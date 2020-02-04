@@ -1,0 +1,39 @@
+html {
+    height: 100%;
+}
+
+body {
+    font-family: 'Arvo', serif;
+    background: linear-gradient(to right, rgb(15, 32, 39), rgb(32, 58, 67), rgb(44, 83, 100));
+    color: white;
+    margin: 20px;
+    height: 100%;
+    padding: 10px;
+    margin: 0;
+}
+
+.wallet-address {
+    cursor: pointer;
+}
+
+.react-bootstrap-table tr {
+    color: white;
+    cursor: pointer;
+}
+
+#app {
+    height: 100%;
+}
+
+.container {
+    padding-left: 79px;
+    height: 100%;
+}
+
+.sidenav---sidenav---_2tBP {
+    background: linear-gradient(to right, rgb(15, 32, 39), rgb(32, 58, 67), rgb(44, 83, 100));
+}
+
+.react-bootstrap-table table {
+    table-layout: auto;
+}
