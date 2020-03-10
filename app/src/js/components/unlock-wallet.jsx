@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import {Button, Col, Container, FormControl, InputGroup, Row, Spinner} from 'react-bootstrap';
-import event_bus from '../../../../deps/millix-node/core/event-bus';
+import eventBus from '../../../../deps/millix-node/core/event-bus';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 const styles       = {
@@ -52,7 +52,7 @@ const UnlockWallet = (props) => {
                             aria-describedby="basic-addon"
                             onKeyPress={(e) => {
                                 if (e.charCode == 13) {
-                                    event_bus.emit('wallet_key', passphraseRef.value);
+                                    eventBus.emit('wallet_key', passphraseRef.value);
                                 }
                             }}
                         />
@@ -75,7 +75,7 @@ const UnlockWallet = (props) => {
             <Row>
                 <Col style={styles.centered}>
                     <Button variant="light" onClick={() => {
-                        event_bus.emit('wallet_key', passphraseRef.value);
+                        eventBus.emit('wallet_key', passphraseRef.value);
                     }} disabled={!props.wallet.isReady}>
                         {!props.wallet.isReady && <Spinner
                             as="span"

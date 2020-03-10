@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import SideNav, {NavIcon, NavItem, NavText} from '@trendmicro/react-sidenav';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import event_bus from '../../../../deps/millix-node/core/event-bus';
+import eventBus from '../../../../deps/millix-node/core/event-bus';
 import walletUtils from '../../../../deps/millix-node/core/wallet/wallet-utils';
 import wallet from '../../../../deps/millix-node/core/wallet/wallet';
 import database from '../../../../deps/millix-node/database/database';
@@ -77,7 +77,7 @@ class Sidebar extends Component {
                            )
                            .then(() => {
                                self.setState({importingWallet: false});
-                               event_bus.emit('wallet_lock', {isImportWallet: true});
+                               eventBus.emit('wallet_lock', {isImportWallet: true});
                            });
             }
             else {
@@ -103,7 +103,7 @@ class Sidebar extends Component {
                             this.setState({exportingWallet: true});
                             break;
                         case 'lock':
-                            event_bus.emit('wallet_lock');
+                            eventBus.emit('wallet_lock');
                             break;
                         case 'resetValidation':
                             wallet.resetTransactionValidationRejected();

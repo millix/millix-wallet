@@ -6,7 +6,7 @@ import PasswordInputView from './utils/password-input-view';
 import walletUtils from '../../../../deps/millix-node/core/wallet/wallet-utils';
 import wallet from '../../../../deps/millix-node/core/wallet/wallet';
 import database from '../../../../deps/millix-node/database/database';
-import event_bus from '../../../../deps/millix-node/core/event-bus';
+import eventBus from '../../../../deps/millix-node/core/event-bus';
 import fs from 'fs';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import async from 'async';
@@ -43,18 +43,18 @@ class NewWallet extends Component {
                 let mnemonic = walletUtils.newMnemonic();
                 walletUtils.removeMnemonic(mnemonic.phrase)
                            .then(() => {
-                               event_bus.emit('wallet_reload', () => {
-                                   event_bus.emit('wallet_key', password);
+                               eventBus.emit('wallet_reload', () => {
+                                   eventBus.emit('wallet_key', password);
                                });
                            });
             }
             else {
-                event_bus.emit('wallet_key', password);
+                eventBus.emit('wallet_key', password);
             }
         }
         else if (status === STATUS.IMPORT_WALLET) {
-            event_bus.emit('wallet_reload', () => {
-                event_bus.emit('wallet_key', password);
+            eventBus.emit('wallet_reload', () => {
+                eventBus.emit('wallet_key', password);
             });
         }
     }
