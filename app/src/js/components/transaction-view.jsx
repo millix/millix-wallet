@@ -46,11 +46,12 @@ class TransactionView extends Component {
 
         this.setState({connectionError: false});
 
-        let destinationAddress           = database.getRepository('address')
-                                                   .getAddressComponent(this.destinationAddress.value.trim());
-        destinationAddress               = destinationAddress['address'];
-        let destinationAddressIdentifier = destinationAddress['identifier'];
-        let destinationAddressVersion    = destinationAddress['version'];
+        let {
+                address   : destinationAddress,
+                identifier: destinationAddressIdentifier,
+                version   : destinationAddressVersion
+            } = database.getRepository('address')
+                        .getAddressComponent(this.destinationAddress.value.trim());
         try {
             if (!walletUtils.isValidAddress(destinationAddress) || !walletUtils.isValidAddress(destinationAddressIdentifier)) {
                 this.setState({addressError: true});

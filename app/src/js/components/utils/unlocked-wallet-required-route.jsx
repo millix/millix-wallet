@@ -11,7 +11,7 @@ const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
         rest.wallet.unlocked ? (
             <Container>
                 <Sidebar {...rest} {...props}/>
-                {rest.config.MODE_TESTNET && (<Row>
+                {rest.config.MODE_TEST_NETWORK && (<Row>
                     <Col className="pr-0" style={{textAlign: 'right'}}>
                         <span
                             style={{
@@ -20,6 +20,12 @@ const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
                             }}>Millix Testnet</span>
                     </Col>
                 </Row>)}
+                <Row>
+                    <Col className="pr-0" style={{textAlign: 'right'}}>
+                        <span
+                            style={{fontSize: '55%'}}>millix v.{rest.config.NODE_MILLIX_VERSION}</span>
+                    </Col>
+                </Row>
                 <Row>
                     <Col className="pr-0" style={{textAlign: 'right'}}>
                         <span
