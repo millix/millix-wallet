@@ -77,7 +77,7 @@ class NewWallet extends Component {
             const data = JSON.parse(dataString);
             if (data.mnemonic_phrase) {
                 walletUtils.storeMnemonic(data.mnemonic_phrase, true)
-                           .then(() => wallet.stopTasks())
+                           .then(() => wallet.stop())
                            .then(() =>
                                new Promise(resolve => {
                                    async.each(data.addresses, (entry, callback) => {

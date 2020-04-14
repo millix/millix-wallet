@@ -7,11 +7,10 @@ import AppContainer from './js/components/app-container';
 import console from '../../deps/millix-node/core/console';
 import network from '../../deps/millix-node/net/network';
 import database from '../../deps/millix-node/database/database';
-import peer from '../../deps/millix-node/net/peer';
 import eventBus from '../../deps/millix-node/core/event-bus';
 import config from '../../deps/millix-node/core/config/config';
 import configLoader from '../../deps/millix-node/core/config/config-loader';
-import wallet, {WALLET_MODE} from '../../deps/millix-node/core/wallet/wallet';
+import {WALLET_MODE} from '../../deps/millix-node/core/wallet/wallet';
 import services from '../../deps/millix-node/core/serices/services';
 import fs from 'fs';
 import {config as faConfig, library} from '@fortawesome/fontawesome-svg-core';
@@ -84,7 +83,7 @@ process.on('exit', function() {
 console.log('starting millix-core');
 
 let initializeWallet = () => {
-    services.initialize(WALLET_MODE.APP)
+    services.initialize({mode: WALLET_MODE.APP})
             .then(() => eventBus.emit('node_list_update'))
             .catch(e => {
                 console.log(e);
@@ -105,7 +104,6 @@ eventBus.on('wallet_ready', (ready) => store.dispatch(walletReady({
     isNew  : ready.create
 })));
 eventBus.on('wallet_unlock', wallet => {
-    logManager.start();
     logManager.setOnUpdate(() => {
         store.dispatch(addLogEvent(logManager.logsCache));
         store.dispatch(setBackLogSize(logManager.backLogSize));
@@ -138,6 +136,7 @@ eventBus.on('wallet_lock', (lockPayload) => {
 
 eventBus.on('wallet_authentication_error', () => {
     store.dispatch(walletReady({authenticationError: true}));
+    services.stop();
     initializeWallet();
 });
 eventBus.emit('wallet_event_log', {

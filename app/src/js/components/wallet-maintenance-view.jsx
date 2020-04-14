@@ -15,9 +15,9 @@ class WalletMaintenanceView extends Component {
     }
 
     optimizeWallet() {
-        wallet.stopTasks();
-        network.stopTasks();
-        peer.stopTasks();
+        wallet.stop();
+        network.stop();
+        peer.stop();
         logManager.stop();
         store.dispatch(updateWalletMaintenance(true));
         database.runVacuum()

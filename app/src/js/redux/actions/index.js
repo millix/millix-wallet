@@ -132,7 +132,7 @@ export function updateNetworkState(payload) {
         network.initialize();
     }
     else {
-        network.stopTasks();
+        network.stop();
     }
 
     return {
