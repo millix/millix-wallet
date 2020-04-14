@@ -4,7 +4,7 @@ import network from '../../../../deps/millix-node/net/network';
 import peer from '../../../../deps/millix-node/net/peer';
 import store from '../redux/store';
 import {updateWalletMaintenance} from '../redux/actions';
-import logManager from '../core/log-manager';
+import logManager from '../../../../deps/millix-node/core/log-manager';
 import wallet from '../../../../deps/millix-node/core/wallet/wallet';
 import database from '../../../../deps/millix-node/database/database';
 

@@ -6,16 +6,16 @@ import {addWalletConfig, lockWallet, unlockWallet, updateClock, updateNetworkCon
 import AppContainer from './js/components/app-container';
 import console from '../../deps/millix-node/core/console';
 import network from '../../deps/millix-node/net/network';
-import server from '../../deps/millix-node/api/server';
 import database from '../../deps/millix-node/database/database';
 import peer from '../../deps/millix-node/net/peer';
 import eventBus from '../../deps/millix-node/core/event-bus';
 import config from '../../deps/millix-node/core/config/config';
 import configLoader from '../../deps/millix-node/core/config/config-loader';
 import wallet, {WALLET_MODE} from '../../deps/millix-node/core/wallet/wallet';
+import services from '../../deps/millix-node/core/serices/services';
 import fs from 'fs';
 import {config as faConfig, library} from '@fortawesome/fontawesome-svg-core';
-import {faTrash, faArrowCircleLeft, faCloudDownloadAlt, faExchangeAlt, faFingerprint, faHeartbeat, faHome, faKey, faPlus, faSignOutAlt, faSlidersH, faStream, faUndoAlt, faWallet} from '@fortawesome/free-solid-svg-icons';
+import {faArrowCircleLeft, faCloudDownloadAlt, faExchangeAlt, faFingerprint, faHeartbeat, faHome, faKey, faPlus, faSignOutAlt, faSlidersH, faStream, faTrash, faUndoAlt, faWallet} from '@fortawesome/free-solid-svg-icons';
 import '../node_modules/react-virtualized/styles.css';
 import './css/bootstrap.min.css';
 import '../node_modules/react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
@@ -24,10 +24,10 @@ import '../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 import '../node_modules/@trendmicro/react-sidenav/dist/react-sidenav.css';
 import './css/app.scss';
 import moment from 'moment';
-import logManager from './js/core/log-manager';
+import logManager from '../../deps/millix-node/core/log-manager';
 import mutex from '../../deps/millix-node/core/mutex';
 import yargs from 'yargs';
-import jobEngine from '../../deps/millix-node/job/job-engine';
+import {addLogEvent, setBackLogSize} from './js/redux/actions';
 
 faConfig.autoAddCss = false;
 library.add(faArrowCircleLeft, faWallet, faKey, faHome, faFingerprint,
@@ -84,15 +84,11 @@ process.on('exit', function() {
 console.log('starting millix-core');
 
 let initializeWallet = () => {
-    wallet.setMode(WALLET_MODE.APP).initialize()
-          .then(() => network.initialize())
-          .then(() => server.initialize())
-          .then(() => peer.initialize())
-          .then(() => jobEngine.initialize())
-          .then(() => eventBus.emit('node_list_update'))
-          .catch(e => {
-              console.log(e);
-          });
+    services.initialize(WALLET_MODE.APP)
+            .then(() => eventBus.emit('node_list_update'))
+            .catch(e => {
+                console.log(e);
+            });
 };
 
 setInterval(() => {
@@ -110,6 +106,10 @@ eventBus.on('wallet_ready', (ready) => store.dispatch(walletReady({
 })));
 eventBus.on('wallet_unlock', wallet => {
     logManager.start();
+    logManager.setOnUpdate(() => {
+        store.dispatch(addLogEvent(logManager.logsCache));
+        store.dispatch(setBackLogSize(logManager.backLogSize));
+    });
     store.dispatch(unlockWallet(wallet));
 });
 eventBus.on('node_list', () => store.dispatch(updateNetworkNodeList()));
@@ -118,11 +118,11 @@ eventBus.on('node_status_update', () => store.dispatch(updateNetworkConnections(
 eventBus.on('wallet_update', (walletID) => store.dispatch(walletUpdateAddresses(walletID)));
 eventBus.on('wallet_update_address_version', (addressVersionList) => store.dispatch(updateWalletAddressVersion(addressVersionList)));
 eventBus.on('node_event_log', data => {
-    logManager.addLog(data);
+    logManager.addLog(data, store.getState().clock);
     logManager.setBacklogSize(mutex.getKeyQueuedSize(['transaction']));
 });
 eventBus.on('wallet_event_log', data => {
-    logManager.addLog(data);
+    logManager.addLog(data, store.getState().clock);
     logManager.setBacklogSize(mutex.getKeyQueuedSize(['transaction']));
 });
 eventBus.on('wallet_reload', (readyCallback) => {
@@ -132,10 +132,7 @@ eventBus.on('wallet_reload', (readyCallback) => {
 });
 eventBus.on('wallet_lock', (lockPayload) => {
     store.dispatch(lockWallet(lockPayload));
-    wallet.stopTasks();
-    network.stopTasks();
-    peer.stopTasks();
-    logManager.stop();
+    services.stop();
     eventBus.emit('wallet_reload');
 });
 
