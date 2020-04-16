@@ -77,14 +77,17 @@ export function addWalletConfig(payload) {
 
 export function walletUpdateConfig(payload) {
     return (dispatch) => {
-        async.each(_.keys(payload), (key, callback) => {
-            database.getRepository('config')
-                    .updateConfig(key, payload[key])
-                    .then(() => callback());
-        }, () => {
-            dispatch({
-                type: UPDATE_WALLET_CONFIG,
-                payload
+        return new Promise(resolve => {
+            async.each(_.keys(payload), (key, callback) => {
+                database.getRepository('config')
+                        .updateConfig(key, payload[key])
+                        .then(() => callback());
+            }, () => {
+                dispatch({
+                    type: UPDATE_WALLET_CONFIG,
+                    payload
+                });
+                resolve();
             });
         });
     };

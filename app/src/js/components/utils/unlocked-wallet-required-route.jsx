@@ -69,7 +69,7 @@ const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
                     }}>
                         <Form.Check
                             type="switch"
-                            id="networSwitch"
+                            id="networkSwitch"
                             label={rest.network.enabled? "online node" : "offline node"}
                             style={{
                                 fontSize: '75%',

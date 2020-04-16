@@ -12,11 +12,12 @@ import config from '../../deps/millix-node/core/config/config';
 import configLoader from '../../deps/millix-node/core/config/config-loader';
 import {WALLET_MODE} from '../../deps/millix-node/core/wallet/wallet';
 import services from '../../deps/millix-node/core/serices/services';
+import bootstrap from '../../deps/millix-node/core/bootstrap';
 import fs from 'fs';
 import {config as faConfig, library} from '@fortawesome/fontawesome-svg-core';
 import {faArrowCircleLeft, faCloudDownloadAlt, faExchangeAlt, faFingerprint, faHeartbeat, faHome, faKey, faPlus, faSignOutAlt, faSlidersH, faStream, faTrash, faUndoAlt, faWallet} from '@fortawesome/free-solid-svg-icons';
 import '../node_modules/react-virtualized/styles.css';
-import './css/bootstrap.min.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import '../node_modules/react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import '../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
@@ -144,10 +145,11 @@ eventBus.emit('wallet_event_log', {
     content: 'application started'
 });
 
-database.initialize()
-        .then(() => eventBus.emit('wallet_update_address_version', database.getRepository('address').addressVersionList))
-        .then(() => configLoader.load().then(config => store.dispatch(addWalletConfig(config))))
-        .then(() => initializeWallet());
+bootstrap.initialize()
+         .then(() => database.initialize())
+         .then(() => eventBus.emit('wallet_update_address_version', database.getRepository('address').addressVersionList))
+         .then(() => configLoader.load().then(config => store.dispatch(addWalletConfig(config))))
+         .then(() => initializeWallet());
 
 const wrapper = document.getElementById('app');
 wrapper ? ReactDOM.render(< AppContainer store={store}
