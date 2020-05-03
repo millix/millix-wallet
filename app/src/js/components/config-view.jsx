@@ -188,9 +188,9 @@ class ConfigView extends Component {
                                        <Form.Control type="text" placeholder=""
                                                      ref={(c) => this._nodes = c}
                                                      onChange={() => {
-                                                         this.setConfig({NODE_INITIAL_LIST: this._nodes.value.split(',')});
+                                                         this.setConfig({NODE_INITIAL_LIST: JSON.parse(this._nodes.value.split(','))});
                                                      }}
-                                                     value={this.props.config.NODE_INITIAL_LIST}/>
+                                                     value={JSON.stringify(this.props.config.NODE_INITIAL_LIST)}/>
                                    </Col>
                                </Form.Group>
                                <Form.Group as={Row}>

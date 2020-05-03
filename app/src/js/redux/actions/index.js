@@ -160,7 +160,7 @@ export function updateWalletMaintenance(payload) {
 
 export function updateNetworkNodeList() {
     return (dispatch) => database.getRepository('node')
-                                 .getNodes()
+                                 .listNodes()
                                  .then(items => items.map(item => {
                                      return {node: item.node_prefix + item.node_ip_address + ':' + item.node_port};
                                  }))

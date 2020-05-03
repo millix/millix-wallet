@@ -25,7 +25,6 @@ import '../node_modules/@trendmicro/react-sidenav/dist/react-sidenav.css';
 import './css/app.scss';
 import moment from 'moment';
 import logManager from '../../deps/millix-node/core/log-manager';
-import mutex from '../../deps/millix-node/core/mutex';
 import yargs from 'yargs';
 import {addLogEvent, setBackLogSize} from './js/redux/actions';
 
@@ -116,14 +115,6 @@ eventBus.on('node_list_update', () => store.dispatch(updateNetworkNodeList()));
 eventBus.on('node_status_update', () => store.dispatch(updateNetworkConnections(network.registeredClients)));
 eventBus.on('wallet_update', (walletID) => store.dispatch(walletUpdateAddresses(walletID)));
 eventBus.on('wallet_update_address_version', (addressVersionList) => store.dispatch(updateWalletAddressVersion(addressVersionList)));
-eventBus.on('node_event_log', data => {
-    logManager.addLog(data, store.getState().clock);
-    logManager.setBacklogSize(mutex.getKeyQueuedSize(['transaction']));
-});
-eventBus.on('wallet_event_log', data => {
-    logManager.addLog(data, store.getState().clock);
-    logManager.setBacklogSize(mutex.getKeyQueuedSize(['transaction']));
-});
 eventBus.on('wallet_reload', (readyCallback) => {
     eventBus.removeAllListeners('wallet_key');
     readyCallback && eventBus.once('wallet_ready', readyCallback);
