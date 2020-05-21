@@ -99,12 +99,16 @@ export function clearTransactionDetails() {
 
 export function updateTransactionDetails(transactionID) {
     return (dispatch) => {
-        const transactionRepository = database.getRepository('transaction');
-        return transactionRepository.getTransactionObject(transactionID)
-                                    .then(payload => dispatch({
-                                        type   : UPDATE_TRANSACTION_DETAILS,
-                                        payload: transactionRepository.normalizeTransactionObject(payload)
-                                    }));
+        database.firstShards((shardID) => {
+            return new Promise((resolve, reject) => {
+                const transactionRepository = database.getRepository('transaction', shardID);
+                return transactionRepository.getTransactionObject(transactionID)
+                                            .then(transaction => transaction ? resolve(transaction) : reject());
+            });
+        }).then(payload => dispatch({
+            type   : UPDATE_TRANSACTION_DETAILS,
+            payload: database.getRepository('transaction').normalizeTransactionObject(payload)
+        }));
     };
 }
 
@@ -177,17 +181,19 @@ export function walletUpdateAddresses(walletID) {
                                  .then(addresses => {
                                      return new Promise(resolve => {
                                          async.eachSeries(addresses, (item, callback) => {
-                                             database.getRepository('address')
-                                                     .getAddressBalance(item.address, true)
-                                                     .then(balance => {
-                                                         item['balance'] = balance || 0;
-                                                     }).then(() => {
-                                                 database.getRepository('address')
-                                                         .getAddressBalance(item.address, false)
-                                                         .then(balance => {
-                                                             item['pendingBalance'] = balance || 0;
-                                                             callback();
-                                                         });
+                                             database.applyShards((shardID) => {
+                                                 const transactionRepository = database.getRepository('transaction', shardID);
+                                                 return transactionRepository.getAddressBalance(item.address, true);
+                                             }).then(balanceList => _.sum(balanceList)).then(balance => {
+                                                 item['balance'] = balance || 0;
+                                             }).then(() => {
+                                                 database.applyShards((shardID) => {
+                                                     const transactionRepository = database.getRepository('transaction', shardID);
+                                                     return transactionRepository.getAddressBalance(item.address, false);
+                                                 }).then(balanceList => _.sum(balanceList)).then(balance => {
+                                                     item['pendingBalance'] = balance || 0;
+                                                     callback();
+                                                 });
                                              });
                                          }, () => resolve(addresses));
                                      });

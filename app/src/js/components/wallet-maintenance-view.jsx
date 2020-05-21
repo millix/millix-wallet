@@ -24,8 +24,8 @@ class WalletMaintenanceView extends Component {
                 .then(() => database.runWallCheckpoint())
                 .then(() => {
                     store.dispatch(updateWalletMaintenance(false));
-                    logManager.start();
                     wallet.initialize(true)
+                          .then(() => logManager.initialize())
                           .then(() => network.initialize())
                           .then(() => peer.initialize())
                           .then(() => {
