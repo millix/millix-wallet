@@ -6,6 +6,7 @@ import {addWalletAddressVersion, walletUpdateConfig, removeWalletAddressVersion}
 import _ from 'lodash';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import bootstrap from '../../../../deps/millix-node/core/bootstrap';
+import network from '../../../../deps/millix-node/net/network';
 
 
 class ConfigView extends Component {
@@ -123,7 +124,7 @@ class ConfigView extends Component {
                                </Form.Group>
                                <Form.Group as={Row}>
                                    <Form.Label column sm="2">
-                                       node dns
+                                       server bind
                                    </Form.Label>
                                    <Col sm="3">
                                        <Form.Control type="text" placeholder=""
@@ -135,23 +136,14 @@ class ConfigView extends Component {
                                    </Col>
 
                                    <Form.Label column sm="2">
-                                       public
+                                       node public ip
                                    </Form.Label>
-                                   <Col sm="2">
-                                       <DropdownButton variant="secondary"
-                                                       title={this.props.config.NODE_PUBLIC ? 'yes' : 'no'}>
-                                           {Array.from([
-                                               'yes',
-                                               'no'
-                                           ]).map(type =>
-                                               <Dropdown.Item key={type}
-                                                              href="#"
-                                                              onClick={() => {
-                                                                  this.setConfig({NODE_PUBLIC: type === 'yes'});
-                                                              }}>{type}</Dropdown.Item>
-                                           )}
-                                       </DropdownButton>
+                                   <Col sm="3">
+                                       <Form.Control type="text" placeholder=""
+                                                     value={network.nodePublicIp}
+                                                     readOnly/>
                                    </Col>
+
                                </Form.Group>
                                <Form.Group as={Row}>
                                    <Form.Label column sm="2">
