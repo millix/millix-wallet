@@ -57,8 +57,9 @@ git clone --recurse-submodules git@github.com:millix/millix-wallet.git -b develo
 ```
 cd millix-wallet\
 npm install
+npm install -g grunt
 grunt build-core
-cd ..\..\app
+cd app
 npm start
 ```
 
