@@ -11,7 +11,7 @@ import eventBus from '../../deps/millix-node/core/event-bus';
 import config from '../../deps/millix-node/core/config/config';
 import configLoader from '../../deps/millix-node/core/config/config-loader';
 import {WALLET_MODE} from '../../deps/millix-node/core/wallet/wallet';
-import services from '../../deps/millix-node/core/serices/services';
+import services from '../../deps/millix-node/core/services/services';
 import bootstrap from '../../deps/millix-node/core/bootstrap';
 import fs from 'fs';
 import {config as faConfig, library} from '@fortawesome/fontawesome-svg-core';
