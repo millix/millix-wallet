@@ -8,14 +8,14 @@
 
 ## Main Features
 
-- DAG-backed criptocurrency
+- DAG-backed cryptocurrency
 - Multiple wallet creation and management in-app
 - Easy to send an receive transactions
 - [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) Hierarchical deterministic (HD) address generation and wallet backups
 - Device-based security: all private keys are stored locally, not in the cloud
 - Support for testnet
 - Mnemonic ([BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki)) support for wallet backups
-- Support [iOS](?#), [Android](?#), [Windows Phone](?#), [Chrome App](?#), [Linux](?#), [Windows](?#) devices
+- Support [macOS](?#), [Linux](?#), [Windows](?#) devices
 
 ## About millix
 
@@ -36,7 +36,7 @@
 - Participants that increase fundamental value should be algorithmically incentivized. 
 
 
-## Instalation
+## Installation
 
 
 ## Install nodejs 12
