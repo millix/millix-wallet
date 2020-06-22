@@ -98,6 +98,33 @@ class ConfigView extends Component {
                                    </Col>
                                </Form.Group>
                                <Form.Group as={Row}>
+                                   <Form.Label column sm="1">
+                                       network
+                                   </Form.Label>
+
+                                   <Col sm="10" style={{
+                                       marginTop   : 'auto',
+                                       marginBottom: 'auto'
+                                   }}>
+                                       <Form.Check
+                                           type="switch"
+                                           id="networkSelectSwitch"
+                                           ref={(c) => this._network = c}
+                                           label={!this.props.config.MODE_TEST_NETWORK ? 'main network' : 'test network'}
+                                           style={{
+                                               color: 'white'
+                                           }}
+                                           checked={!this.props.config.MODE_TEST_NETWORK}
+                                           onChange={(e) => {
+                                               this.setState({
+                                                   is_main_network   : e.target.checked,
+                                                   show_restart_modal: true
+                                               });
+                                           }}
+                                       />
+                                   </Col>
+                               </Form.Group>
+                               <Form.Group as={Row}>
                                    <Form.Label column sm="3">
                                        network port
                                    </Form.Label>
@@ -337,11 +364,11 @@ class ConfigView extends Component {
                                    </Form.Label>
                                    <Col sm="3">
                                        <Form.Control type="text" placeholder=""
-                                                     ref={(c) => this._audit_point_transaction_prune_min_age = c}
+                                                     ref={(c) => this._transaction_prune_age_min = c}
                                                      onChange={() => {
-                                                         this.setConfig({AUDIT_POINT_TRANSACTION_PRUNE_AGE_MIN: this._audit_point_transaction_prune_min_age.value});
+                                                         this.setConfig({TRANSACTION_PRUNE_AGE_MIN: this._transaction_prune_age_min.value});
                                                      }}
-                                                     value={this.props.config.AUDIT_POINT_TRANSACTION_PRUNE_AGE_MIN}/>
+                                                     value={this.props.config.TRANSACTION_PRUNE_AGE_MIN}/>
                                    </Col>
 
                                    <Form.Label column sm="2">
@@ -349,11 +376,11 @@ class ConfigView extends Component {
                                    </Form.Label>
                                    <Col sm="3">
                                        <Form.Control type="text" placeholder=""
-                                                     ref={(c) => this._audit_point_transaction_prune_count = c}
+                                                     ref={(c) => this._transaction_prune_count = c}
                                                      onChange={() => {
-                                                         this.setConfig({AUDIT_POINT_TRANSACTION_PRUNE_COUNT: Math.min(parseInt(this._audit_point_transaction_prune_count.value), 512).toString()});
+                                                         this.setConfig({TRANSACTION_PRUNE_COUNT: Math.min(parseInt(this._transaction_prune_count.value), 512).toString()});
                                                      }}
-                                                     value={this.props.config.AUDIT_POINT_TRANSACTION_PRUNE_COUNT}/>
+                                                     value={this.props.config.TRANSACTION_PRUNE_COUNT}/>
                                    </Col>
                                </Form.Group>
                                <Form.Group as={Row}>
