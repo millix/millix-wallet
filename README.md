@@ -50,7 +50,7 @@
  
 ## Download millix-node code
 ```
-git clone --recurse-submodules git@github.com:millix/millix-wallet.git -b develop
+git clone --recurse-submodules https://github.com/millix/millix-wallet.git -b develop
 ````
 
 ## Run millix-wallet
