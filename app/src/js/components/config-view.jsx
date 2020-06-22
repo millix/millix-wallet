@@ -6,6 +6,7 @@ import {addWalletAddressVersion, walletUpdateConfig, removeWalletAddressVersion}
 import _ from 'lodash';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import bootstrap from '../../../../deps/millix-node/core/bootstrap';
+import network from '../../../../deps/millix-node/net/network';
 
 
 class ConfigView extends Component {
@@ -97,33 +98,6 @@ class ConfigView extends Component {
                                    </Col>
                                </Form.Group>
                                <Form.Group as={Row}>
-                                   <Form.Label column sm="1">
-                                       network
-                                   </Form.Label>
-
-                                   <Col sm="10" style={{
-                                       marginTop   : 'auto',
-                                       marginBottom: 'auto'
-                                   }}>
-                                       <Form.Check
-                                           type="switch"
-                                           id="networkSelectSwitch"
-                                           ref={(c) => this._network = c}
-                                           label={!this.props.config.MODE_TEST_NETWORK ? 'main network' : 'test network'}
-                                           style={{
-                                               color: 'white'
-                                           }}
-                                           checked={!this.props.config.MODE_TEST_NETWORK}
-                                           onChange={(e) => {
-                                               this.setState({
-                                                   is_main_network   : e.target.checked,
-                                                   show_restart_modal: true
-                                               });
-                                           }}
-                                       />
-                                   </Col>
-                               </Form.Group>
-                               <Form.Group as={Row}>
                                    <Form.Label column sm="3">
                                        network port
                                    </Form.Label>
@@ -150,7 +124,7 @@ class ConfigView extends Component {
                                </Form.Group>
                                <Form.Group as={Row}>
                                    <Form.Label column sm="2">
-                                       node dns
+                                       server bind
                                    </Form.Label>
                                    <Col sm="3">
                                        <Form.Control type="text" placeholder=""
@@ -162,23 +136,14 @@ class ConfigView extends Component {
                                    </Col>
 
                                    <Form.Label column sm="2">
-                                       public
+                                       node public ip
                                    </Form.Label>
-                                   <Col sm="2">
-                                       <DropdownButton variant="secondary"
-                                                       title={this.props.config.NODE_PUBLIC ? 'yes' : 'no'}>
-                                           {Array.from([
-                                               'yes',
-                                               'no'
-                                           ]).map(type =>
-                                               <Dropdown.Item key={type}
-                                                              href="#"
-                                                              onClick={() => {
-                                                                  this.setConfig({NODE_PUBLIC: type === 'yes'});
-                                                              }}>{type}</Dropdown.Item>
-                                           )}
-                                       </DropdownButton>
+                                   <Col sm="3">
+                                       <Form.Control type="text" placeholder=""
+                                                     value={network.nodePublicIp}
+                                                     readOnly/>
                                    </Col>
+
                                </Form.Group>
                                <Form.Group as={Row}>
                                    <Form.Label column sm="2">
@@ -188,9 +153,9 @@ class ConfigView extends Component {
                                        <Form.Control type="text" placeholder=""
                                                      ref={(c) => this._nodes = c}
                                                      onChange={() => {
-                                                         this.setConfig({NODE_INITIAL_LIST: this._nodes.value.split(',')});
+                                                         this.setConfig({NODE_INITIAL_LIST: JSON.parse(this._nodes.value.split(','))});
                                                      }}
-                                                     value={this.props.config.NODE_INITIAL_LIST}/>
+                                                     value={JSON.stringify(this.props.config.NODE_INITIAL_LIST)}/>
                                    </Col>
                                </Form.Group>
                                <Form.Group as={Row}>

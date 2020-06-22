@@ -68,6 +68,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('build-core', [
+        'shell:deps',
         'env:build',
         'clean',
         'shell:webpack'

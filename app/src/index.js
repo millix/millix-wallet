@@ -11,7 +11,7 @@ import eventBus from '../../deps/millix-node/core/event-bus';
 import config from '../../deps/millix-node/core/config/config';
 import configLoader from '../../deps/millix-node/core/config/config-loader';
 import {WALLET_MODE} from '../../deps/millix-node/core/wallet/wallet';
-import services from '../../deps/millix-node/core/serices/services';
+import services from '../../deps/millix-node/core/services/services';
 import bootstrap from '../../deps/millix-node/core/bootstrap';
 import fs from 'fs';
 import {config as faConfig, library} from '@fortawesome/fontawesome-svg-core';
@@ -25,7 +25,6 @@ import '../node_modules/@trendmicro/react-sidenav/dist/react-sidenav.css';
 import './css/app.scss';
 import moment from 'moment';
 import logManager from '../../deps/millix-node/core/log-manager';
-import mutex from '../../deps/millix-node/core/mutex';
 import yargs from 'yargs';
 import {addLogEvent, setBackLogSize} from './js/redux/actions';
 
@@ -51,7 +50,10 @@ if (argv.port) {
     config.NODE_PORT = argv.port;
 }
 if (argv.folder) {
-    config.KEY_PATH                   = argv.folder + 'keys.json';
+    config.WALLET_KEY_PATH            = argv.folder + 'millix_private_key.json';
+    config.NODE_KEY_PATH              = argv.folder + 'node.json';
+    config.NODE_CERTIFICATE_KEY_PATH  = argv.folder + 'node_certificate_key.pem';
+    config.NODE_CERTIFICATE_PATH      = argv.folder + 'node_certificate.pem';
     config.DATABASE_CONNECTION.FOLDER = argv.folder;
 }
 
@@ -116,14 +118,6 @@ eventBus.on('node_list_update', () => store.dispatch(updateNetworkNodeList()));
 eventBus.on('node_status_update', () => store.dispatch(updateNetworkConnections(network.registeredClients)));
 eventBus.on('wallet_update', (walletID) => store.dispatch(walletUpdateAddresses(walletID)));
 eventBus.on('wallet_update_address_version', (addressVersionList) => store.dispatch(updateWalletAddressVersion(addressVersionList)));
-eventBus.on('node_event_log', data => {
-    logManager.addLog(data, store.getState().clock);
-    logManager.setBacklogSize(mutex.getKeyQueuedSize(['transaction']));
-});
-eventBus.on('wallet_event_log', data => {
-    logManager.addLog(data, store.getState().clock);
-    logManager.setBacklogSize(mutex.getKeyQueuedSize(['transaction']));
-});
 eventBus.on('wallet_reload', (readyCallback) => {
     eventBus.removeAllListeners('wallet_key');
     readyCallback && eventBus.once('wallet_ready', readyCallback);

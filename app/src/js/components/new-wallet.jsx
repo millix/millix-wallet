@@ -40,8 +40,7 @@ class NewWallet extends Component {
 
         if (status === STATUS.NEW_WALLET) {
             if (this.props.location.state && this.props.location.state.walletExists) {
-                let mnemonic = walletUtils.newMnemonic();
-                walletUtils.removeMnemonic(mnemonic.phrase)
+                walletUtils.removeMnemonic()
                            .then(() => {
                                eventBus.emit('wallet_reload', () => {
                                    eventBus.emit('wallet_key', password);
