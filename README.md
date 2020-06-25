@@ -2,7 +2,7 @@
   <br>
   <a href="#"><img src="https://github.com/millix/millix-wallet/blob/master/app/icon.png?raw=true" alt="millix node" width="200"></a>
   <br>
-  millix wallet <small>v1.3.2</small>
+  millix wallet <small>v1.3.3</small>
   <br>
 </h1>
 
