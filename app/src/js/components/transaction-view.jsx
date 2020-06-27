@@ -67,7 +67,7 @@ class TransactionView extends Component {
 
         let amount;
         try {
-            amount = parseInt(this.amount.value.split(',').join(''));
+            amount = parseInt(this.amount.value.replace(/[,.]/g, ""));
             if (amount <= 0 || amount.toLocaleString() != this.amount.value) {
                 this.setState({amountError: true});
                 return;
@@ -106,9 +106,9 @@ class TransactionView extends Component {
 
         let cursorStart = e.target.selectionStart,
             cursorEnd   = e.target.selectionEnd;
-        let amount      = e.target.value.split(',').join('');
+        let amount      = e.target.value.replace(/[,.]/g, "");
         let offset      = 0;
-        if ((amount.length - 1) % 3 == 0) {
+        if ((amount.length - 1) % 3 === 0) {
             offset = 1;
         }
         e.target.value = parseInt(amount).toLocaleString();
