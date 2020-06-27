@@ -2,7 +2,7 @@
   <br>
   <a href="#"><img src="https://github.com/millix/millix-wallet/blob/master/app/icon.png?raw=true" alt="millix node" width="200"></a>
   <br>
-  millix wallet
+  millix wallet <small>v1.3.3</small>
   <br>
 </h1>
 
@@ -50,7 +50,7 @@
  
 ## Download millix-node code
 ```
-git clone --recurse-submodules git@github.com:millix/millix-wallet.git -b develop
+git clone --recurse-submodules https://github.com/millix/millix-wallet.git -b develop
 ````
 
 ## Run millix-wallet
