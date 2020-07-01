@@ -22,7 +22,9 @@ class PeerInfoView extends Component {
         let tabularAttributes = [];
         attributes.forEach(ele => {
             if (ele.value instanceof Array) {
-                tabularAttributes.push(ele);
+                ele.value.forEach(entry => {
+                    tabularAttributes.push(entry);
+                });
             }
             else {
                 simpleAttributes.push(
@@ -55,6 +57,29 @@ class PeerInfoView extends Component {
                     </Col>
                 </Row>
                 {simpleAttributes}
+                <Table striped bordered hover variant="dark">
+                    <thead>
+                    <tr>
+                        <th>shard_id</th>
+                        <th>transaction_count</th>
+                        <th>update_date</th>
+                        <th>is_required</th>
+                        <th>fee_ask_request_byte</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {tabularAttributes.map((item, idx) => {
+                        return (
+                            <tr key={idx} className="wallet-node">
+                                <td>{item.shard_id}</td>
+                                <td>{item.transaction_count}</td>
+                                <td>{item.update_date}</td>
+                                <td>{item.is_required}</td>
+                                <td>{item.fee_ask_request_byte}</td>
+                            </tr>);
+                    })}
+                    </tbody>
+                </Table>
             </div>
         );
     }
