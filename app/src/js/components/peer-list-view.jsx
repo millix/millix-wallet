@@ -48,7 +48,10 @@ class PeerListView extends Component {
                             <tbody>
                             {this.props.network.node_online_list.map((item, idx) => {
                                 return (
-                                    <tr key={item.node} className="wallet-node">
+                                    <tr key={item.node} className="wallet-address"
+                                        onClick={() => {
+                                            this.props.history.push('/peer/' + item.nodeID, {peer: item.nodeID});
+                                        }}>
                                         <td>{idx}</td>
                                         <td>{item.node}</td>
                                         <td style={{color: 'green'}}>ok</td>

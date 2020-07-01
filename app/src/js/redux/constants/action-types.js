@@ -18,3 +18,4 @@ export const ADD_WALLET_CONFIG             = 'ADD_WALLET_CONFIG';
 export const UPDATE_WALLET_CONFIG          = 'UPDATE_WALLET_CONFIG';
 export const UPDATE_WALLET_MAINTENANCE     = 'UPDATE_WALLET_MAINTENANCE';
 export const UPDATE_CLOCK                  = 'UPDATE_CLOCK';
+export const GET_NODE_ATTRIBUTES           = 'GET_NODE_ATTRIBUTES';

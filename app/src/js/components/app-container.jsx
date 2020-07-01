@@ -12,6 +12,7 @@ import WalletMaintenanceView from './wallet-maintenance-view';
 import EventLogView from './event-log-view';
 import ConfigView from './config-view';
 import PeerListView from './peer-list-view';
+import PeerInfoView from './peer-info-view';
 import NewWallet from './new-wallet';
 
 const AppContainer = ({store}) => (
@@ -34,6 +35,8 @@ const AppContainer = ({store}) => (
                                              component={EventLogView}/>
                 <UnlockedWalletRequiredRoute path='/peers'
                                              component={PeerListView}/>
+                <UnlockedWalletRequiredRoute path='/peer/:peer'
+                                             component={PeerInfoView}/>
                 <UnlockedWalletRequiredRoute component={Wallet}/>
             </Switch>
         </Router>
