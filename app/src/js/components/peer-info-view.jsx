@@ -27,10 +27,11 @@ class PeerInfoView extends Component {
                 });
             }
             else {
+                let attributeType = ele.attribute_type.replace(/_/g," ");
                 simpleAttributes.push(
                     <Row className="mb-3"
                          style={{color: 'lightcyan'}}>
-                        <h5>{ele.attribute_type}:</h5>&nbsp;<p>{ele.value}</p>
+                        <h5>{attributeType}:</h5>&nbsp;<p>{ele.value}</p>
                     </Row>
                 );
             }
@@ -60,11 +61,11 @@ class PeerInfoView extends Component {
                 <Table striped bordered hover variant="dark">
                     <thead>
                     <tr>
-                        <th>shard_id</th>
-                        <th>transaction_count</th>
-                        <th>update_date</th>
-                        <th>is_required</th>
-                        <th>fee_ask_request_byte</th>
+                        <th>shard id</th>
+                        <th>transaction count</th>
+                        <th>update date</th>
+                        <th>is required</th>
+                        <th>fee ask request byte</th>
                     </tr>
                     </thead>
                     <tbody>
