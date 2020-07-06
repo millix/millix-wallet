@@ -1,4 +1,4 @@
-import {UPDATE_WALLET_ADDRESS_VERSION, ADD_LOG_EVENT, ADD_NEW_ADDRESS, ADD_WALLET_CONFIG, CLEAR_TRANSACTION_DETAILS, LOCK_WALLET, SET_BACKLOG_SIZE, UNLOCK_WALLET, UPDATE_CLOCK, UPDATE_NETWORK_CONNECTIONS, UPDATE_NETWORK_NODE_LIST, UPDATE_NETWORK_STATE, UPDATE_TRANSACTION_DETAILS, UPDATE_WALLET_ADDRESS, UPDATE_WALLET_CONFIG, UPDATE_WALLET_MAINTENANCE, UPDATE_WALLET_TRANSACTIONS, WALLET_READY, ADD_WALLET_ADDRESS_VERSION} from '../constants/action-types';
+import {UPDATE_WALLET_ADDRESS_VERSION, ADD_LOG_EVENT, ADD_NEW_ADDRESS, ADD_WALLET_CONFIG, CLEAR_TRANSACTION_DETAILS, LOCK_WALLET, SET_BACKLOG_SIZE, UNLOCK_WALLET, UPDATE_CLOCK, UPDATE_NETWORK_CONNECTIONS, UPDATE_NETWORK_NODE_LIST, UPDATE_NETWORK_STATE, UPDATE_TRANSACTION_DETAILS, UPDATE_WALLET_ADDRESS, UPDATE_WALLET_CONFIG, UPDATE_WALLET_MAINTENANCE, UPDATE_WALLET_TRANSACTIONS, WALLET_READY, ADD_WALLET_ADDRESS_VERSION, GET_NODE_ATTRIBUTES} from '../constants/action-types';
 import database from '../../../../../deps/millix-node/database/database';
 import wallet from '../../../../../deps/millix-node/core/wallet/wallet';
 import async from 'async';
@@ -216,4 +216,21 @@ export function updateClock(clock) {
         type   : UPDATE_CLOCK,
         payload: {clock}
     };
+}
+
+export function getNodeAttribute(nodeID) {//removeWalletAddressVersion(payload) {
+    return (dispatch) => {
+        //nodeRepository.listNodeAttribute(where: {node_id:nodeID}, orderBy, limit);
+        return database.getRepository('node')
+                .listNodeAttribute({node_id:nodeID})
+                .then((listAttributes) => {
+                    return dispatch({
+                        type   : GET_NODE_ATTRIBUTES,
+                        payload: listAttributes
+                    });
+                })
+                .catch(() => {
+                });
+    };
+
 }

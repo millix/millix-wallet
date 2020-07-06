@@ -1,4 +1,4 @@
-import {ADD_LOG_EVENT, ADD_NEW_ADDRESS, ADD_WALLET_CONFIG, CLEAR_TRANSACTION_DETAILS, LOCK_WALLET, SET_BACKLOG_SIZE, UNLOCK_WALLET, UPDATE_CLOCK, UPDATE_NETWORK_CONNECTIONS, UPDATE_NETWORK_NODE_LIST, UPDATE_NETWORK_STATE, UPDATE_TRANSACTION_DETAILS, UPDATE_WALLET_ADDRESS, UPDATE_WALLET_CONFIG, UPDATE_WALLET_MAINTENANCE, UPDATE_WALLET_TRANSACTIONS, WALLET_READY, UPDATE_WALLET_ADDRESS_VERSION, ADD_WALLET_ADDRESS_VERSION} from '../constants/action-types';
+import {ADD_LOG_EVENT, ADD_NEW_ADDRESS, ADD_WALLET_CONFIG, CLEAR_TRANSACTION_DETAILS, LOCK_WALLET, SET_BACKLOG_SIZE, UNLOCK_WALLET, UPDATE_CLOCK, UPDATE_NETWORK_CONNECTIONS, UPDATE_NETWORK_NODE_LIST, UPDATE_NETWORK_STATE, UPDATE_TRANSACTION_DETAILS, UPDATE_WALLET_ADDRESS, UPDATE_WALLET_CONFIG, UPDATE_WALLET_MAINTENANCE, UPDATE_WALLET_TRANSACTIONS, WALLET_READY, UPDATE_WALLET_ADDRESS_VERSION, ADD_WALLET_ADDRESS_VERSION, GET_NODE_ATTRIBUTES} from '../constants/action-types';
 import config from '../../../../../deps/millix-node/core/config/config';
 import _ from 'lodash';
 
@@ -28,7 +28,10 @@ const initialState = {
     backlog           : {
         size: 0
     },
-    transactionDetails: null
+    transactionDetails: null,
+    node: {
+        attributes:[],
+    }
 };
 
 function rootReducer(state = initialState, action) {
@@ -193,6 +196,13 @@ function rootReducer(state = initialState, action) {
                     ...state.wallet.address_version_list,
                     action.payload
                 ]
+            }
+        });
+    }
+    else if (action.type === GET_NODE_ATTRIBUTES) {
+        return Object.assign({}, state, {
+            node: {
+                attributes:[...action.payload]
             }
         });
     }
