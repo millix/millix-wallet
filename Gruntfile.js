@@ -47,7 +47,7 @@ module.exports = function(grunt) {
                 command: 'cd deps/millix-node && npm install'
             },
             release_win_deps: {
-                command: 'cd app/dist/millix-win-x64 && rm -r node_modules/* package-lock.json && npm install sqlite3'
+                command: 'cd app/dist/millix-win-x64 && cp locales/en* . && rm -rf locales/* && cp en* locales && rm -r node_modules/* package-lock.json && npm install sqlite3'
             },
             webpack         : {
                 command: 'cd app && npm install && webpack --config webpack.prod.config.js'
