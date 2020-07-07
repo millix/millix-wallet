@@ -86,6 +86,7 @@ process.on('exit', function() {
 console.log('starting millix-core');
 
 let initializeWallet = () => {
+    services.stop();
     services.initialize({mode: WALLET_MODE.APP})
             .then(() => eventBus.emit('node_list_update'))
             .catch(e => {
