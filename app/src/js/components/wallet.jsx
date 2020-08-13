@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {Button, Col, Form, FormControl, InputGroup, Row, Spinner, Table} from 'react-bootstrap';
-import {addNewAddress, walletUpdateAddresses} from '../redux/actions/index';
+import {addNewAddress, walletUpdateAddresses, walletUpdateBalance} from '../redux/actions/index';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import database from '../../../../deps/millix-node/database/database';
 import walletUtils from '../../../../deps/millix-node/core/wallet/wallet-utils';
@@ -31,6 +31,7 @@ class Wallet extends Component {
 
     componentDidMount() {
         this.props.walletUpdateAddresses(this.props.wallet.id);
+        this.props.walletUpdateBalance(this.props.wallet.address_key_identifier);
     }
 
     send() {
@@ -58,7 +59,7 @@ class Wallet extends Component {
 
         let amount;
         try {
-            amount = parseInt(this.amount.value.replace(/[,.]/g, ""));
+            amount = parseInt(this.amount.value.replace(/[,.]/g, ''));
             if (amount <= 0 || amount.toLocaleString() != this.amount.value) {
                 this.setState({amountError: true});
                 return;
@@ -83,7 +84,14 @@ class Wallet extends Component {
             }
         ])
               .then(() => this.props.walletUpdateAddresses(this.props.wallet.id))
-              .then(() => this.props.history.goBack())
+              .then(() => this.props.walletUpdateBalance(this.props.wallet.address_key_identifier))
+              .then(() => {
+                  this.destinationAddress.value = "";
+                  this.amount.value = "";
+                  this.setState({
+                      sending: false
+                  });
+              })
               .catch(() => this.setState({
                   connectionError: true,
                   sending        : false
@@ -97,7 +105,7 @@ class Wallet extends Component {
 
         let cursorStart = e.target.selectionStart,
             cursorEnd   = e.target.selectionEnd;
-        let amount      = e.target.value.replace(/[,.]/g, "");
+        let amount      = e.target.value.replace(/[,.]/g, '');
         let offset      = 0;
         if ((amount.length - 1) % 3 === 0) {
             offset = 1;
@@ -112,10 +120,10 @@ class Wallet extends Component {
             <div>
                 <Row className="mb-3">
                     <Col style={styles.centered}>
-                        <h3 style={{color: 'green'}}>available: xxx</h3>
+                        <h3 style={{color: 'green'}}>available: {this.props.wallet.balance_stable}</h3>
                     </Col>
                     <Col style={styles.centered}>
-                        <h3 style={{color: 'orange'}}>pending: xxx</h3>
+                        <h3 style={{color: 'orange'}}>pending: {this.props.wallet.balance_pending}</h3>
                     </Col>
                 </Row>
                 <Row className="mb-3">
@@ -178,8 +186,6 @@ class Wallet extends Component {
                 </Row>
 
 
-
-
                 <Row className="mb-3 mt-3">
                     <Col className="pr-0" style={{
                         ...styles.centered,
@@ -204,18 +210,15 @@ class Wallet extends Component {
                             <tr>
                                 <th>#</th>
                                 <th>address</th>
-                                <th>available balance</th>
-                                <th>pending balance</th>
                             </tr>
                             </thead>
                             <tbody>
                             {this.props.wallet.addresses.map((item, idx) => {
-                                return (<tr key={idx} className="wallet-address">
-                                    <td>{idx}</td>
-                                    <td>{item.address}</td>
-                                    <td style={{color: 'green'}}>{item.balance.toLocaleString()}</td>
-                                    <td style={{color: 'orange'}}>{item.pendingBalance == undefined ? 0 : item.pendingBalance.toLocaleString()}</td>
-                                </tr>);
+                                return (
+                                    <tr key={idx} className="wallet-address">
+                                        <td>{idx}</td>
+                                        <td>{item.address}</td>
+                                    </tr>);
                             })}
                             </tbody>
                         </Table>
@@ -233,6 +236,7 @@ export default connect(
     }),
     {
         walletUpdateAddresses,
-        addNewAddress
+        addNewAddress,
+        walletUpdateBalance
     }
 )(withRouter(Wallet));
