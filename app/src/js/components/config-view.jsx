@@ -337,11 +337,11 @@ class ConfigView extends Component {
                                    </Form.Label>
                                    <Col sm="3">
                                        <Form.Control type="text" placeholder=""
-                                                     ref={(c) => this._audit_point_transaction_prune_min_age = c}
+                                                     ref={(c) => this._transaction_prune_min_age = c}
                                                      onChange={() => {
-                                                         this.setConfig({AUDIT_POINT_TRANSACTION_PRUNE_AGE_MIN: this._audit_point_transaction_prune_min_age.value});
+                                                         this.setConfig({TRANSACTION_PRUNE_AGE_MIN: this._transaction_prune_min_age.value});
                                                      }}
-                                                     value={this.props.config.AUDIT_POINT_TRANSACTION_PRUNE_AGE_MIN}/>
+                                                     value={this.props.config.TRANSACTION_PRUNE_AGE_MIN}/>
                                    </Col>
 
                                    <Form.Label column sm="2">
@@ -349,11 +349,11 @@ class ConfigView extends Component {
                                    </Form.Label>
                                    <Col sm="3">
                                        <Form.Control type="text" placeholder=""
-                                                     ref={(c) => this._audit_point_transaction_prune_count = c}
+                                                     ref={(c) => this._transaction_prune_count = c}
                                                      onChange={() => {
-                                                         this.setConfig({AUDIT_POINT_TRANSACTION_PRUNE_COUNT: Math.min(parseInt(this._audit_point_transaction_prune_count.value), 512).toString()});
+                                                         this.setConfig({TRANSACTION_PRUNE_COUNT: Math.min(parseInt(this._transaction_prune_count.value), 512).toString()});
                                                      }}
-                                                     value={this.props.config.AUDIT_POINT_TRANSACTION_PRUNE_COUNT}/>
+                                                     value={this.props.config.TRANSACTION_PRUNE_COUNT}/>
                                    </Col>
                                </Form.Group>
                                <Form.Group as={Row}>
