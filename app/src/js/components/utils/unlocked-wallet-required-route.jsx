@@ -35,12 +35,6 @@ const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
                 <Row>
                     <Col className="pr-0" style={{textAlign: 'right'}}>
                         <span
-                            style={{fontSize: '75%'}}>wallet id: {rest.wallet.id}</span>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col className="pr-0" style={{textAlign: 'right'}}>
-                        <span
                             style={{fontSize: '75%'}}>event log size: {rest.log.size}</span>
                     </Col>
                 </Row>
