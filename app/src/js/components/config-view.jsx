@@ -98,33 +98,6 @@ class ConfigView extends Component {
                                    </Col>
                                </Form.Group>
                                <Form.Group as={Row}>
-                                   <Form.Label column sm="1">
-                                       network
-                                   </Form.Label>
-
-                                   <Col sm="10" style={{
-                                       marginTop   : 'auto',
-                                       marginBottom: 'auto'
-                                   }}>
-                                       <Form.Check
-                                           type="switch"
-                                           id="networkSelectSwitch"
-                                           ref={(c) => this._network = c}
-                                           label={!this.props.config.MODE_TEST_NETWORK ? 'main network' : 'test network'}
-                                           style={{
-                                               color: 'white'
-                                           }}
-                                           checked={!this.props.config.MODE_TEST_NETWORK}
-                                           onChange={(e) => {
-                                               this.setState({
-                                                   is_main_network   : e.target.checked,
-                                                   show_restart_modal: true
-                                               });
-                                           }}
-                                       />
-                                   </Col>
-                               </Form.Group>
-                               <Form.Group as={Row}>
                                    <Form.Label column sm="3">
                                        network port
                                    </Form.Label>
@@ -364,9 +337,9 @@ class ConfigView extends Component {
                                    </Form.Label>
                                    <Col sm="3">
                                        <Form.Control type="text" placeholder=""
-                                                     ref={(c) => this._transaction_prune_age_min = c}
+                                                     ref={(c) => this._transaction_prune_min_age = c}
                                                      onChange={() => {
-                                                         this.setConfig({TRANSACTION_PRUNE_AGE_MIN: this._transaction_prune_age_min.value});
+                                                         this.setConfig({TRANSACTION_PRUNE_AGE_MIN: this._transaction_prune_min_age.value});
                                                      }}
                                                      value={this.props.config.TRANSACTION_PRUNE_AGE_MIN}/>
                                    </Col>

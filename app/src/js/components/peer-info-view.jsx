@@ -75,7 +75,7 @@ class PeerInfoView extends Component {
                                 <td>{item.shard_id}</td>
                                 <td>{item.transaction_count}</td>
                                 <td>{item.update_date}</td>
-                                <td>{item.is_required}</td>
+                                <td>{item.is_required ? 'yes' : 'no'}</td>
                                 <td>{item.fee_ask_request_byte}</td>
                             </tr>);
                     })}
