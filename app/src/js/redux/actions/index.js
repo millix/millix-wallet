@@ -1,4 +1,4 @@
-import {UPDATE_WALLET_ADDRESS_VERSION, ADD_LOG_EVENT, ADD_NEW_ADDRESS, ADD_WALLET_CONFIG, CLEAR_TRANSACTION_DETAILS, LOCK_WALLET, SET_BACKLOG_SIZE, UNLOCK_WALLET, UPDATE_CLOCK, UPDATE_NETWORK_CONNECTIONS, UPDATE_NETWORK_NODE_LIST, UPDATE_NETWORK_STATE, UPDATE_TRANSACTION_DETAILS, UPDATE_WALLET_ADDRESS, UPDATE_WALLET_CONFIG, UPDATE_WALLET_MAINTENANCE, UPDATE_WALLET_TRANSACTIONS, WALLET_READY, ADD_WALLET_ADDRESS_VERSION, GET_NODE_ATTRIBUTES} from '../constants/action-types';
+import {UPDATE_WALLET_ADDRESS_VERSION, ADD_LOG_EVENT, ADD_NEW_ADDRESS, ADD_WALLET_CONFIG, CLEAR_TRANSACTION_DETAILS, LOCK_WALLET, SET_BACKLOG_SIZE, UNLOCK_WALLET, UPDATE_CLOCK, UPDATE_NETWORK_CONNECTIONS, UPDATE_NETWORK_NODE_LIST, UPDATE_NETWORK_STATE, UPDATE_TRANSACTION_DETAILS, UPDATE_WALLET_ADDRESS, UPDATE_WALLET_CONFIG, UPDATE_WALLET_MAINTENANCE, UPDATE_WALLET_TRANSACTIONS, WALLET_READY, ADD_WALLET_ADDRESS_VERSION, GET_NODE_ATTRIBUTES, UPDATE_WALLET_BALANCE} from '../constants/action-types';
 import database from '../../../../../deps/millix-node/database/database';
 import wallet from '../../../../../deps/millix-node/core/wallet/wallet';
 import async from 'async';
@@ -52,9 +52,18 @@ export function addWalletAddressVersion(payload) {
 }
 
 export function unlockWallet(payload) {
-    return {
-        type: UNLOCK_WALLET,
-        payload
+    return (dispatch) => {
+        database.getRepository('keychain')
+                .getWalletDefaultKeyIdentifier(payload)//walletID
+                .then(defaultKeyIdentifier => {
+                    dispatch({
+                        type   : UNLOCK_WALLET,
+                        payload: {
+                            address_key_identifier: defaultKeyIdentifier,
+                            id                    : payload
+                        }
+                    });
+                });
     };
 }
 
@@ -174,30 +183,33 @@ export function updateNetworkNodeList() {
                                  }));
 }
 
+export function walletUpdateBalance(keyIdentifier) {
+    return (dispatch) => {
+        database.applyShards((shardID) => {
+            const transactionRepository = database.getRepository('transaction', shardID);
+            return transactionRepository.getWalletBalance(keyIdentifier, true);
+        }).then(balanceList => _.sum(balanceList)).then(balance => {
+            let payload = {};
+            payload['balance_stable'] = balance || 0;
+            return payload;
+        }).then((payload) => {
+            return database.applyShards((shardID) => {
+                const transactionRepository = database.getRepository('transaction', shardID);
+                return transactionRepository.getWalletBalance(keyIdentifier, false);
+            }).then(balanceList => _.sum(balanceList)).then(balance => {
+                payload['balance_pending'] = balance || 0;
+                return payload;
+            });
+        }).then(payload => dispatch({
+            type: UPDATE_WALLET_BALANCE,
+            payload
+        }));
+    };
+}
 
 export function walletUpdateAddresses(walletID) {
     return (dispatch) => database.getRepository('keychain')
                                  .getWalletAddresses(walletID)
-                                 .then(addresses => {
-                                     return new Promise(resolve => {
-                                         async.eachSeries(addresses, (item, callback) => {
-                                             database.applyShards((shardID) => {
-                                                 const transactionRepository = database.getRepository('transaction', shardID);
-                                                 return transactionRepository.getAddressBalance(item.address, true);
-                                             }).then(balanceList => _.sum(balanceList)).then(balance => {
-                                                 item['balance'] = balance || 0;
-                                             }).then(() => {
-                                                 database.applyShards((shardID) => {
-                                                     const transactionRepository = database.getRepository('transaction', shardID);
-                                                     return transactionRepository.getAddressBalance(item.address, false);
-                                                 }).then(balanceList => _.sum(balanceList)).then(balance => {
-                                                     item['pendingBalance'] = balance || 0;
-                                                     callback();
-                                                 });
-                                             });
-                                         }, () => resolve(addresses));
-                                     });
-                                 })
                                  .then(payload => dispatch({
                                      type: UPDATE_WALLET_ADDRESS,
                                      payload
@@ -220,17 +232,18 @@ export function updateClock(clock) {
 
 export function getNodeAttribute(nodeID) {//removeWalletAddressVersion(payload) {
     return (dispatch) => {
-        //nodeRepository.listNodeAttribute(where: {node_id:nodeID}, orderBy, limit);
+        //nodeRepository.listNodeAttribute(where: {node_id:nodeID}, orderBy,
+        // limit);
         return database.getRepository('node')
-                .listNodeAttribute({node_id:nodeID})
-                .then((listAttributes) => {
-                    return dispatch({
-                        type   : GET_NODE_ATTRIBUTES,
-                        payload: listAttributes
-                    });
-                })
-                .catch(() => {
-                });
+                       .listNodeAttribute({node_id: nodeID})
+                       .then((listAttributes) => {
+                           return dispatch({
+                               type   : GET_NODE_ATTRIBUTES,
+                               payload: listAttributes
+                           });
+                       })
+                       .catch(() => {
+                       });
     };
 
 }

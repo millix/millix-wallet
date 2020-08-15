@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import store from './js/redux/store';
 import _ from 'lodash';
-import {addWalletConfig, lockWallet, unlockWallet, updateClock, updateNetworkConnections, updateNetworkNodeList, updateWalletAddressVersion, walletReady, walletUpdateAddresses} from './js/redux/actions/index';
+import {addWalletConfig, lockWallet, unlockWallet, updateClock, updateNetworkConnections, updateNetworkNodeList, updateWalletAddressVersion, walletReady, walletUpdateAddresses, walletUpdateBalance} from './js/redux/actions/index';
 import AppContainer from './js/components/app-container';
 import console from '../../deps/millix-node/core/console';
 import network from '../../deps/millix-node/net/network';
@@ -118,7 +118,11 @@ eventBus.on('wallet_unlock', wallet => {
 eventBus.on('node_list', () => store.dispatch(updateNetworkNodeList()));
 eventBus.on('node_list_update', () => store.dispatch(updateNetworkNodeList()));
 eventBus.on('node_status_update', () => store.dispatch(updateNetworkConnections(_.filter(network.registeredClients, ws => ws.nodeConnectionReady))));
-eventBus.on('wallet_update', (walletID) => store.dispatch(walletUpdateAddresses(walletID)));
+eventBus.on('wallet_update', () => {
+    const wallet = store.getState().wallet;
+    store.dispatch(walletUpdateAddresses(wallet.id));
+    store.dispatch(walletUpdateBalance(wallet.address_key_identifier));
+});
 eventBus.on('wallet_update_address_version', (addressVersionList) => store.dispatch(updateWalletAddressVersion(addressVersionList)));
 eventBus.on('wallet_reload', (readyCallback) => {
     eventBus.removeAllListeners('wallet_key');
