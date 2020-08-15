@@ -83,7 +83,7 @@ class TransactionView extends Component {
             sending    : true
         });
 
-        wallet.addTransaction(this.address, [
+        wallet.addTransaction([
             {
                 address_base          : destinationAddress,
                 address_version       : destinationAddressVersion,
