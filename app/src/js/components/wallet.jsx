@@ -12,7 +12,11 @@ const styles = {
     centered: {
         display       : 'flex',
         justifyContent: 'center'
-    }
+    },
+    left: {
+        display       : 'flex',
+        justifyContent: 'left'
+    },
 };
 
 
@@ -118,12 +122,19 @@ class Wallet extends Component {
     render() {
         return (
             <div>
-                <Row className="mb-3">
-                    <Col style={styles.centered}>
-                        <h3 style={{color: 'green'}}>available: {this.props.wallet.balance_stable}</h3>
+                <Row className="mb-1">
+                    <Col style={styles.left}>
+                        <span>balance</span>
                     </Col>
-                    <Col style={styles.centered}>
-                        <h3 style={{color: 'orange'}}>pending: {this.props.wallet.balance_pending}</h3>
+                </Row>
+                <Row className="mb-1">
+                    <Col style={styles.left}>
+                        <span style={{color: 'lightblue'}}>available: {this.props.wallet.balance_stable}</span>
+                    </Col>
+                </Row>
+                <Row className="mb-3">
+                    <Col style={styles.left}>
+                        <span style={{color: 'lightslategrey'}}>pending: {this.props.wallet.balance_pending}</span>
                     </Col>
                 </Row>
                 <Row className="mb-3">
