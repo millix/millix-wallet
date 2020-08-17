@@ -50,6 +50,24 @@ class ConfigView extends Component {
         });
     }
 
+    addToConfigList(configName, stateName) {
+        let value        = this.state[stateName];
+        const configList = this.props.config[configName];
+        if (!value || configList.includes(value)) {
+            return;
+        }
+        value = value.trim();
+        configList.push(value);
+        this.setState({[stateName]: ''});
+        this.setConfig({[configName]: configList});
+    }
+
+
+    removeFromConfigList(configName, value) {
+        _.pull(this.props.config[configName], value);
+        this.setConfig({[configName]: this.props.config[configName]});
+    }
+
     render() {
         return this.state.show_restart_modal ? (
             <div>
@@ -183,6 +201,181 @@ class ConfigView extends Component {
                                                      value={this.props.config.NODE_CONNECTION_OUTBOUND_MAX}/>
                                    </Col>
                                </Form.Group>
+
+
+                               <Form.Group as={Row}>
+                                   <Form.Label column sm="12">
+                                       inbound connection whitelist
+                                   </Form.Label>
+                               </Form.Group>
+                               <Form.Group as={Row}>
+                                   <Col sm="8">
+                                       <Form.Control type="text"
+                                                     placeholder="node id"
+                                                     ref={(c) => this._connection_whitelist_inbound_node = c}
+                                                     onChange={() => {
+                                                         this.setState({connection_whitelist_inbound_node: this._connection_whitelist_inbound_node.value});
+                                                     }}
+                                                     value={this.state.connection_whitelist_inbound_node}/>
+                                   </Col>
+                                   <Col sm="2">
+                                       <Button variant={'secondary'}
+                                               onClick={() => this.addToConfigList('NODE_CONNECTION_INBOUND_WHITELIST', 'connection_whitelist_inbound_node')}>
+                                           <FontAwesomeIcon icon="plus"
+                                                            size="1x"/>
+                                       </Button>
+                                   </Col>
+                               </Form.Group>
+                               <div style={{
+                                   width   : '100%',
+                                   overflow: 'auto'
+                               }}>
+                                   <Table striped bordered hover
+                                          variant="dark">
+                                       <thead>
+                                       <tr>
+                                           <th>node id</th>
+                                           <th></th>
+                                       </tr>
+                                       </thead>
+                                       <tbody>
+                                       {this.props.config.NODE_CONNECTION_INBOUND_WHITELIST.map((nodeID, idx) => {
+                                           return (
+                                               <tr key={idx}
+                                                   className="table-row">
+                                                   <td>{nodeID}</td>
+                                                   <td>
+                                                       <Button
+                                                           variant={'danger'}
+                                                           size={'sm'}
+                                                           onClick={() => this.removeFromConfigList('NODE_CONNECTION_INBOUND_WHITELIST', nodeID)}>
+                                                           <FontAwesomeIcon
+                                                               icon="trash"
+                                                               size="1x"/>
+                                                       </Button>
+                                                   </td>
+                                               </tr>);
+                                       })}
+                                       </tbody>
+                                   </Table>
+                               </div>
+
+                               <Form.Group as={Row}>
+                                   <Form.Label column sm="12">
+                                       outbound connection whitelist
+                                   </Form.Label>
+                               </Form.Group>
+                               <Form.Group as={Row}>
+                                   <Col sm="8">
+                                       <Form.Control type="text"
+                                                     placeholder="node id"
+                                                     ref={(c) => this._connection_whitelist_outbound_node = c}
+                                                     onChange={() => {
+                                                         this.setState({connection_whitelist_outbound_node: this._connection_whitelist_outbound_node.value});
+                                                     }}
+                                                     value={this.state.connection_whitelist_outbound_node}/>
+                                   </Col>
+                                   <Col sm="2">
+                                       <Button variant={'secondary'}
+                                               onClick={() => this.addToConfigList('NODE_CONNECTION_OUTBOUND_WHITELIST', 'connection_whitelist_outbound_node')}>
+                                           <FontAwesomeIcon icon="plus"
+                                                            size="1x"/>
+                                       </Button>
+                                   </Col>
+                               </Form.Group>
+
+                               <div style={{
+                                   width   : '100%',
+                                   overflow: 'auto'
+                               }}>
+                                   <Table striped bordered hover
+                                          variant="dark">
+                                       <thead>
+                                       <tr>
+                                           <th>node id</th>
+                                           <th></th>
+                                       </tr>
+                                       </thead>
+                                       <tbody>
+                                       {this.props.config.NODE_CONNECTION_OUTBOUND_WHITELIST.map((nodeID, idx) => {
+                                           return (
+                                               <tr key={idx}
+                                                   className="table-row">
+                                                   <td>{nodeID}</td>
+                                                   <td>
+                                                       <Button
+                                                           variant={'danger'}
+                                                           size={'sm'}
+                                                           onClick={() => this.removeFromConfigList('NODE_CONNECTION_OUTBOUND_WHITELIST', nodeID)}>
+                                                           <FontAwesomeIcon
+                                                               icon="trash"
+                                                               size="1x"/>
+                                                       </Button>
+                                                   </td>
+                                               </tr>);
+                                       })}
+                                       </tbody>
+                                   </Table>
+                               </div>
+
+                               <Form.Group as={Row}>
+                                   <Form.Label column sm="12">
+                                       static connection
+                                   </Form.Label>
+                               </Form.Group>
+                               <Form.Group as={Row}>
+                                   <Col sm="8">
+                                       <Form.Control type="text"
+                                                     placeholder="node id"
+                                                     ref={(c) => this._connection_static_node = c}
+                                                     onChange={() => {
+                                                         this.setState({connection_static_node: this._connection_static_node.value});
+                                                     }}
+                                                     value={this.state.connection_static_node}/>
+                                   </Col>
+                                   <Col sm="2">
+                                       <Button variant={'secondary'}
+                                               onClick={() => this.addToConfigList('NODE_CONNECTION_STATIC', 'connection_static_node')}>
+                                           <FontAwesomeIcon icon="plus"
+                                                            size="1x"/>
+                                       </Button>
+                                   </Col>
+                               </Form.Group>
+
+                               <div style={{
+                                   width   : '100%',
+                                   overflow: 'auto'
+                               }}>
+                                   <Table striped bordered hover
+                                          variant="dark">
+                                       <thead>
+                                       <tr>
+                                           <th>node id</th>
+                                           <th></th>
+                                       </tr>
+                                       </thead>
+                                       <tbody>
+                                       {this.props.config.NODE_CONNECTION_STATIC.map((nodeID, idx) => {
+                                           return (
+                                               <tr key={idx}
+                                                   className="table-row">
+                                                   <td>{nodeID}</td>
+                                                   <td>
+                                                       <Button
+                                                           variant={'danger'}
+                                                           size={'sm'}
+                                                           onClick={() => this.removeFromConfigList('NODE_CONNECTION_STATIC', nodeID)}>
+                                                           <FontAwesomeIcon
+                                                               icon="trash"
+                                                               size="1x"/>
+                                                       </Button>
+                                                   </td>
+                                               </tr>);
+                                       })}
+                                       </tbody>
+                                   </Table>
+                               </div>
+
                                <Form.Group as={Row}>
                                    <Form.Label column sm="2">
                                        consensus
