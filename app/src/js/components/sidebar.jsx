@@ -107,6 +107,7 @@ class Sidebar extends Component {
                             break;
                         case 'resetValidation':
                             wallet.resetTransactionValidationRejected();
+                            wallet._doTransactionOutputRefresh().then(_ => _);
                             break;
                         default:
                             props.history.push(selected);
