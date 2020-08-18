@@ -89,7 +89,7 @@ export function walletUpdateConfig(payload) {
         return new Promise(resolve => {
             async.each(_.keys(payload), (key, callback) => {
                 database.getRepository('config')
-                        .updateConfig(key, payload[key])
+                        .updateConfig(key, JSON.stringify(payload[key]))
                         .then(() => callback());
             }, () => {
                 dispatch({
