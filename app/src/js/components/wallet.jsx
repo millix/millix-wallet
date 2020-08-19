@@ -129,12 +129,12 @@ class Wallet extends Component {
                 </Row>
                 <Row className="mb-1">
                     <Col style={styles.left}>
-                        <span style={{color: 'lightblue'}}>available: {this.props.wallet.balance_stable}</span>
+                        <span style={{color: 'lightblue'}}>available: {this.props.wallet.balance_stable.toLocaleString()}</span>
                     </Col>
                 </Row>
                 <Row className="mb-3">
                     <Col style={styles.left}>
-                        <span style={{color: 'lightslategrey'}}>pending: {this.props.wallet.balance_pending}</span>
+                        <span style={{color: 'lightslategrey'}}>pending: {this.props.wallet.balance_pending.toLocaleString()}</span>
                     </Col>
                 </Row>
                 <Row className="mb-3">
