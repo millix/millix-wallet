@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import Wallet from './wallet';
 import UnlockWallet from './unlock-wallet';
 import UnlockedWalletRequiredRoute from './utils/unlocked-wallet-required-route';
-import TransactionView from './transaction-view';
 import TransactionDetails from './transaction-details';
 import TransactionHistoryView from './transaction-history-view';
 import WalletMaintenanceView from './wallet-maintenance-view';
@@ -25,8 +24,6 @@ const AppContainer = ({store}) => (
                                              component={ConfigView}/>
                 <UnlockedWalletRequiredRoute path='/optimize'
                                              component={WalletMaintenanceView}/>
-                <UnlockedWalletRequiredRoute path='/address/:address'
-                                             component={TransactionView}/>
                 <UnlockedWalletRequiredRoute path='/transaction/:transaction_id'
                                              component={TransactionDetails}/>
                 <UnlockedWalletRequiredRoute path='/history'

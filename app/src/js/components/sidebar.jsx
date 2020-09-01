@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import SideNav, {NavIcon, NavItem, NavText} from '@trendmicro/react-sidenav';
+import SideNav, {NavItem, NavText} from '@trendmicro/react-sidenav';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import eventBus from '../../../../deps/millix-node/core/event-bus';
 import walletUtils from '../../../../deps/millix-node/core/wallet/wallet-utils';
@@ -12,8 +12,15 @@ import async from 'async';
 class Sidebar extends Component {
     constructor(props) {
         super(props);
-        let now    = Date.now();
-        this.state = {
+        let now            = Date.now();
+        this.walletScreens = [
+            '/history',
+            '/log',
+            '/config',
+            '/transaction',
+            '/peer'
+        ];
+        this.state         = {
             fileKeyExport: 'export_' + now,
             fileKeyImport: 'import_' + now
         };
@@ -88,10 +95,25 @@ class Sidebar extends Component {
         this.setState({fileKeyImport: 'import_' + Date.now()});
     }
 
+    isWalletScreen(pathName) {
+        if (!pathName) {
+            return false;
+        }
+
+        for (let screen of this.walletScreens) {
+            if (pathName.startsWith(screen)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     render() {
         let props = this.props;
-        return (<div>
+        return (<aside className={'navigation'}>
             <SideNav
+                expanded={true}
+                style={{minWidth: 200}}
                 onSelect={(selected) => {
                     switch (selected) {
                         case 'loadWallet':
@@ -114,78 +136,52 @@ class Sidebar extends Component {
                     }
                 }}
             >
-                <SideNav.Toggle/>
                 <SideNav.Nav
-                    defaultSelected={props.location.pathname.length === 0 ? '/wallet' : props.location.pathname}>
+                    defaultSelected={!this.isWalletScreen(props.location.pathname) ? '/wallet' : props.location.pathname}>
+                    <li className="nav-category">
+                        {this.props.clock}
+                    </li>
                     <NavItem key={'wallet'} eventKey="/wallet">
-                        <NavIcon>
-                            <FontAwesomeIcon icon="home" size="1x"/>
-                        </NavIcon>
                         <NavText>
                             home
                         </NavText>
                     </NavItem>
                     <NavItem key={'history'} eventKey="/history">
-                        <NavIcon>
-                            <FontAwesomeIcon icon="exchange-alt" size="1x"/>
-                        </NavIcon>
                         <NavText>
                             transaction history
                         </NavText>
                     </NavItem>
                     <NavItem key={'log'} eventKey="/log">
-                        <NavIcon>
-                            <FontAwesomeIcon icon="stream" size="1x"/>
-                        </NavIcon>
                         <NavText>
                             logs
                         </NavText>
                     </NavItem>
                     <NavItem key={'config'} eventKey="/config">
-                        <NavIcon>
-                            <FontAwesomeIcon icon="sliders-h" size="1x"/>
-                        </NavIcon>
                         <NavText>
                             configure
                         </NavText>
                     </NavItem>
                     <NavItem key={'optimize'} eventKey="/optimize">
-                        <NavIcon>
-                            <FontAwesomeIcon icon="heartbeat" size="1x"/>
-                        </NavIcon>
                         <NavText>
                             optimize
                         </NavText>
                     </NavItem>
                     <NavItem key={'resetValidation'} eventKey="resetValidation">
-                        <NavIcon>
-                            <FontAwesomeIcon icon="undo-alt" size="1x"/>
-                        </NavIcon>
                         <NavText>
                             reset validation
                         </NavText>
                     </NavItem>
                     <NavItem key={'loadWallet'} eventKey="loadWallet">
-                        <NavIcon>
-                            <FontAwesomeIcon icon="wallet" size="1x"/>
-                        </NavIcon>
                         <NavText>
                             load wallet
                         </NavText>
                     </NavItem>
                     <NavItem key={'saveWallet'} eventKey="saveWallet">
-                        <NavIcon>
-                            <FontAwesomeIcon icon="cloud-download-alt"
-                                             size="1x"/>
-                        </NavIcon>
                         <NavText>
                             save wallet
                         </NavText>
                     </NavItem>
                     <NavItem key={'lock'} eventKey="lock">
-                        <NavIcon>
-                            <FontAwesomeIcon icon="sign-out-alt" size="1x"/>
-                        </NavIcon>
                         <NavText>
                             logout
                         </NavText>
@@ -203,7 +199,7 @@ class Sidebar extends Component {
                        onChange={this.exportKeys.bind(this)}
                        key={this.state.fileKeyExport}/>
             </div>
-        </div>);
+        </aside>);
     }
 }
 

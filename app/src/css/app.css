@@ -1,39 +1,92 @@
-html {
-    height: 100%;
+.navigation div {
+    color: #949ba2 !important;
 }
 
-body {
-    font-family: 'Arvo', serif;
-    background: linear-gradient(to right, rgb(15, 32, 39), rgb(32, 58, 67), rgb(44, 83, 100));
-    color: white;
-    margin: 20px;
-    height: 100%;
-    padding: 10px;
-    margin: 0;
+.navigation .sidenav---selected---1EK3y div {
+    color: #c0c4c8 !important;
 }
 
-.wallet-address {
-    cursor: pointer;
+.luna-nav.nav li a:hover, .luna-nav.nav li a:focus {
+    color: #c0c4c8;
+    background: inherit;
 }
 
-.react-bootstrap-table tr {
-    color: white;
-    cursor: pointer;
+.sidenav---sidenav-nav---3tvij > .sidenav---sidenav-navitem---uwIJ- > .sidenav---navitem---9uL5T .sidenav---navtext---1AE_f {
+    padding: 8px 15px 8px 25px;
+    margin: 0 0;
+    height: 36px;
+    line-height: 20px;
 }
 
-#app {
-    height: 100%;
+.sidenav---sidenav-nav---3tvij > .sidenav---sidenav-navitem---uwIJ-.sidenav---highlighted---oUx9u > .sidenav---navitem---9uL5T .sidenav---navtext---1AE_f {
+    border-left: 6px solid #f6a821;
+    padding-left: 19px;
+    color: #c0c4c8;
 }
 
-.container {
-    padding-left: 79px;
-    height: 100%;
+.sidenav---sidenav-nav---3tvij > .sidenav---sidenav-navitem---uwIJ- > .sidenav---navitem---9uL5T {
+    height: 36px;
 }
 
-.sidenav---sidenav---_2tBP {
-    background: linear-gradient(to right, rgb(15, 32, 39), rgb(32, 58, 67), rgb(44, 83, 100));
+.sidenav---sidenav-nav---3tvij > .sidenav---sidenav-navitem---uwIJ-.sidenav---highlighted---oUx9u > .sidenav---navitem---9uL5T::after {
+    opacity: 0;
 }
 
-.react-bootstrap-table table {
-    table-layout: auto;
+.sidenav---sidenav-nav---3tvij > .sidenav---sidenav-navitem---uwIJ-:hover > .sidenav---navitem---9uL5T .sidenav---navtext---1AE_f {
+    color: #c0c4c8 !important;
+}
+
+.sidenav---sidenav-nav---3tvij > .sidenav---sidenav-navitem---uwIJ-:hover > .sidenav---navitem---9uL5T::after {
+    background: #2f323b;
+}
+
+.sidenav---sidenav-nav---3tvij > .sidenav---sidenav-navitem---uwIJ-.sidenav---highlighted---oUx9u > .sidenav---navitem---9uL5T::after, .sidenav---sidenav-nav---3tvij > .sidenav---sidenav-navitem---uwIJ-:hover.sidenav---highlighted---oUx9u > .sidenav---navitem---9uL5T::after {
+    background: #2f323b;
+}
+
+.nav-category {
+    color: #FFFFFF;
+    margin-top: 10px !important;
+    margin-bottom: 10px;
+}
+
+.sidenav---sidenav-nav---3tvij > .nav-category {
+    padding: 8px 15px 8px 25px;
+    margin: 0 0;
+}
+
+.panel-body > .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.sidenav---sidenav---_2tBP.sidenav---expanded---1KdUL {
+    padding-top: 15px;
+}
+
+.switchery-small {
+    border-radius: 15px;
+    height: 15px;
+}
+
+.switchery-small > small {
+    height: 15px;
+    width: 15px;
+}
+
+.switch-class.network-switch label {
+    font-size: 75% !important;
+    color: #949ba2 !important;
+}
+
+.mb-1 {
+    margin-bottom: 5px;
+}
+
+.mb-2 {
+    margin-bottom: 10px;
+}
+
+.mb-3 {
+    margin-bottom: 15px;
 }

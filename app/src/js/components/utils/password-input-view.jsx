@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Button, Col, FormControl, InputGroup, Row} from 'react-bootstrap';
+import eventBus from '../../../../../deps/millix-node/core/event-bus';
 
 const styles            = {
     centered: {
@@ -15,32 +16,28 @@ const PasswordInputView = (props) => {
         <Row>
             <Col>
                 <Row>
-                    <Col>
-                        <InputGroup className="mb-3">
-                            <FormControl
-                                ref={c => passphraseRef = c}
-                                type="password"
-                                placeholder="wallet passphrase"
-                                aria-label="wallet passphrase"
-                                aria-describedby="basic-addon"
-                                onKeyPress={(e) => {
-                                    if (e.charCode == 13) {
-                                        props.onPassword(passphraseRef.value);
-                                    }
-                                }}
-                            />
-                            <InputGroup.Append>
-                                <InputGroup.Text
-                                    id="basic-addon">passphrase</InputGroup.Text>
-                            </InputGroup.Append>
-                        </InputGroup>
+                    <Col className={'mb-3 col-md-offset-2'} md={8}>
+                        <FormControl
+                            ref={c => passphraseRef = c}
+                            type="password"
+                            placeholder="wallet passphrase"
+                            aria-label="wallet passphrase"
+                            aria-describedby="basic-addon"
+                            onKeyPress={(e) => {
+                                if (e.charCode == 13) {
+                                    props.onPassword(passphraseRef.value);
+                                }
+                            }}
+                        />
                     </Col>
                 </Row>
                 <Row>
                     <Col style={styles.centered}>
-                        <Button variant="light" onClick={() => {
-                            props.onPassword(passphraseRef.value);
-                        }}>{props.newWallet ? 'create wallet' : 'unlock wallet'}</Button>
+                        <Button variant="light"
+                                className={'btn btn-w-md btn-default'}
+                                onClick={() => {
+                                    props.onPassword(passphraseRef.value);
+                                }}>{props.newWallet ? 'create wallet' : 'unlock wallet'}</Button>
                     </Col>
                 </Row>
             </Col>

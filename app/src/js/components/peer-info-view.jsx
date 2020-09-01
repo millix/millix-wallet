@@ -27,11 +27,10 @@ class PeerInfoView extends Component {
                 });
             }
             else {
-                let attributeType = ele.attribute_type.replace(/_/g," ");
+                let attributeType = ele.attribute_type.replace(/_/g, ' ');
                 simpleAttributes.push(
-                    <Row className="mb-3"
-                         style={{color: 'lightcyan'}}>
-                        <h5>{attributeType}:</h5>&nbsp;<p>{ele.value}</p>
+                    <Row className="mb-1">
+                        <h5>{attributeType}:</h5> {ele.value}
                     </Row>
                 );
             }
@@ -44,7 +43,8 @@ class PeerInfoView extends Component {
                         display       : 'flex',
                         justifyContent: 'flex-start'
                     }}>
-                        <Button variant="outline-secondary"
+                        <Button variant="light"
+                                className={'btn btn-w-md btn-default'}
                                 onClick={this.props.history.goBack}>
                             <FontAwesomeIcon icon="arrow-circle-left"
                                              size="2x"/>
@@ -57,7 +57,11 @@ class PeerInfoView extends Component {
                         </Button>
                     </Col>
                 </Row>
-                {simpleAttributes}
+                <div className={'panel panel-filled'}>
+                    <div className={'panel-body'}>
+                        {simpleAttributes}
+                    </div>
+                </div>
                 <Table striped bordered hover variant="dark">
                     <thead>
                     <tr>

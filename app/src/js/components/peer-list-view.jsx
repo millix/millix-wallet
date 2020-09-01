@@ -18,7 +18,7 @@ class PeerListView extends Component {
                         display       : 'flex',
                         justifyContent: 'flex-start'
                     }}>
-                        <Button variant="outline-secondary"
+                        <Button variant="light"  className={"btn btn-w-md btn-default"}
                                 onClick={this.props.history.goBack}>
                             <FontAwesomeIcon icon="arrow-circle-left"
                                              size="2x"/>

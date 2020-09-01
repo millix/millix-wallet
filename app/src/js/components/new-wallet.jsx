@@ -14,7 +14,8 @@ import async from 'async';
 const styles = {
     centered: {
         display       : 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        color         : '#949ba2'
     }
 };
 
@@ -115,7 +116,8 @@ class NewWallet extends Component {
             }}>
                 <Row className="mb-3">
                     {this.props.location.state && this.props.location.state.walletExists && (
-                        <Button variant="outline-secondary" style={{
+                        <Button variant="light"
+                                className={'btn btn-w-md btn-default'} style={{
                             float     : 'left',
                             marginLeft: '80px'
                         }} onClick={() => {
@@ -124,62 +126,63 @@ class NewWallet extends Component {
                             <FontAwesomeIcon icon="fingerprint"
                                              size="1x"/> unlock
                         </Button>)}
-                    {this.props.location.state && this.props.location.state.walletExists ?
-                     <Col style={{
-                         ...styles.centered,
-                         marginRight: '178px'
-                     }}><h2>millix</h2></Col> :
-                     <Col style={styles.centered}><h2>millix</h2></Col>}
 
                 </Row>
 
                 {status === STATUS.SELECT && (
-                    <Row>
-                        <Col style={{textAlign: 'right'}}>
-                            <Button variant="outline-secondary" style={{
-                                width        : '80%',
-                                paddingTop   : '14.66%',
-                                paddingBottom: '14.66%'
-                            }} onClick={() => {
-                                this.setState({status: STATUS.NEW_WALLET});
-                            }}>
-                                <FontAwesomeIcon icon="wallet" size="8x"
-                                                 style={{
-                                                     margin : '0 auto',
-                                                     display: 'block'
-                                                 }}/> new wallet
-                            </Button>
-                        </Col>
-                        <Col>
-                            <input style={{display: 'none'}} type="file"
-                                   accept=".json"
-                                   ref={(component) => this.inputImport = component}
-                                   onChange={this.importKey.bind(this)}
-                                   key={this.state.fileKeyImport}/>
-                            <Button variant="outline-secondary" style={{
-                                width        : '80%',
-                                paddingTop   : '20.66%',
-                                paddingBottom: '18.66%'
-                            }} onClick={() => {
-                                this.inputImport.click();
-                                this.setState({importingWallet: true});
-                            }}>
-                                <FontAwesomeIcon icon="key" size="6x" style={{
-                                    margin : '0 auto',
-                                    display: 'block'
-                                }}/>
-                                {this.state.importingWallet && (
-                                    <Spinner
-                                        as="span"
-                                        animation="grow"
-                                        size="sm"
-                                        role="status"
-                                        aria-hidden="true"
-                                    />)}
-                                {this.state.importingWallet ? ('loading wallet') : ('load wallet')}
-                            </Button>
-                        </Col>
-                    </Row>
+                    <div className="container-center lg">
+                        <Row>
+                            <Col sm={6} style={{textAlign: 'right'}}>
+                                <Button variant="light"
+                                        className={'btn btn-w-md btn-accent'}
+                                        style={{
+                                            width        : '80%',
+                                            paddingTop   : '14.66%',
+                                            paddingBottom: '20.66%'
+                                        }} onClick={() => {
+                                    this.setState({status: STATUS.NEW_WALLET});
+                                }}>
+                                    <FontAwesomeIcon icon="wallet" size="8x"
+                                                     style={{
+                                                         margin : '0 auto',
+                                                         display: 'block'
+                                                     }}/> new wallet
+                                </Button>
+                            </Col>
+                            <Col sm={6}>
+                                <input style={{display: 'none'}} type="file"
+                                       accept=".json"
+                                       ref={(component) => this.inputImport = component}
+                                       onChange={this.importKey.bind(this)}
+                                       key={this.state.fileKeyImport}/>
+                                <Button variant="light"
+                                        className={'btn btn-w-md btn-accent'}
+                                        style={{
+                                            width        : '80%',
+                                            paddingTop   : '24.3%',
+                                            paddingBottom: '18.66%'
+                                        }} onClick={() => {
+                                    this.inputImport.click();
+                                    this.setState({importingWallet: true});
+                                }}>
+                                    <FontAwesomeIcon icon="key" size="6x"
+                                                     style={{
+                                                         margin : '0 auto',
+                                                         display: 'block'
+                                                     }}/>
+                                    {this.state.importingWallet && (
+                                        <Spinner
+                                            as="span"
+                                            animation="grow"
+                                            size="sm"
+                                            role="status"
+                                            aria-hidden="true"
+                                        />)}
+                                    {this.state.importingWallet ? ('loading wallet') : ('load wallet')}
+                                </Button>
+                            </Col>
+                        </Row>
+                    </div>
                 )}
                 {status === STATUS.NEW_WALLET && (
                     <PasswordInputView onPassword={this.onPassword.bind(this)}
