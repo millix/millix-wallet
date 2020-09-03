@@ -44,7 +44,7 @@ class PeerInfoView extends Component {
                         justifyContent: 'flex-start'
                     }}>
                         <Button variant="light"
-                                className={'btn btn-w-md btn-default'}
+                                className={'btn btn-w-md btn-accent'}
                                 onClick={this.props.history.goBack}>
                             <FontAwesomeIcon icon="arrow-circle-left"
                                              size="2x"/>

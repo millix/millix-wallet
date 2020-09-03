@@ -169,7 +169,7 @@ class EventsLogView extends Component {
                         justifyContent: 'flex-end'
                     }}>
                         <Button variant="light"
-                                className={'btn btn-w-md btn-default'}
+                                className={'btn btn-w-md btn-accent'}
                                 onClick={this.openExportDialog.bind(this)}>
                             export log to csv
                         </Button>
@@ -218,7 +218,7 @@ class EventsLogView extends Component {
                                                 id="logSwitch"
                                                 options={
                                                     {
-                                                        color: '#f6a821',
+                                                        color: '#C741FC',
                                                         size : 'small'
                                                     }
                                                 }

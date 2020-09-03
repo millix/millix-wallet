@@ -85,7 +85,7 @@ class TransactionHistoryView extends Component {
                         display       : 'flex',
                         justifyContent: 'flex-end'
                     }}>
-                        <Button variant="light"  className={"btn btn-w-md btn-default"}
+                        <Button variant="light"  className={'btn btn-w-md btn-accent'}
                                 onClick={this.openExportDialog.bind(this)}>
                             export transactions to csv
                         </Button>

@@ -222,7 +222,7 @@ class Wallet extends Component {
                         justifyContent: 'flex-end'
                     }}>
                         <Button variant="light"
-                                className={'btn btn-w-md btn-default'}
+                                className={'btn btn-w-md btn-accent'}
                                 onClick={() => {
                                     this.props.addNewAddress(this.props.wallet.id).then(() => this.props.walletUpdateAddresses(this.props.wallet.id));
                                 }}>
