@@ -426,11 +426,11 @@ class ConfigView extends Component {
                                    </Form.Label>
                                    <Col sm="3">
                                        <Form.Control type="text" placeholder=""
-                                                     ref={(c) => this._consensus_min_inc_path = c}
+                                                     ref={(c) => this._consensus_required_validation_rounds = c}
                                                      onChange={() => {
-                                                         this.setConfig({CONSENSUS_ROUND_PATH_LENGTH_MIN: this._consensus_min_inc_path.value});
+                                                         this.setConfig({CONSENSUS_ROUND_VALIDATION_REQUIRED: this._consensus_required_validation_rounds.value});
                                                      }}
-                                                     value={this.props.config.CONSENSUS_ROUND_PATH_LENGTH_MIN}/>
+                                                     value={this.props.config.CONSENSUS_ROUND_VALIDATION_REQUIRED}/>
                                    </Col>
                                </Form.Group>
                                <Form.Group as={Row}>
@@ -456,19 +456,6 @@ class ConfigView extends Component {
                                                          this.setConfig({CONSENSUS_ROUND_DOUBLE_SPEND_MAX: this._consensus_max_double_spend_rounds.value});
                                                      }}
                                                      value={this.props.config.CONSENSUS_ROUND_DOUBLE_SPEND_MAX}/>
-                                   </Col>
-                               </Form.Group>
-                               <Form.Group as={Row}>
-                                   <Form.Label column sm="2">
-                                       number of validation required
-                                   </Form.Label>
-                                   <Col sm="3">
-                                       <Form.Control type="text" placeholder=""
-                                                     ref={(c) => this._consensus_required_validation_rounds = c}
-                                                     onChange={() => {
-                                                         this.setConfig({CONSENSUS_ROUND_VALIDATION_REQUIRED: this._consensus_required_validation_rounds.value});
-                                                     }}
-                                                     value={this.props.config.CONSENSUS_ROUND_VALIDATION_REQUIRED}/>
                                    </Col>
                                </Form.Group>
                                <Form.Group as={Row}>
