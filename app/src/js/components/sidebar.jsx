@@ -3,6 +3,7 @@ import SideNav, {NavIcon, NavItem, NavText} from '@trendmicro/react-sidenav';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import eventBus from '../../../../deps/millix-node/core/event-bus';
 import walletUtils from '../../../../deps/millix-node/core/wallet/wallet-utils';
+import walletConsensus from '../../../../deps/millix-node/core/wallet/wallet-transaction-consensus';
 import wallet from '../../../../deps/millix-node/core/wallet/wallet';
 import database from '../../../../deps/millix-node/database/database';
 import fs from 'fs';
@@ -107,7 +108,7 @@ class Sidebar extends Component {
                             break;
                         case 'resetValidation':
                             wallet.resetTransactionValidationRejected();
-                            wallet._doTransactionOutputRefresh().then(_ => _);
+                            wallet._doTransactionOutputRefresh().then(() => walletConsensus.doValidateTransaction());
                             break;
                         default:
                             props.history.push(selected);
