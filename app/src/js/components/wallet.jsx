@@ -125,30 +125,39 @@ class Wallet extends Component {
                 <Row>
                     <Col md={10} className={'col-md-offset-1'}>
                         <div className={'panel panel-filled'}>
+                            <div className={'panel-heading'}>balance</div>
+                            <hr style={{
+                                marginTop   : '0px',
+                                marginBottom: '0px'
+                            }}/>
                             <div className={'panel-body'}>
                                 <Row className="mb-1">
                                     <Col style={styles.left}>
-                                        <Form.Label>balance</Form.Label>
-                                    </Col>
-                                </Row>
-                                <Row className="mb-1">
-                                    <Col style={styles.left}>
-                                        <span>available: {this.props.wallet.balance_stable.toLocaleString()}</span>
+                                        <span
+                                            className={'form-control'}>available: {this.props.wallet.balance_stable.toLocaleString()}</span>
                                     </Col>
                                 </Row>
                                 <Row className="mb-3">
                                     <Col style={styles.left}>
-                                        <span>pending: {this.props.wallet.balance_pending.toLocaleString()}</span>
+                                        <span className={'form-control'}
+                                              style={{backgroundColor: '#ffffff00'}}>pending: {this.props.wallet.balance_pending.toLocaleString()}</span>
                                     </Col>
                                 </Row>
+                            </div>
+                        </div>
+                        <div className={'panel panel-filled'}>
+                            <div className={'panel-heading'}>send</div>
+                            <hr style={{
+                                marginTop   : '0px',
+                                marginBottom: '0px'
+                            }}/>
+                            <div className={'panel-body'}>
                                 <Row className="mb-3">
                                     <Col>
                                         <Form>
                                             <Form.Group>
-                                                <Form.Label>destination
-                                                    address</Form.Label>
                                                 <Form.Control type="text"
-                                                              placeholder="enter destination address"
+                                                              placeholder="address"
                                                               ref={c => this.destinationAddress = c}/>
                                                 {this.state.addressError && (
                                                     <Form.Text
@@ -157,21 +166,8 @@ class Wallet extends Component {
                                                         address.
                                                         please, set a correct
                                                         value.</small></Form.Text>)}
-                                                <Form.Text
-                                                    className="text-muted">please
-                                                    carefully confirm the
-                                                    destination
-                                                    address
-                                                    before sending. if you send
-                                                    to
-                                                    an
-                                                    invalid
-                                                    address you will lose your
-                                                    millix.</Form.Text>
                                             </Form.Group>
                                             <Form.Group>
-                                                <Form.Label>amount of
-                                                    millix</Form.Label>
                                                 <Form.Control type="text"
                                                               placeholder="amount"
                                                               pattern="[0-9]+([,][0-9]{1,2})?"
@@ -206,7 +202,10 @@ class Wallet extends Component {
                                                 className={'btn btn-w-md btn-accent'}
                                                 onClick={this.send.bind(this)}
                                                 disabled={this.state.sending}>
-                                            {this.state.sending && <div style={{fontSize: "6px", float: 'left'}} className="loader-spin"/>}
+                                            {this.state.sending && <div style={{
+                                                fontSize: '6px',
+                                                float   : 'left'
+                                            }} className="loader-spin"/>}
                                             send millix
                                         </Button>
                                     </Col>

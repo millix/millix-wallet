@@ -41,58 +41,66 @@ const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
                 <Sidebar {...rest} {...props}/>
                 <section className={'content'}>
                     <Container fluid={true}>
-                        {rest.config.MODE_TEST_NETWORK && (<Row>
-                            <Col className="pr-0" style={{textAlign: 'right'}}>
+                        <div>
+                            <div >
+                                {rest.config.MODE_TEST_NETWORK && (<Row>
+                                    <Col className="pr-0"
+                                         style={{textAlign: 'right'}}>
                             <span
                                 style={{
                                     fontSize: '85%',
                                     color   : 'red'
                                 }}>Millix Testnet</span>
-                            </Col>
-                        </Row>)}
-                        <Row>
-                            <Col className="pr-0" style={{textAlign: 'right'}}>
+                                    </Col>
+                                </Row>)}
+                                <Row>
+                                    <Col className="pr-0"
+                                         style={{textAlign: 'right'}}>
                             <span
                                 style={{fontSize: '75%'}}>event log size: {rest.log.size}</span>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col className="pr-0" style={{textAlign: 'right'}}>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col className="pr-0"
+                                         style={{textAlign: 'right'}}>
                             <span
                                 style={{fontSize: '75%'}}>backlog size: {rest.backlog.size}</span>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col className="pr-0" style={{textAlign: 'right'}}>
-                                <Button variant="link"
-                                        onClick={() => props.history.push('/peers')}
-                                        style={{
-                                            fontSize: '75%',
-                                            padding : 0
-                                        }}>node
-                                    connections: {rest.network.connections}</Button>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col className="pr-0 mb-3" style={{
-                                display       : 'flex',
-                                justifyContent: 'flex-end'
-                            }}>
-                                <Switch
-                                    className={"switch-class network-switch"}
-                                    id="networkSwitch"
-                                    onChange={(checked) => rest.updateNetworkState(checked)}
-                                    options={
-                                        {
-                                            color: '#C741FC',
-                                            size : 'small'
-                                        }
-                                    }
-                                    label={rest.network.enabled ? 'online node' : 'offline node'}
-                                    checked={rest.network.enabled}
-                                />
-                            </Col>
-                        </Row>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col className="pr-0"
+                                         style={{textAlign: 'right'}}>
+                                        <Button variant="link"
+                                                onClick={() => props.history.push('/peers')}
+                                                style={{
+                                                    fontSize: '75%',
+                                                    padding : 0
+                                                }}>node
+                                            connections: {rest.network.connections}</Button>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col className="pr-0 mb-3" style={{
+                                        display       : 'flex',
+                                        justifyContent: 'flex-end'
+                                    }}>
+                                        <Switch
+                                            className={'switch-class network-switch'}
+                                            id="networkSwitch"
+                                            onChange={(checked) => rest.updateNetworkState(checked)}
+                                            options={
+                                                {
+                                                    color: '#C741FC',
+                                                    size : 'small'
+                                                }
+                                            }
+                                            label={rest.network.enabled ? 'online node' : 'offline node'}
+                                            checked={rest.network.enabled}
+                                        />
+                                    </Col>
+                                </Row>
+                            </div>
+                        </div>
                         <Component {...props} />
                     </Container>
                 </section>
