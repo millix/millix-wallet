@@ -90,7 +90,7 @@ const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
                                             onChange={(checked) => rest.updateNetworkState(checked)}
                                             options={
                                                 {
-                                                    color: '#C741FC',
+                                                    color: '#9400CE',
                                                     size : 'small'
                                                 }
                                             }

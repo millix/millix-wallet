@@ -218,7 +218,7 @@ class EventsLogView extends Component {
                                                 id="logSwitch"
                                                 options={
                                                     {
-                                                        color: '#C741FC',
+                                                        color: '#9400CE',
                                                         size : 'small'
                                                     }
                                                 }

@@ -80,28 +80,28 @@
 .btn-primary {
     color: #949ba2;
     background-color: transparent;
-    border-color: #C741FC;
+    border-color: #9400CE;
 }
 
 .btn-primary:focus,
 .btn-primary.focus {
     color: #ffffff;
-    background-color: #9400CE;
-    border-color: #C741FC;
+    background-color: #C741FC;
+    border-color: #9400CE;
 }
 
 .btn-primary:hover {
     color: #ffffff;
-    background-color: #9400CE;
-    border-color: #C741FC;
+    background-color: #C741FC;
+    border-color: #9400CE;
 }
 
 .btn-primary:active,
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
     color: #ffffff;
-    background-color: #9400CE;
-    border-color: #C741FC;
+    background-color: #C741FC;
+    border-color: #9400CE;
 }
 
 .btn-primary:active:hover,
@@ -114,8 +114,8 @@
 .btn-primary.active.focus,
 .open > .dropdown-toggle.btn-primary.focus {
     color: #ffffff;
-    background-color: #9400CE;
-    border-color: #9400CE;
+    background-color: #C741FC;
+    border-color: #C741FC;
 }
 
 .btn-primary.disabled:hover,
@@ -127,8 +127,8 @@ fieldset[disabled] .btn-primary:focus,
 .btn-primary.disabled.focus,
 .btn-primary[disabled].focus,
 fieldset[disabled] .btn-primary.focus {
-    background-color: #9400CE;
-    border-color: #C741FC;
+    background-color: #C741FC;
+    border-color: #9400CE;
 }
 
 .d-flex {
@@ -583,7 +583,7 @@ table.dataTable.reusable_datatable.dtr-inline.collapsed > tbody > tr.parent > td
 
 .btn.disabled,
 .btn:disabled {
-    background-color: #9400CE;
+    background-color: #C741FC;
 }
 
 .btn.disabled .btn__text,
@@ -869,10 +869,10 @@ hr.lighter {
 
 .file-upload-gear .progress-box {
     width: 100%;
-    color: #C741FC;
+    color: #9400CE;
     background-color: transparent;
     border-radius: 2px;
-    border: 1px solid #C741FC;
+    border: 1px solid #9400CE;
     margin-bottom: 10px;
     display: inline-block;
     padding: 6px 12px;
@@ -974,7 +974,7 @@ hr.lighter {
 .loader_circle > .circle {
     animation: spin 1s linear infinite;
     border: 0.5rem solid #f3f3f3;
-    border-top: 0.5rem solid #C741FC;
+    border-top: 0.5rem solid #9400CE;
     border-radius: 50%;
     width: 4rem;
     height: 4rem;
@@ -1197,7 +1197,7 @@ hr {
     content: '';
     animation: spin 1s linear infinite;
     border: 0.5rem solid #484c5a;
-    border-top: 0.5rem solid #C741FC;
+    border-top: 0.5rem solid #9400CE;
     border-radius: 50%;
     display: inline-block;
     position: absolute;

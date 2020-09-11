@@ -55,11 +55,11 @@ input.custom_checkbox:checked:before {
 
 input.custom_checkbox.primary:checked:before,
 input.custom_checkbox.primary:hover:before {
-    border: 0.1rem solid #C741FC;
+    border: 0.1rem solid #9400CE;
 }
 
 input.custom_checkbox.primary:checked:before {
-    background: #C741FC;
+    background: #9400CE;
 }
 
 input.custom_checkbox:checked:after {
@@ -89,7 +89,7 @@ input.custom_radio:before {
     font-weight: 300;
     font-size: 1rem;
     content: "\f111";
-    color: #C741FC;
+    color: #9400CE;
 }
 
 input.custom_radio:checked:before,

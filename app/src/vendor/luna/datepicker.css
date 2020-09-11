@@ -1,5 +1,5 @@
 body .ui-datepicker {
-    background-color: #C741FC;
+    background-color: #9400CE;
     border: 0.2rem solid #e5e5e5;
     border-radius: 0;
     -webkit-border-radius: 0;
@@ -102,6 +102,6 @@ body .ui-datepicker .ui-state-disabled .ui-state-default {
 
 body .ui-datepicker td .ui-state-active,
 body .ui-datepicker td .ui-state-hover {
-    background: #C741FC;
+    background: #9400CE;
     color: #ffffff;
 }

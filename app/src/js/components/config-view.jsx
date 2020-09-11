@@ -138,7 +138,7 @@ class ConfigView extends Component {
                                                id="networkSelectSwitch"
                                                options={
                                                    {
-                                                       color: '#C741FC',
+                                                       color: '#9400CE',
                                                        size : 'small'
                                                    }
                                                }
