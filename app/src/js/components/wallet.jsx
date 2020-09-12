@@ -123,7 +123,7 @@ class Wallet extends Component {
         return (
             <div>
                 <Row>
-                    <Col md={10} className={'col-md-offset-1'}>
+                    <Col md={12}>
                         <div className={'panel panel-filled'}>
                             <div className={'panel-heading'}>balance</div>
                             <hr style={{
