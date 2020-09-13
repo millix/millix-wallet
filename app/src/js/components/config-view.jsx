@@ -395,7 +395,7 @@ class ConfigView extends Component {
                                    </Col>
 
                                    <Form.Label column sm="2">
-                                       min include path
+                                       number of validations required
                                    </Form.Label>
                                    <Col sm="3">
                                        <Form.Control type="text" placeholder=""
@@ -408,7 +408,7 @@ class ConfigView extends Component {
                                </Form.Group>
                                <Form.Group as={Row}>
                                    <Form.Label column sm="2">
-                                       number of validation rounds
+                                       max number of validation rounds
                                    </Form.Label>
                                    <Col sm="3">
                                        <Form.Control type="text" placeholder=""
@@ -433,6 +433,18 @@ class ConfigView extends Component {
                                </Form.Group>
                                <Form.Group as={Row}>
                                    <Form.Label column sm="2">
+                                       max number of transaction not found
+                                   </Form.Label>
+                                   <Col sm="3">
+                                       <Form.Control type="text" placeholder=""
+                                                     ref={(c) => this._consensus_max_validation_not_found_rounds = c}
+                                                     onChange={() => {
+                                                         this.setConfig({CONSENSUS_ROUND_NOT_FOUND_MAX: this._consensus_max_validation_not_found_rounds.value});
+                                                     }}
+                                                     value={this.props.config.CONSENSUS_ROUND_NOT_FOUND_MAX}/>
+                                   </Col>
+                                   ge
+                                   <Form.Label column sm="2">
                                        max wait (sec)
                                    </Form.Label>
                                    <Col sm="3">
@@ -443,7 +455,8 @@ class ConfigView extends Component {
                                                      }}
                                                      value={this.props.config.CONSENSUS_VALIDATION_WAIT_TIME_MAX}/>
                                    </Col>
-
+                               </Form.Group>
+                               <Form.Group as={Row}>
                                    <Form.Label column sm="2">
                                        retry wait (sec)
                                    </Form.Label>
