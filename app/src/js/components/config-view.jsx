@@ -443,7 +443,7 @@ class ConfigView extends Component {
                                                      }}
                                                      value={this.props.config.CONSENSUS_ROUND_NOT_FOUND_MAX}/>
                                    </Col>
-                                   ge
+                                   
                                    <Form.Label column sm="2">
                                        max wait (sec)
                                    </Form.Label>
