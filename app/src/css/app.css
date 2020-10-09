@@ -91,3 +91,17 @@
     margin-bottom: 15px;
 }
 
+.hrPanel {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.btn-full-width {
+    width: 100%;
+}
+
+.label-btn {
+    padding-top: 0.5em;
+    padding-right: 1em;
+    padding-bottom: 0.5em;
+}

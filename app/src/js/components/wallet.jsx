@@ -7,6 +7,8 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import database from '../../../../deps/millix-node/database/database';
 import walletUtils from '../../../../deps/millix-node/core/wallet/wallet-utils';
 import wallet from '../../../../deps/millix-node/core/wallet/wallet';
+import DataTable, { createTheme } from 'react-data-table-component';
+import styled from 'styled-components';
 
 const styles = {
     centered: {
@@ -19,6 +21,33 @@ const styles = {
     }
 };
 
+const data = [{ id: 1, title: 'Conan the Barbarian', year: '1982' },
+              { id: 2, title: 'Conan the Barbarian2', year: '1982' },
+              { id: 3, title: 'Conan the Barbarian3', year: '1982' }];
+const columns = [
+    {
+        name: 'Title',
+        selector: 'title',
+        sortable: true,
+    },
+    {
+        name: 'Year',
+        selector: 'year',
+        sortable: true,
+        //right: true,
+    },
+];
+
+const Buttons = styled.button`
+  font-size: 10em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border-radius: 3px;
+
+  /* Color the border and text with theme.main */
+  color: ${props => props.theme.main};
+  border: 2px solid ${props => props.theme.main};
+`;
 
 class Wallet extends Component {
     constructor(props) {
@@ -120,16 +149,26 @@ class Wallet extends Component {
     }
 
     render() {
+        /*
+         <Col md={12}>
+         <DataTable
+         title="Arnold Movies"
+         columns={columns}
+         data={data}
+         />
+
+         <Buttons>
+         send millix
+         </Buttons>
+         </Col>
+        * */
         return (
             <div>
                 <Row>
                     <Col md={12}>
                         <div className={'panel panel-filled'}>
                             <div className={'panel-heading'}>balance</div>
-                            <hr style={{
-                                marginTop   : '0px',
-                                marginBottom: '0px'
-                            }}/>
+                            <hr className={'hrPanel'}/>
                             <div className={'panel-body'}>
                                 <Row className="mb-1">
                                     <Col style={styles.left}>
@@ -147,15 +186,14 @@ class Wallet extends Component {
                         </div>
                         <div className={'panel panel-filled'}>
                             <div className={'panel-heading'}>send</div>
-                            <hr style={{
-                                marginTop   : '0px',
-                                marginBottom: '0px'
-                            }}/>
+                            <hr className={'hrPanel'}/>
                             <div className={'panel-body'}>
                                 <Row className="mb-3">
-                                    <Col>
-                                        <Form>
+                                    <Form>
+                                        <Col>
                                             <Form.Group>
+                                                <label
+                                                    className="control-label">address</label>
                                                 <Form.Control type="text"
                                                               placeholder="address"
                                                               ref={c => this.destinationAddress = c}/>
@@ -167,6 +205,10 @@ class Wallet extends Component {
                                                         please, set a correct
                                                         value.</small></Form.Text>)}
                                             </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <label
+                                                className="control-label">amount</label>
                                             <Form.Group>
                                                 <Form.Control type="text"
                                                               placeholder="amount"
@@ -181,79 +223,83 @@ class Wallet extends Component {
                                                         please, set a correct
                                                         value.</small></Form.Text>)}
                                             </Form.Group>
-                                        </Form>
-                                    </Col>
+                                        </Col>
+                                        <Col style={styles.centered}>
+                                            <Button variant="light"
+                                                    className={'btn btn-w-md btn-accent'}
+                                                    onClick={this.send.bind(this)}
+                                                    disabled={this.state.sending}>
+                                                {this.state.sending &&
+                                                 <div style={{
+                                                     fontSize: '6px',
+                                                     float   : 'left'
+                                                 }} className="loader-spin"/>}
+                                                send millix
+                                            </Button>
+                                        </Col>
+                                        <Col style={styles.centered}>
+                                            {this.state.connectionError && (
+                                                <Form.Text
+                                                    className="text-muted"><small
+                                                    style={{color: 'red'}}>invalid
+                                                    network
+                                                    state.
+                                                    could not send the
+                                                    transaction.</small></Form.Text>)}
+                                        </Col>
+                                    </Form>
                                 </Row>
-                                <Row>
-                                    <Col style={styles.centered}>
-                                        {this.state.connectionError && (
-                                            <Form.Text
-                                                className="text-muted"><small
-                                                style={{color: 'red'}}>invalid
-                                                network
-                                                state.
-                                                could not send the
-                                                transaction.</small></Form.Text>)}
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col style={styles.centered}>
+                            </div>
+                        </div>
+                        <div className={'panel panel-filled'}>
+                            <div className={'panel-heading'}>addresses</div>
+                            <hr className={'hrPanel'}/>
+                            <div className={'panel-body'}>
+                                <Row className="mb-3 mt-3">
+                                    <Col className="pr-0" style={{
+                                        ...styles.centered,
+                                        display       : 'flex',
+                                        justifyContent: 'flex-end'
+                                    }}>
                                         <Button variant="light"
                                                 className={'btn btn-w-md btn-accent'}
-                                                onClick={this.send.bind(this)}
-                                                disabled={this.state.sending}>
-                                            {this.state.sending && <div style={{
-                                                fontSize: '6px',
-                                                float   : 'left'
-                                            }} className="loader-spin"/>}
-                                            send millix
+                                                onClick={() => {
+                                                    this.props.addNewAddress(this.props.wallet.id).then(() => this.props.walletUpdateAddresses(this.props.wallet.id));
+                                                }}>
+                                            show more addresses
                                         </Button>
                                     </Col>
+                                </Row>
+                                <Row className="mb-3">
+                                    <div style={{
+                                        maxHeight: 310,
+                                        width    : '100%',
+                                        overflow : 'auto'
+                                    }}>
+                                        <Table striped bordered hover variant="dark">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>address</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {this.props.wallet.addresses.map((item, idx) => {
+                                                return (
+                                                    <tr key={idx} className="wallet-address">
+                                                        <td>{idx}</td>
+                                                        <td>{item.address}</td>
+                                                    </tr>);
+                                            })}
+                                            </tbody>
+                                        </Table>
+                                    </div>
                                 </Row>
                             </div>
                         </div>
                     </Col>
                 </Row>
-                <Row className="mb-3 mt-3">
-                    <Col className="pr-0" style={{
-                        ...styles.centered,
-                        display       : 'flex',
-                        justifyContent: 'flex-end'
-                    }}>
-                        <Button variant="light"
-                                className={'btn btn-w-md btn-accent'}
-                                onClick={() => {
-                                    this.props.addNewAddress(this.props.wallet.id).then(() => this.props.walletUpdateAddresses(this.props.wallet.id));
-                                }}>
-                            show more addresses
-                        </Button>
-                    </Col>
-                </Row>
-                <Row className="mb-3">
-                    <div style={{
-                        maxHeight: 310,
-                        width    : '100%',
-                        overflow : 'auto'
-                    }}>
-                        <Table striped bordered hover variant="dark">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>address</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {this.props.wallet.addresses.map((item, idx) => {
-                                return (
-                                    <tr key={idx} className="wallet-address">
-                                        <td>{idx}</td>
-                                        <td>{item.address}</td>
-                                    </tr>);
-                            })}
-                            </tbody>
-                        </Table>
-                    </div>
-                </Row>
+
             </div>
         );
     }

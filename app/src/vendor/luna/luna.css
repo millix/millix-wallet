@@ -802,7 +802,10 @@ body {
   margin-top: 60px;
   margin-left: 200px;
   position: relative;
-  padding: 30px;
+  padding-top: 30px;
+  padding-right: 10px;
+  padding-bottom: 30px;
+  padding-left: 10px;
   transition: margin-left 0.3s ease-out;
   -webkit-transition: margin-left 0.3s ease-out;
 }

@@ -7,12 +7,12 @@ import UnlockWallet from './unlock-wallet';
 import UnlockedWalletRequiredRoute from './utils/unlocked-wallet-required-route';
 import TransactionDetails from './transaction-details';
 import TransactionHistoryView from './transaction-history-view';
-import WalletMaintenanceView from './wallet-maintenance-view';
 import EventLogView from './event-log-view';
 import ConfigView from './config-view';
 import PeerListView from './peer-list-view';
 import PeerInfoView from './peer-info-view';
 import NewWallet from './new-wallet';
+import ActionView from './action-view';
 
 const AppContainer = ({store}) => (
     <Provider store={store}>
@@ -22,8 +22,6 @@ const AppContainer = ({store}) => (
                 <Route path='/newWallet/' component={NewWallet}/>
                 <UnlockedWalletRequiredRoute path='/config'
                                              component={ConfigView}/>
-                <UnlockedWalletRequiredRoute path='/optimize'
-                                             component={WalletMaintenanceView}/>
                 <UnlockedWalletRequiredRoute path='/transaction/:transaction_id'
                                              component={TransactionDetails}/>
                 <UnlockedWalletRequiredRoute path='/history'
@@ -34,6 +32,8 @@ const AppContainer = ({store}) => (
                                              component={PeerListView}/>
                 <UnlockedWalletRequiredRoute path='/peer/:peer'
                                              component={PeerInfoView}/>
+                <UnlockedWalletRequiredRoute path='/actions'
+                                             component={ActionView}/>
                 <UnlockedWalletRequiredRoute component={Wallet}/>
             </Switch>
         </Router>

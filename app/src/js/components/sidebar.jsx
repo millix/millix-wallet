@@ -26,75 +26,6 @@ class Sidebar extends Component {
         };
     }
 
-    exportKeys() {
-        if (this.inputExport.value === '') {
-            this.setState({exportingWallet: false});
-            return;
-        }
-
-        console.log('saving keys to ', this.inputExport.value);
-
-        walletUtils.loadMnemonic()
-                   .then(([mnemonicPhrase, _]) => {
-                       wallet.getWalletAddresses()
-                             .then(addresses => {
-                                 let json = JSON.stringify({
-                                     mnemonic_phrase: mnemonicPhrase,
-                                     addresses
-                                 });
-                                 fs.writeFile(this.inputExport.value, json, 'utf8', () => {
-                                     this.setState({
-                                         fileKeyExport  : 'export_' + Date.now(),
-                                         exportingWallet: false
-                                     });
-                                 });
-                             });
-                   });
-    }
-
-    importKey() {
-        let self = this;
-        if (this.inputImport.value === '') {
-            this.setState({importingWallet: false});
-            return;
-        }
-
-        console.log('importing keys from ', this.inputImport.value);
-
-        fs.readFile(this.inputImport.value, 'utf8', function(err, dataString) {
-            if (err) {
-                this.setState({importingWallet: false});
-                return reject('Couldn\'t read wallet mnemonic');
-            }
-
-            const data = JSON.parse(dataString);
-            if (data.mnemonic_phrase) {
-                walletUtils.storeMnemonic(data.mnemonic_phrase, true)
-                           .then(() =>
-                               new Promise(resolve => {
-                                   async.each(data.addresses, (entry, callback) => {
-                                       database.getRepository('keychain')
-                                               .addAddress(entry.wallet_id, entry.is_change, entry.address_position, entry.address_base, entry.address_version, entry.address_key_identifier, entry.address_attribute)
-                                               .then(() => callback()).catch((e) => {
-                                           console.log(e);
-                                           callback();
-                                       });
-                                   }, () => resolve());
-                               })
-                           )
-                           .then(() => {
-                               self.setState({importingWallet: false});
-                               eventBus.emit('wallet_lock', {isImportWallet: true});
-                           });
-            }
-            else {
-                self.setState({importingWallet: false});
-                return reject('Couldn\'t read nor create master key');
-            }
-        });
-        this.setState({fileKeyImport: 'import_' + Date.now()});
-    }
-
     isWalletScreen(pathName) {
         if (!pathName) {
             return false;
@@ -110,26 +41,14 @@ class Sidebar extends Component {
 
     render() {
         let props = this.props;
-        return (<aside className={'navigation'}>
+        return (<aside className={'navigation'} style={{height: '100%', minHeight: '100vh'}}>
             <SideNav
                 expanded={true}
                 style={{minWidth: 200}}
                 onSelect={(selected) => {
                     switch (selected) {
-                        case 'loadWallet':
-                            this.inputImport.click();
-                            this.setState({importingWallet: true});
-                            break;
-                        case 'saveWallet':
-                            this.inputExport.click();
-                            this.setState({exportingWallet: true});
-                            break;
                         case 'lock':
                             eventBus.emit('wallet_lock');
-                            break;
-                        case 'resetValidation':
-                            wallet.resetTransactionValidationRejected();
-                            wallet._doTransactionOutputRefresh().then(_ => _);
                             break;
                         default:
                             props.history.push(selected);
@@ -151,6 +70,11 @@ class Sidebar extends Component {
                             transaction history
                         </NavText>
                     </NavItem>
+                    <NavItem key={'connections'} eventKey="/peers">
+                        <NavText>
+                            connections
+                        </NavText>
+                    </NavItem>
                     <NavItem key={'log'} eventKey="/log">
                         <NavText>
                             logs
@@ -161,24 +85,9 @@ class Sidebar extends Component {
                             configure
                         </NavText>
                     </NavItem>
-                    <NavItem key={'optimize'} eventKey="/optimize">
+                    <NavItem key={'actions'} eventKey="/actions">
                         <NavText>
-                            optimize
-                        </NavText>
-                    </NavItem>
-                    <NavItem key={'resetValidation'} eventKey="resetValidation">
-                        <NavText>
-                            reset validation
-                        </NavText>
-                    </NavItem>
-                    <NavItem key={'loadWallet'} eventKey="loadWallet">
-                        <NavText>
-                            load wallet
-                        </NavText>
-                    </NavItem>
-                    <NavItem key={'saveWallet'} eventKey="saveWallet">
-                        <NavText>
-                            save wallet
+                            actions
                         </NavText>
                     </NavItem>
                     <NavItem key={'lock'} eventKey="lock">
@@ -188,17 +97,6 @@ class Sidebar extends Component {
                     </NavItem>
                 </SideNav.Nav>
             </SideNav>
-            <div>
-                <input style={{display: 'none'}} type="file" accept=".json"
-                       ref={(component) => this.inputImport = component}
-                       onChange={this.importKey.bind(this)}
-                       key={this.state.fileKeyImport}/>
-                <input style={{display: 'none'}} type="file" accept=".json"
-                       nwsaveas="millix_private_key.json"
-                       ref={(component) => this.inputExport = component}
-                       onChange={this.exportKeys.bind(this)}
-                       key={this.state.fileKeyExport}/>
-            </div>
         </aside>);
     }
 }

@@ -7,7 +7,6 @@ import {Button, Col, Container, Form, Row} from 'react-bootstrap';
 import Switch from 'react-switchery';
 import '../../../../node_modules/mohithg-switchery/switchery.css';
 
-
 const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
     <Route {...rest} render={props => (
         rest.wallet.unlocked ? (
@@ -49,28 +48,25 @@ const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
                                 <div className={'panel panel-filled'}>
                                     <div className={'panel-heading'}>status
                                     </div>
-                                    <hr style={{
-                                        marginTop   : '0px',
-                                        marginBottom: '0px'
-                                    }}/>
+                                    <hr className={'hrPanel'}/>
                                     <div className={'panel-body'}>
                                         {rest.config.MODE_TEST_NETWORK && (<Row>
                                             <Col className="pr-0"
                                                  style={{textAlign: 'left'}}>
-                                                <span>Millix Testnet</span>
+                                                <span>millix testnet</span>
                                                 <hr/>
                                             </Col>
                                         </Row>)}
                                         <Row>
                                             <Col className="pr-0"
                                                  style={{textAlign: 'left'}}>
-                            <span>event log size: {rest.log.size}</span>
+                                                <span>event log size: {rest.log.size}</span>
                                             </Col>
                                         </Row>
                                         <Row>
                                             <Col className="pr-0"
                                                  style={{textAlign: 'left'}}>
-                            <span>backlog size: {rest.backlog.size}</span>
+                                                <span>backlog size: {rest.backlog.size}</span>
                                             </Col>
                                         </Row>
                                         <Row>
@@ -79,8 +75,8 @@ const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
                                                 <Button variant="link"
                                                         onClick={() => props.history.push('/peers')}
                                                         style={{
-                                                            padding : 0,
-                                                            borderWidth: "0rem"
+                                                            padding    : 0,
+                                                            borderWidth: '0rem'
                                                         }}>node
                                                     connections: {rest.network.connections}</Button>
                                             </Col>
