@@ -1,6 +1,7 @@
 export const UNLOCK_WALLET                 = 'UNLOCK_WALLET';
 export const LOCK_WALLET                   = 'LOCK_WALLET';
 export const WALLET_READY                  = 'WALLET_READY';
+export const WALLET_VERSION_AVAILABLE      = 'WALLET_VERSION_AVAILABLE';
 export const UPDATE_WALLET_ADDRESS         = 'UPDATE_WALLET_ADDRESS';
 export const UPDATE_WALLET_ADDRESS_VERSION = 'UPDATE_WALLET_ADDRESS_VERSION';
 export const ADD_WALLET_ADDRESS_VERSION    = 'ADD_WALLET_ADDRESS_VERSION';

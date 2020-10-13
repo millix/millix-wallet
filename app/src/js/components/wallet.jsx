@@ -13,10 +13,10 @@ const styles = {
         display       : 'flex',
         justifyContent: 'center'
     },
-    left: {
+    left    : {
         display       : 'flex',
         justifyContent: 'left'
-    },
+    }
 };
 
 
@@ -26,10 +26,10 @@ class Wallet extends Component {
         this.address     = props.match.params.address;
         this.fullAddress = this.address;
         this.state       = {
-            amountError    : false,
-            addressError   : false,
-            connectionError: false,
-            sending        : false
+            amountError         : false,
+            addressError        : false,
+            sendTransactionError: false,
+            sending             : false
         };
     }
 
@@ -40,14 +40,17 @@ class Wallet extends Component {
 
     send() {
 
-        this.setState({connectionError: false});
+        this.setState({
+            sendTransactionError       : false,
+            sendTransactionErrorMessage: null
+        });
 
-        let {
-                address   : destinationAddress,
-                identifier: destinationAddressIdentifier,
-                version   : destinationAddressVersion
-            } = database.getRepository('address')
-                        .getAddressComponent(this.destinationAddress.value.trim());
+        const {
+                  address   : destinationAddress,
+                  identifier: destinationAddressIdentifier,
+                  version   : destinationAddressVersion
+              } = database.getRepository('address')
+                          .getAddressComponent(this.destinationAddress.value.trim());
         try {
             if (!walletUtils.isValidAddress(destinationAddress) || !walletUtils.isValidAddress(destinationAddressIdentifier)) {
                 this.setState({addressError: true});
@@ -64,7 +67,7 @@ class Wallet extends Component {
         let amount;
         try {
             amount = parseInt(this.amount.value.replace(/[,.]/g, ''));
-            if (amount <= 0 || amount.toLocaleString() != this.amount.value) {
+            if (amount <= 0 || amount.toLocaleString() !== this.amount.value) {
                 this.setState({amountError: true});
                 return;
             }
@@ -90,15 +93,16 @@ class Wallet extends Component {
               .then(() => this.props.walletUpdateAddresses(this.props.wallet.id))
               .then(() => this.props.walletUpdateBalance(this.props.wallet.address_key_identifier))
               .then(() => {
-                  this.destinationAddress.value = "";
-                  this.amount.value = "";
+                  this.destinationAddress.value = '';
+                  this.amount.value             = '';
                   this.setState({
                       sending: false
                   });
               })
-              .catch(() => this.setState({
-                  connectionError: true,
-                  sending        : false
+              .catch((e) => this.setState({
+                  sendTransactionError       : true,
+                  sendTransactionErrorMessage: e,
+                  sending                    : false
               }));
     }
 
@@ -129,12 +133,14 @@ class Wallet extends Component {
                 </Row>
                 <Row className="mb-1">
                     <Col style={styles.left}>
-                        <span style={{color: 'lightblue'}}>available: {this.props.wallet.balance_stable.toLocaleString()}</span>
+                        <span
+                            style={{color: 'lightblue'}}>available: {this.props.wallet.balance_stable.toLocaleString()}</span>
                     </Col>
                 </Row>
                 <Row className="mb-3">
                     <Col style={styles.left}>
-                        <span style={{color: 'lightslategrey'}}>pending: {this.props.wallet.balance_pending.toLocaleString()}</span>
+                        <span
+                            style={{color: 'lightslategrey'}}>pending: {this.props.wallet.balance_pending.toLocaleString()}</span>
                     </Col>
                 </Row>
                 <Row className="mb-3">
@@ -173,11 +179,11 @@ class Wallet extends Component {
                 </Row>
                 <Row>
                     <Col style={styles.centered}>
-                        {this.state.connectionError && (
+                        {this.state.sendTransactionError && (
                             <Form.Text className="text-muted"><small
-                                style={{color: 'red'}}>invalid network state.
-                                could not send the
-                                transaction.</small></Form.Text>)}
+                                style={{color: 'red'}}> could not send the
+                                transaction
+                                ({this.state.sendTransactionErrorMessage}).</small></Form.Text>)}
                     </Col>
                 </Row>
                 <Row>
