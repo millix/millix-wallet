@@ -1,4 +1,4 @@
-import {ADD_LOG_EVENT, ADD_NEW_ADDRESS, ADD_WALLET_CONFIG, CLEAR_TRANSACTION_DETAILS, LOCK_WALLET, SET_BACKLOG_SIZE, UNLOCK_WALLET, UPDATE_CLOCK, UPDATE_NETWORK_CONNECTIONS, UPDATE_NETWORK_NODE_LIST, UPDATE_NETWORK_STATE, UPDATE_TRANSACTION_DETAILS, UPDATE_WALLET_ADDRESS, UPDATE_WALLET_CONFIG, UPDATE_WALLET_MAINTENANCE, UPDATE_WALLET_TRANSACTIONS, WALLET_READY, UPDATE_WALLET_ADDRESS_VERSION, ADD_WALLET_ADDRESS_VERSION, GET_NODE_ATTRIBUTES, UPDATE_WALLET_BALANCE} from '../constants/action-types';
+import {ADD_LOG_EVENT, ADD_NEW_ADDRESS, ADD_WALLET_CONFIG, CLEAR_TRANSACTION_DETAILS, LOCK_WALLET, SET_BACKLOG_SIZE, UNLOCK_WALLET, UPDATE_CLOCK, UPDATE_NETWORK_CONNECTIONS, UPDATE_NETWORK_NODE_LIST, UPDATE_NETWORK_STATE, UPDATE_TRANSACTION_DETAILS, UPDATE_WALLET_ADDRESS, UPDATE_WALLET_CONFIG, UPDATE_WALLET_MAINTENANCE, UPDATE_WALLET_TRANSACTIONS, WALLET_READY, UPDATE_WALLET_ADDRESS_VERSION, ADD_WALLET_ADDRESS_VERSION, GET_NODE_ATTRIBUTES, UPDATE_WALLET_BALANCE, WALLET_VERSION_AVAILABLE} from '../constants/action-types';
 import config from '../../../../../deps/millix-node/core/config/config';
 import _ from 'lodash';
 
@@ -19,7 +19,8 @@ const initialState = {
         transactions        : [],
         address_version_list: [],
         balance_stable      : 0,
-        balance_pending     : 0
+        balance_pending     : 0,
+        version_available   : undefined
     },
     config            : {},
     clock             : 'not available...',
@@ -214,6 +215,14 @@ function rootReducer(state = initialState, action) {
             wallet: {
                 ...state.wallet,
                 ...action.payload
+            }
+        });
+    }
+    else if (action.type === WALLET_VERSION_AVAILABLE) {
+        return Object.assign({}, state, {
+            wallet: {
+                ...state.wallet,
+                version_available: action.payload
             }
         });
     }

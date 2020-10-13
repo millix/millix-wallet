@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import store from './js/redux/store';
 import _ from 'lodash';
-import {addWalletConfig, lockWallet, unlockWallet, updateClock, updateNetworkConnections, updateNetworkNodeList, updateWalletAddressVersion, walletReady, walletUpdateAddresses, walletUpdateBalance} from './js/redux/actions/index';
+import {walletVersionAvailable, addWalletConfig, lockWallet, unlockWallet, updateClock, updateNetworkConnections, updateNetworkNodeList, updateWalletAddressVersion, walletReady, walletUpdateAddresses, walletUpdateBalance} from './js/redux/actions/index';
 import AppContainer from './js/components/app-container';
 import console from '../../deps/millix-node/core/console';
 import network from '../../deps/millix-node/net/network';
@@ -25,6 +25,7 @@ import '../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 import '../node_modules/@trendmicro/react-sidenav/dist/react-sidenav.css';
 import './css/app.scss';
 import moment from 'moment';
+import request from 'request';
 import logManager from '../../deps/millix-node/core/log-manager';
 import yargs from 'yargs';
 import {addLogEvent, setBackLogSize} from './js/redux/actions';
@@ -149,6 +150,12 @@ bootstrap.initialize()
          .then(() => database.initialize())
          .then(() => eventBus.emit('wallet_update_address_version', database.getRepository('address').addressVersionList))
          .then(() => configLoader.load().then(config => store.dispatch(addWalletConfig(config))))
+         .then(() => {
+             request.get('https://millix.org/wallet/node-version.json', (err, res, data) => {
+                 data = JSON.parse(data);
+                 store.dispatch(walletVersionAvailable(data['node_version']));
+             });
+         })
          .then(() => initializeWallet());
 
 const wrapper = document.getElementById('app');

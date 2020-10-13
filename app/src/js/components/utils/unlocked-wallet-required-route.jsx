@@ -26,6 +26,19 @@ const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
                             style={{fontSize: '55%'}}>millix v.{rest.config.NODE_MILLIX_VERSION}</span>
                     </Col>
                 </Row>
+                {!!rest.wallet.version_available && rest.config.NODE_MILLIX_VERSION !== rest.wallet.version_available &&
+                 (<Row>
+                     <Col className="pr-0" style={{textAlign: 'right'}}>
+                         <Button variant="link"
+                                 onClick={() => nw.Shell.openExternal('https://millix.org/client.html')}
+                                 style={{
+                                     fontSize: '75%',
+                                     padding : 0,
+                                     color   : '#ffadad'
+                                 }}>new version available
+                             v.{rest.wallet.version_available} !</Button>
+                     </Col>
+                 </Row>)}
                 <Row>
                     <Col className="pr-0" style={{textAlign: 'right'}}>
                         <span
@@ -64,7 +77,7 @@ const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
                         <Form.Check
                             type="switch"
                             id="networkSwitch"
-                            label={rest.network.enabled? "online node" : "offline node"}
+                            label={rest.network.enabled ? 'online node' : 'offline node'}
                             style={{
                                 fontSize: '75%',
                                 color   : 'white',
