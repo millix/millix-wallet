@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {Button, Col, Form, FormControl, InputGroup, Row, Spinner, Table} from 'react-bootstrap';
@@ -7,8 +7,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import database from '../../../../deps/millix-node/database/database';
 import walletUtils from '../../../../deps/millix-node/core/wallet/wallet-utils';
 import wallet from '../../../../deps/millix-node/core/wallet/wallet';
-import DataTable, { createTheme } from 'react-data-table-component';
-import styled from 'styled-components';
 
 const styles = {
     centered: {
@@ -20,34 +18,6 @@ const styles = {
         justifyContent: 'left'
     }
 };
-
-const data = [{ id: 1, title: 'Conan the Barbarian', year: '1982' },
-              { id: 2, title: 'Conan the Barbarian2', year: '1982' },
-              { id: 3, title: 'Conan the Barbarian3', year: '1982' }];
-const columns = [
-    {
-        name: 'Title',
-        selector: 'title',
-        sortable: true,
-    },
-    {
-        name: 'Year',
-        selector: 'year',
-        sortable: true,
-        //right: true,
-    },
-];
-
-const Buttons = styled.button`
-  font-size: 10em;
-  margin: 1em;
-  padding: 0.25em 1em;
-  border-radius: 3px;
-
-  /* Color the border and text with theme.main */
-  color: ${props => props.theme.main};
-  border: 2px solid ${props => props.theme.main};
-`;
 
 class Wallet extends Component {
     constructor(props) {
@@ -149,19 +119,6 @@ class Wallet extends Component {
     }
 
     render() {
-        /*
-         <Col md={12}>
-         <DataTable
-         title="Arnold Movies"
-         columns={columns}
-         data={data}
-         />
-
-         <Buttons>
-         send millix
-         </Buttons>
-         </Col>
-        * */
         return (
             <div>
                 <Row>
@@ -170,20 +127,24 @@ class Wallet extends Component {
                             <div className={'panel-heading'}>balance</div>
                             <hr className={'hrPanel'}/>
                             <div className={'panel-body'}>
-                                <Row className="mb-1">
-                                    <Col style={styles.left}>
-                                        <span
-                                            className={'form-control'}>available: {this.props.wallet.balance_stable.toLocaleString()}</span>
-                                    </Col>
-                                </Row>
-                                <Row className="mb-3">
-                                    <Col style={styles.left}>
-                                        <span className={'form-control'}
-                                              style={{backgroundColor: '#ffffff00'}}>pending: {this.props.wallet.balance_pending.toLocaleString()}</span>
-                                    </Col>
-                                </Row>
+
+                                <Table striped bordered hover variant="dark">
+                                    <thead>
+                                    <tr>
+                                        <th>available</th>
+                                        <th>pending</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr key="1" className="wallet-address">
+                                        <td>{this.props.wallet.balance_stable.toLocaleString()}</td>
+                                        <td>{this.props.wallet.balance_pending.toLocaleString()}</td>
+                                    </tr>
+                                    </tbody>
+                                </Table>
                             </div>
                         </div>
+
                         <div className={'panel panel-filled'}>
                             <div className={'panel-heading'}>send</div>
                             <hr className={'hrPanel'}/>

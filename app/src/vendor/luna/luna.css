@@ -42,7 +42,7 @@
 }
 .btn-accent:hover {
   color: #ffffff;
-  background-color: #C741FC;
+  background-color: #9400CE;
   border-color: #9400CE;
 }
 .btn-accent:active,
@@ -466,7 +466,7 @@ fieldset[disabled] .btn-danger.focus {
 .btn-link:active:focus,
 .btn-link:focus,
 .btn-link.active {
-  color: #9400CE;
+  color: #C741FC;
   text-decoration: none;
 }
 .dropdown-menu > .active > a,
@@ -1198,10 +1198,10 @@ img.image-xl {
 .luna-nav.nav li.active .nav-second li.active a {
   padding-left: 34px;
   border-left: 6px solid #c37e08;
-  color: #c0c4c8;
+  color: #C741FC;
 }
 .luna-nav.nav li.active .nav-second li a:hover {
-  color: #c0c4c8;
+  color: #C741FC;
 }
 .luna-nav.nav li > a {
   color: #848c94;
@@ -1209,11 +1209,11 @@ img.image-xl {
 .luna-nav.nav li.active a {
   border-left: 6px solid #9400CE;
   padding-left: 19px;
-  color: #c0c4c8;
+  color: #C741FC;
 }
 .luna-nav.nav li a:hover,
 .luna-nav.nav li a:focus {
-  color: #c0c4c8;
+  color: #C741FC;
   background: inherit;
 }
 .luna-nav.nav .nav-category {

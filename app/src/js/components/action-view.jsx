@@ -16,6 +16,10 @@ const styles = {
     centered: {
         display       : 'flex',
         justifyContent: 'center'
+    },
+    left: {
+        display       : 'flex',
+        justifyContent: 'left'
     }
 };
 
@@ -126,7 +130,7 @@ class ActionView extends Component {
                             <hr className={'hrPanel'}/>
                             <div className={'panel-body'}>
                                 <Row className="mb-1">
-                                    <Col style={styles.centered}>
+                                    <Col style={styles.left}>
                                         <p>the optimize action compacts the
                                             local database and optimize the
                                             storage.</p>
@@ -151,7 +155,7 @@ class ActionView extends Component {
                             <hr className={'hrPanel'}/>
                             <div className={'panel-body'}>
                                 <Row className="mb-1">
-                                    <Col style={styles.centered}>
+                                    <Col style={styles.left}>
                                         <p>the reset validation action tries to
                                             revalidate pending transactions.</p>
                                     </Col>
@@ -175,7 +179,7 @@ class ActionView extends Component {
                             <hr className={'hrPanel'}/>
                             <div className={'panel-body'}>
                                 <Row className="mb-1">
-                                    <Col style={styles.centered}>
+                                    <Col style={styles.left}>
                                         <p>the load wallet action allows the
                                             user to
                                             load a previously exported wallet
@@ -202,7 +206,7 @@ class ActionView extends Component {
                             <hr className={'hrPanel'}/>
                             <div className={'panel-body'}>
                                 <Row className="mb-1">
-                                    <Col style={styles.centered}>
+                                    <Col style={styles.left}>
                                         <p>the save wallet action allows the
                                             user to
                                             export the wallet private key to a
