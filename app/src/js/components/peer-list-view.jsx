@@ -14,7 +14,7 @@ class PeerListView extends Component {
         return (
             <div>
                 <div className={'panel panel-filled'}>
-                    <div className={'panel-heading'}>nodes list</div>
+                    <div className={'panel-heading'}>connections</div>
                     <hr className={'hrPanel'}/>
                     <div className={'panel-body'}>
                         <Row className="mb-3">

@@ -67,7 +67,7 @@ class Sidebar extends Component {
                     </NavItem>
                     <NavItem key={'history'} eventKey="/history">
                         <NavText>
-                            transaction history
+                            transactions
                         </NavText>
                     </NavItem>
                     <NavItem key={'connections'} eventKey="/peers">
@@ -82,7 +82,7 @@ class Sidebar extends Component {
                     </NavItem>
                     <NavItem key={'config'} eventKey="/config">
                         <NavText>
-                            configure
+                            settings
                         </NavText>
                     </NavItem>
                     <NavItem key={'actions'} eventKey="/actions">

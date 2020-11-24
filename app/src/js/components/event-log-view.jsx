@@ -181,7 +181,7 @@ class EventsLogView extends Component {
                                         <div
                                             className="btn-group btn-full-width">
                                             <button data-toggle="dropdown"
-                                                    className="btn btn-accent dropdown-toggle btn-full-width"
+                                                    className="btn btn-accent dropdown-toggle btn-full-width dropdown-luna"
                                                     aria-expanded="false">
                                                 <p style={{
                                                     float       : 'left',
@@ -192,9 +192,11 @@ class EventsLogView extends Component {
                                                     marginBottom: '0px'
                                                 }}><span className="caret"/></p>
                                             </button>
-                                            <ul className="dropdown-menu">
+                                            <ul className="dropdown-menu btn-full-width dropdown-lu">
                                                 {Array.from(this.getTypes()).sort().map(type =>
-                                                    <li><a key={type}
+                                                    <li><a
+                                                           className="li-a"
+                                                           key={type}
                                                            href="#"
                                                            onClick={() => {
                                                                this.filterByType(this.props.log.events, type);

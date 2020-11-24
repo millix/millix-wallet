@@ -227,7 +227,7 @@ class Wallet extends Component {
                                                 onClick={() => {
                                                     this.props.addNewAddress(this.props.wallet.id).then(() => this.props.walletUpdateAddresses(this.props.wallet.id));
                                                 }}>
-                                            show more addresses
+                                            generate addresses
                                         </Button>
                                     </Col>
                                 </Row>

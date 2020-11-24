@@ -77,7 +77,7 @@ const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
                                                         style={{
                                                             padding    : 0,
                                                             borderWidth: '0rem'
-                                                        }}>node
+                                                        }}>
                                                     connections: {rest.network.connections}</Button>
                                             </Col>
                                         </Row>

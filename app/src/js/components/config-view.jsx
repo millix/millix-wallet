@@ -119,18 +119,19 @@ class ConfigView extends Component {
                                            className="btn-group btn-full-width">
                                            <button
                                                data-toggle="dropdown"
-                                               className="btn btn-w-sm  btn-accent dropdown-toggle btn-full-width"
+                                               className="btn btn-w-sm  btn-accent dropdown-toggle btn-full-width dropdown-luna"
                                                aria-expanded="false">
                                                <p style={{float:"left", marginBottom: "0px"}}>{this.props.config.MODE_DEBUG ? 'on' : 'off'}</p>
                                                <p style={{float:"right", marginBottom: "0px"}}><span className="caret"/></p>
                                            </button>
-                                           <ul className="dropdown-menu">
+                                           <ul className="dropdown-menu btn-full-width dropdown-lu">
                                                {Array.from([
                                                    'on',
                                                    'off'
                                                ]).map(type =>
                                                    <li>
                                                        <a
+                                                           className="li-a"
                                                            key={type}
                                                            href="#"
                                                            onClick={() => {
@@ -240,8 +241,7 @@ class ConfigView extends Component {
                                        <Form.Group>
                                            <label
                                                className="control-label">nodes</label>
-                                           <Form.Control
-                                               type="text"
+                                           <Form.Control as="textarea" rows={10}
                                                placeholder=""
                                                ref={(c) => this._nodes = c}
                                                onChange={() => {
@@ -669,17 +669,19 @@ class ConfigView extends Component {
                                            <div className="btn-group btn-full-width">
                                                <button
                                                    data-toggle="dropdown"
-                                                   className="btn btn-w-sm btn-accent dropdown-toggle btn-full-width"
+                                                   className="btn btn-w-sm btn-accent dropdown-toggle btn-full-width dropdown-luna"
                                                    aria-expanded="false">
                                                    <p style={{float:"left", marginBottom: "0px"}}>{this.props.config.WALLET_SPENT_TRANSACTION_PRUNE ? 'yes' : 'no'}</p>
                                                    <p style={{float:"right", marginBottom: "0px"}}><span className="caret"/></p>
                                                </button>
-                                               <ul className="dropdown-menu">
+                                               <ul className="dropdown-menu btn-full-width dropdown-lu">
                                                    {Array.from([
                                                        'yes',
                                                        'no'
                                                    ]).map(type =>
-                                                       <li><a key={type}
+                                                       <li><a
+                                                              className="li-a"
+                                                              key={type}
                                                               href="#"
                                                               onClick={() => {
                                                                   this.setConfig({WALLET_SPENT_TRANSACTION_PRUNE: type === 'yes'});
@@ -842,18 +844,19 @@ class ConfigView extends Component {
                                                className="btn-group btn-full-width">
                                                <button
                                                    data-toggle="dropdown"
-                                                   className="btn btn-w-sm btn-accent dropdown-toggle btn-full-width"
+                                                   className="btn btn-w-sm btn-accent dropdown-toggle btn-full-width dropdown-luna"
                                                    aria-expanded="false">
                                                    <p style={{float:"left", marginBottom: "0px"}}>{this.state.address_is_default ? 'yes' : 'no'}</p>
                                                    <p style={{float:"right", marginBottom: "0px"}}><span className="caret"/></p>
                                                </button>
-                                               <ul className="dropdown-menu">
+                                               <ul className="dropdown-menu btn-full-width dropdown-lu">
                                                    {Array.from([
                                                        'yes',
                                                        'no'
                                                    ]).map(type =>
                                                        <li>
                                                            <a
+                                                               className="li-a"
                                                                key={type}
                                                                href="#"
                                                                onClick={() => {

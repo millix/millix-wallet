@@ -113,3 +113,18 @@
 .panel-heading{
     font-size: 1.4rem;
 }
+
+.dropdown-luna{
+    background: #9400CE;
+    color: #fff;
+}
+.li-a{
+    color: #fff !important;
+}
+.li-a:hover{
+    color: #C741FC !important;
+    background-color: #2f323b !important;
+}
+.dropdown-lu{
+    background: #2f323b;
+}
