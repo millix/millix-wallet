@@ -7,6 +7,7 @@ import _ from 'lodash';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import bootstrap from '../../../../deps/millix-node/core/bootstrap';
 import network from '../../../../deps/millix-node/net/network';
+import {TRANSACTION_FEE_DEFAULT, TRANSACTION_FEE_NETWORK, TRANSACTION_FEE_PROXY} from '../../../../deps/millix-node/core/config/config';
 
 
 class ConfigView extends Component {
@@ -375,6 +376,49 @@ class ConfigView extends Component {
                                        </tbody>
                                    </Table>
                                </div>
+                               <Form.Group as={Row}>
+                                   <Form.Label column sm="2">
+                                       fees
+                                   </Form.Label>
+                               </Form.Group>
+                               <Form.Group as={Row}>
+                                   <Form.Label column sm="2">
+                                       proxy fee (min)
+                                   </Form.Label>
+                                   <Col sm="3">
+                                       <Form.Control type="text" placeholder=""
+                                                     ref={(c) => this._fee_proxy_fee = c}
+                                                     onChange={() => {
+                                                         this.setConfig({TRANSACTION_FEE_PROXY: this._fee_proxy_fee.value});
+                                                     }}
+                                                     value={this.props.config.TRANSACTION_FEE_PROXY}/>
+                                   </Col>
+
+                                   <Form.Label column sm="2">
+                                       transaction fee (min)
+                                   </Form.Label>
+                                   <Col sm="3">
+                                       <Form.Control type="text" placeholder=""
+                                                     ref={(c) => this._fee_transaction_default = c}
+                                                     onChange={() => {
+                                                         this.setConfig({TRANSACTION_FEE_DEFAULT: this._fee_transaction_default.value});
+                                                     }}
+                                                     value={this.props.config.TRANSACTION_FEE_DEFAULT}/>
+                                   </Col>
+                               </Form.Group>
+                               <Form.Group as={Row}>
+                                   <Form.Label column sm="2">
+                                       network fee (%)
+                                   </Form.Label>
+                                   <Col sm="3">
+                                       <Form.Control type="text" placeholder=""
+                                                     ref={(c) => this._fee_transaction_network = c}
+                                                     onChange={() => {
+                                                         this.setConfig({TRANSACTION_FEE_NETWORK: parseFloat(this._fee_transaction_network.value)/100});
+                                                     }}
+                                                     value={this.props.config.TRANSACTION_FEE_NETWORK * 100}/>
+                                   </Col>
+                               </Form.Group>
 
                                <Form.Group as={Row}>
                                    <Form.Label column sm="2">
@@ -443,7 +487,7 @@ class ConfigView extends Component {
                                                      }}
                                                      value={this.props.config.CONSENSUS_ROUND_NOT_FOUND_MAX}/>
                                    </Col>
-                                   
+
                                    <Form.Label column sm="2">
                                        max wait (sec)
                                    </Form.Label>
