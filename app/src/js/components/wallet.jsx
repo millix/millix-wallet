@@ -27,15 +27,26 @@ class Wallet extends Component {
         this.fullAddress = this.address;
         this.state       = {
             amountError         : false,
+            feeError            : false,
             addressError        : false,
             sendTransactionError: false,
             sending             : false
         };
+
+        this.feesInitialized = false;
     }
 
     componentDidMount() {
         this.props.walletUpdateAddresses(this.props.wallet.id);
         this.props.walletUpdateBalance(this.props.wallet.address_key_identifier);
+    }
+
+    _getAmount(value, allowZero = false) {
+        const pValue = parseInt(value.replace(/[,.]/g, ''));
+        if ((allowZero ? pValue < 0 : pValue <= 0) || pValue.toLocaleString() !== value) {
+            throw Error('invalid_value');
+        }
+        return pValue;
     }
 
     send() {
@@ -62,24 +73,36 @@ class Wallet extends Component {
             return;
         }
 
-        this.setState({addressError: false});
-
         let amount;
         try {
-            amount = parseInt(this.amount.value.replace(/[,.]/g, ''));
-            if (amount <= 0 || amount.toLocaleString() !== this.amount.value) {
-                this.setState({amountError: true});
-                return;
-            }
+            amount = this._getAmount(this.amount.value);
         }
         catch (e) {
-            this.setState({amountError: true});
+            this.setState({
+                amountError : true,
+                addressError: false
+            });
+            return;
+        }
+
+        let fees;
+        try {
+            fees = this._getAmount(this.fees.value, true);
+        }
+        catch (e) {
+            this.setState({
+                feeError    : true,
+                amountError : false,
+                addressError: false
+            });
             return;
         }
 
         this.setState({
-            amountError: false,
-            sending    : true
+            addressError: false,
+            amountError : false,
+            feeError    : false,
+            sending     : true
         });
 
         wallet.addTransaction([
@@ -89,21 +112,31 @@ class Wallet extends Component {
                 address_key_identifier: destinationAddressIdentifier,
                 amount
             }
-        ])
+        ], {
+            fee_type: 'transaction_fee_default',
+            amount  : fees
+        })
               .then(() => this.props.walletUpdateAddresses(this.props.wallet.id))
               .then(() => this.props.walletUpdateBalance(this.props.wallet.address_key_identifier))
               .then(() => {
                   this.destinationAddress.value = '';
                   this.amount.value             = '';
+                  this.fees.value               = '';
                   this.setState({
                       sending: false
                   });
               })
-              .catch((e) => this.setState({
-                  sendTransactionError       : true,
-                  sendTransactionErrorMessage: e,
-                  sending                    : false
-              }));
+              .catch((e) => {
+                  this.setState({
+                      sendTransactionError       : true,
+                      sendTransactionErrorMessage: e.message || e,
+                      sending                    : false
+                  });
+              });
+    }
+
+    updateSuggestedFees() {
+        this.fees.value = this.props.wallet.transaction_fee;
     }
 
     handleAmountValueChange(e) {
@@ -118,7 +151,9 @@ class Wallet extends Component {
         if ((amount.length - 1) % 3 === 0) {
             offset = 1;
         }
-        e.target.value = parseInt(amount).toLocaleString();
+
+        amount         = parseInt(amount);
+        e.target.value = !isNaN(amount) ? amount.toLocaleString() : 0;
 
         e.target.setSelectionRange(cursorStart + offset, cursorEnd + offset);
     }
@@ -162,17 +197,48 @@ class Wallet extends Component {
                                     address you will lose your
                                     millix.</Form.Text>
                             </Form.Group>
-                            <Form.Group>
-                                <Form.Label>amount of millix</Form.Label>
-                                <Form.Control type="text" placeholder="amount"
-                                              pattern="[0-9]+([,][0-9]{1,2})?"
-                                              ref={c => this.amount = c}
-                                              onChange={this.handleAmountValueChange.bind(this)}/>
-                                {this.state.amountError && (
-                                    <Form.Text className="text-muted"><small
-                                        style={{color: 'red'}}>invalid amount.
-                                        please, set a correct
-                                        value.</small></Form.Text>)}
+                            <Form.Group as={Row}>
+                                <Col sm="9">
+                                    <Form.Label>amount of millix</Form.Label>
+                                    <Form.Control type="text"
+                                                  placeholder="amount"
+                                                  pattern="[0-9]+([,][0-9]{1,2})?"
+                                                  ref={c => this.amount = c}
+                                                  onChange={this.handleAmountValueChange.bind(this)}/>
+                                    {this.state.amountError && (
+                                        <Form.Text className="text-muted"><small
+                                            style={{color: 'red'}}>invalid
+                                            amount.
+                                            please, set a correct
+                                            value.</small></Form.Text>)}
+                                </Col>
+                                <Col sm="2">
+                                    <Form.Label>fees</Form.Label>
+                                    <Form.Control type="text" placeholder="fees"
+                                                  pattern="[0-9]+([,][0-9]{1,2})?"
+                                                  ref={c => {
+                                                      this.fees = c;
+                                                      if (this.fees && !this.feesInitialized && this.props.wallet.transaction_fee > 0) {
+                                                          this.feesInitialized = true;
+                                                          this.fees.value      = this.props.wallet.transaction_fee;
+                                                      }
+                                                  }}
+                                                  onChange={this.handleAmountValueChange.bind(this)}/>
+                                    {this.state.feeError && (
+                                        <Form.Text className="text-muted"><small
+                                            style={{color: 'red'}}>invalid fee.
+                                            please, set a correct
+                                            value.</small></Form.Text>)}
+                                </Col>
+                                <Col sm="1" style={{
+                                    alignSelf  : 'flex-end',
+                                    paddingLeft: 0
+                                }}>
+                                    <Button variant="outline-secondary"
+                                            onClick={this.updateSuggestedFees.bind(this)}>
+                                        <FontAwesomeIcon icon="undo" size="1x"/>
+                                    </Button>
+                                </Col>
                             </Form.Group>
                         </Form>
                     </Col>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import {Button, Col, Container, FormControl, InputGroup, Row, Spinner} from 'react-bootstrap';
@@ -87,6 +87,18 @@ const UnlockWallet = (props) => {
                         {!props.wallet.isReady ? ' loading...' : 'login'}</Button>
                 </Col>
             </Row>
+            {props.wallet.notification_message && (props.wallet.notification_message.is_sticky || props.wallet.notification_message.timestamp + 10000 >= Date.now()) &&
+             props.wallet.notification_message.message.split('\n').map((message, idx) =>
+                 <Row key={'message_' + idx}>
+                     <Col style={{
+                         ...styles.centered,
+                         marginTop: idx === 0 ? 30 : 0
+                     }}>
+                         <small>
+                             {message}
+                         </small>
+                     </Col>
+                 </Row>)}
         </Container>
     );
 };
