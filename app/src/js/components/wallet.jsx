@@ -32,6 +32,8 @@ class Wallet extends Component {
             sendTransactionError: false,
             sending             : false
         };
+
+        this.feesInitialized = false;
     }
 
     componentDidMount() {
@@ -39,9 +41,9 @@ class Wallet extends Component {
         this.props.walletUpdateBalance(this.props.wallet.address_key_identifier);
     }
 
-    _getAmount(value) {
+    _getAmount(value, allowZero = false) {
         const pValue = parseInt(value.replace(/[,.]/g, ''));
-        if (pValue <= 0 || pValue.toLocaleString() !== value) {
+        if ((allowZero ? pValue < 0 : pValue <= 0) || pValue.toLocaleString() !== value) {
             throw Error('invalid_value');
         }
         return pValue;
@@ -85,7 +87,7 @@ class Wallet extends Component {
 
         let fees;
         try {
-            fees = this._getAmount(this.fees.value);
+            fees = this._getAmount(this.fees.value, true);
         }
         catch (e) {
             this.setState({
@@ -131,6 +133,10 @@ class Wallet extends Component {
                       sending                    : false
                   });
               });
+    }
+
+    updateSuggestedFees() {
+        this.fees.value = this.props.wallet.transaction_fee;
     }
 
     handleAmountValueChange(e) {
@@ -206,17 +212,32 @@ class Wallet extends Component {
                                             please, set a correct
                                             value.</small></Form.Text>)}
                                 </Col>
-                                <Col sm="3">
+                                <Col sm="2">
                                     <Form.Label>fees</Form.Label>
                                     <Form.Control type="text" placeholder="fees"
                                                   pattern="[0-9]+([,][0-9]{1,2})?"
-                                                  ref={c => this.fees = c}
+                                                  ref={c => {
+                                                      this.fees = c;
+                                                      if (this.fees && !this.feesInitialized && this.props.wallet.transaction_fee > 0) {
+                                                          this.feesInitialized = true;
+                                                          this.fees.value      = this.props.wallet.transaction_fee;
+                                                      }
+                                                  }}
                                                   onChange={this.handleAmountValueChange.bind(this)}/>
                                     {this.state.feeError && (
                                         <Form.Text className="text-muted"><small
                                             style={{color: 'red'}}>invalid fee.
                                             please, set a correct
                                             value.</small></Form.Text>)}
+                                </Col>
+                                <Col sm="1" style={{
+                                    alignSelf  : 'flex-end',
+                                    paddingLeft: 0
+                                }}>
+                                    <Button variant="outline-secondary"
+                                            onClick={this.updateSuggestedFees.bind(this)}>
+                                        <FontAwesomeIcon icon="undo" size="1x"/>
+                                    </Button>
                                 </Col>
                             </Form.Group>
                         </Form>
