@@ -81,7 +81,7 @@ class TransactionHistoryView extends Component {
         return (
             <div>
                 <div className={'panel panel-filled'}>
-                    <div className={'panel-heading'}>transaction history</div>
+                    <div className={'panel-heading'}>transaction</div>
                     <hr className={'hrPanel'}/>
                     <div className={'panel-body'}>
 

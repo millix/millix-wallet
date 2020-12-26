@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Redirect, Route} from 'react-router-dom';
+import {Link, Redirect, Route} from 'react-router-dom';
 import {updateNetworkState} from '../../redux/actions';
 import Sidebar from '../sidebar';
 import {Button, Col, Container, Form, Row} from 'react-bootstrap';
@@ -22,10 +22,10 @@ const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
                                     </a>
                                 </div>
                             </div>
-                            <a class="navbar-brand" href="#">
+                            <Link class="navbar-brand" to={{pathname:'/wallet'}}>
                                 millix
                                 <span>v.{rest.config.NODE_MILLIX_VERSION}</span>
-                            </a>
+                            </Link>
                         </div>
                         <div id="navbar" class="navbar-collapse collapse">
                             <div class="left-nav-toggle">
