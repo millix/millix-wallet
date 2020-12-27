@@ -136,7 +136,7 @@ class Wallet extends Component {
     }
 
     updateSuggestedFees() {
-        this.fees.value = this.props.wallet.transaction_fee;
+        this.fees.value = Math.floor(this.props.wallet.transaction_fee);
     }
 
     handleAmountValueChange(e) {
@@ -220,7 +220,7 @@ class Wallet extends Component {
                                                       this.fees = c;
                                                       if (this.fees && !this.feesInitialized && this.props.wallet.transaction_fee > 0) {
                                                           this.feesInitialized = true;
-                                                          this.fees.value      = this.props.wallet.transaction_fee;
+                                                          this.fees.value      = Math.floor(this.props.wallet.transaction_fee);
                                                       }
                                                   }}
                                                   onChange={this.handleAmountValueChange.bind(this)}/>
