@@ -165,10 +165,20 @@ bootstrap.initialize()
          .then(() => eventBus.emit('wallet_update_address_version', database.getRepository('address').addressVersionList))
          .then(() => configLoader.load().then(config => store.dispatch(addWalletConfig(config))))
          .then(() => {
-             request.get('https://millix.org/wallet/node-version.json', (err, res, data) => {
-                 data = JSON.parse(data);
-                 store.dispatch(walletVersionAvailable(data['node_version']));
-             });
+             let currentVersion;
+             const checkVersion = () => {
+                 console.log('[wallet] check build version');
+                 request.get('https://millix.org/wallet/node-version.json', (err, res, data) => {
+                     data = JSON.parse(data);
+                     if (currentVersion !== data['node_version']) {
+                         currentVersion = data['node_version'];
+                         store.dispatch(walletVersionAvailable(currentVersion));
+                     }
+                     setTimeout(() => checkVersion(), 3600000);
+                 });
+             };
+
+             checkVersion();
          })
          .then(() => initializeWallet());
 
