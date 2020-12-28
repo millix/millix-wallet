@@ -26,8 +26,19 @@ class PeerInfoView extends Component {
                     tabularAttributes.push(entry);
                 });
             }
+            else if (ele.value instanceof Object) {
+                for (let [key, value] of Object.entries(ele.value)) {
+                    let attributeType = key.replace(/_/g, ' ');
+                    simpleAttributes.push(
+                        <Row className="mb-3"
+                             style={{color: 'lightcyan'}}>
+                            <h5>{attributeType}:</h5>&nbsp;<p>{value}</p>
+                        </Row>
+                    );
+                }
+            }
             else {
-                let attributeType = ele.attribute_type.replace(/_/g," ");
+                let attributeType = ele.attribute_type.replace(/_/g, ' ');
                 simpleAttributes.push(
                     <Row className="mb-3"
                          style={{color: 'lightcyan'}}>
