@@ -163,122 +163,139 @@ class EventsLogView extends Component {
         let events = this.state.events;
         return (
             <div>
-                <Row className="mb-3 mt-3">
-                    <Col className="pr-0" style={{
-                        display       : 'flex',
-                        justifyContent: 'flex-end'
-                    }}>
-                        <Button variant="light"
-                                className={'btn btn-w-md btn-default'}
-                                onClick={this.openExportDialog.bind(this)}>
-                            export log to csv
-                        </Button>
-                        <input style={{display: 'none'}} type="file"
-                               nwsaveas="log.csv" accept=".csv"
-                               ref={(component) => this.input = component}
-                               onChange={this.exportLog.bind(this)}
-                               key={this.state.fileKey}/>
-                    </Col>
-                </Row>
+
                 <Row>
                     <Col md={12}>
                         <div className={'panel panel-filled'}>
+                            <div
+                                className={'panel-heading'}>logs
+                            </div>
+                            <hr className={'hrPanel'}/>
                             <div className={'panel-body'}>
+
                                 <Form>
-                                    <Form.Group as={Row}>
-                                        <Form.Label column sm="2"
-                                                    className="pl-0">
-                                            message type
-                                        </Form.Label>
-                                        <Col sm="8">
-                                            <div className="btn-group">
-                                                <button data-toggle="dropdown"
-                                                        className="btn btn-accent dropdown-toggle"
-                                                        aria-expanded="false">{this.state.typeFilter}
-                                                    <span className="caret"/>
-                                                </button>
-                                                <ul className="dropdown-menu">
-                                                    {Array.from(this.getTypes()).sort().map(type =>
-                                                        <li><a key={type}
-                                                               href="#"
-                                                               onClick={() => {
-                                                                   this.filterByType(this.props.log.events, type);
-                                                               }}>{type}</a>
-                                                        </li>
-                                                    )}
-                                                </ul>
-                                            </div>
-                                        </Col>
-                                        <Col sm="2" style={{
-                                            display       : 'flex',
-                                            justifyContent: 'flex-end'
-                                        }} className="pr-0">
+                                    <Form.Group>
+                                        <label
+                                            className="control-label">message
+                                            type</label>
+                                        <div
+                                            className="btn-group btn-full-width">
+                                            <button data-toggle="dropdown"
+                                                    className="btn btn-accent dropdown-toggle btn-full-width dropdown-luna"
+                                                    aria-expanded="false">
+                                                <p style={{
+                                                    float       : 'left',
+                                                    marginBottom: '0px'
+                                                }}>{this.state.typeFilter}</p>
+                                                <p style={{
+                                                    float       : 'right',
+                                                    marginBottom: '0px'
+                                                }}><span className="caret"/></p>
+                                            </button>
+                                            <ul className="dropdown-menu btn-full-width dropdown-lu">
+                                                {Array.from(this.getTypes()).sort().map(type =>
+                                                    <li><a
+                                                           className="li-a"
+                                                           key={type}
+                                                           href="#"
+                                                           onClick={() => {
+                                                               this.filterByType(this.props.log.events, type);
+                                                           }}>{type}</a>
+                                                    </li>
+                                                )}
+                                            </ul>
+                                        </div>
+                                    </Form.Group>
+                                    <Form.Group>
+                                        <label
+                                            className="control-label">message
+                                            content</label>
+                                        <Form.Control type="text"
+                                                      placeholder="filter content"
+                                                      ref={this.inputFilterText}
+                                                      onKeyDown={(e) => {
+                                                          if (e.keyCode == 13) {
+                                                              e.stopPropagation();
+                                                              e.preventDefault();
+                                                          }
+                                                      }}
+                                                      onChange={() => {
+                                                          this.filterByContent(this.props.log.events, this.inputFilterText.current.value);
+                                                      }}/>
+                                    </Form.Group>
+                                </Form>
+                                <Row className="mb-3 mt-3">
+                                    <Col sm="2">
+                                        <Form.Group>
+
+                                            <label
+                                                className="control-label">stream
+                                                log</label>
+
                                             <Switch
                                                 className={'switch-class network-switch'}
                                                 id="logSwitch"
                                                 options={
                                                     {
-                                                        color: '#f6a821',
+                                                        color: '#9400CE',
                                                         size : 'small'
                                                     }
                                                 }
-                                                label="stream log"
                                                 checked={this.state.enableAutoupdate}
                                                 onChange={(checked) => this.setState({enableAutoupdate: checked})}
                                             />
-                                        </Col>
-                                    </Form.Group>
 
-                                    <Form.Group as={Row}>
-                                        <Form.Label column sm="2"
-                                                    className="pl-0">
-                                            message content
-                                        </Form.Label>
-                                        <Col sm="10">
-                                            <Form.Control type="text"
-                                                          placeholder="filter content"
-                                                          ref={this.inputFilterText}
-                                                          onKeyDown={(e) => {
-                                                              if (e.keyCode == 13) {
-                                                                  e.stopPropagation();
-                                                                  e.preventDefault();
-                                                              }
-                                                          }}
-                                                          onChange={() => {
-                                                              this.filterByContent(this.props.log.events, this.inputFilterText.current.value);
-                                                          }}/>
-                                        </Col>
-                                    </Form.Group>
-                                </Form>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col className="pr-0" style={{
+                                        display       : 'flex',
+                                        justifyContent: 'flex-end'
+                                    }}>
+                                        <Button variant="light"
+                                                className={'btn btn-w-md btn-accent'}
+                                                onClick={this.openExportDialog.bind(this)}
+                                                style={{marginTop: "8px"}}>
+                                            export log to csv
+                                        </Button>
+                                        <input style={{display: 'none'}}
+                                               type="file"
+                                               nwsaveas="log.csv" accept=".csv"
+                                               ref={(component) => this.input = component}
+                                               onChange={this.exportLog.bind(this)}
+                                               key={this.state.fileKey}/>
+                                    </Col>
+                                </Row>
+                                <Row className="mb-3">
+                                    <div style={{
+                                        width   : '100%',
+                                        overflow: 'auto'
+                                    }}>
+                                        <BootstrapTable keyField='key'
+                                                        style={{tableLayout: 'auto'}}
+                                                        data={_.map(events, (event, idx) => {
+                                                            return {
+                                                                key    : idx,
+                                                                type   : event.type.split(':')[0],
+                                                                content: event.content,
+                                                                date   : event.timestamp,
+                                                                node   : event.from
+                                                            };
+                                                        })}
+                                                        rowEvents={{
+                                                            onClick: (e, row, rowIndex) => {
+                                                                this.openDetails(row);
+                                                            }
+                                                        }}
+                                                        columns={this.tableColumns}
+                                                        pagination={paginationFactory()}/>
+                                    </div>
+                                </Row>
                             </div>
+
                         </div>
                     </Col>
                 </Row>
-                <Row className="mb-3">
-                    <div style={{
-                        width   : '100%',
-                        overflow: 'auto'
-                    }}>
-                        <BootstrapTable keyField='key'
-                                        style={{tableLayout: 'auto'}}
-                                        data={_.map(events, (event, idx) => {
-                                            return {
-                                                key    : idx,
-                                                type   : event.type.split(':')[0],
-                                                content: event.content,
-                                                date   : event.timestamp,
-                                                node   : event.from
-                                            };
-                                        })}
-                                        rowEvents={{
-                                            onClick: (e, row, rowIndex) => {
-                                                this.openDetails(row);
-                                            }
-                                        }}
-                                        columns={this.tableColumns}
-                                        pagination={paginationFactory()}/>
-                    </div>
-                </Row>
+
             </div>
         );
     }

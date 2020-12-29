@@ -7,7 +7,12 @@
 }
 
 .luna-nav.nav li a:hover, .luna-nav.nav li a:focus {
-    color: #c0c4c8;
+    color: #C741FC !important;
+    background: inherit;
+}
+
+.customNav{
+    color: #C741FC !important;
     background: inherit;
 }
 
@@ -19,9 +24,9 @@
 }
 
 .sidenav---sidenav-nav---3tvij > .sidenav---sidenav-navitem---uwIJ-.sidenav---highlighted---oUx9u > .sidenav---navitem---9uL5T .sidenav---navtext---1AE_f {
-    border-left: 6px solid #f6a821;
+    border-left: 6px solid #9400CE;
     padding-left: 19px;
-    color: #c0c4c8;
+    color: #C741FC;
 }
 
 .sidenav---sidenav-nav---3tvij > .sidenav---sidenav-navitem---uwIJ- > .sidenav---navitem---9uL5T {
@@ -33,7 +38,7 @@
 }
 
 .sidenav---sidenav-nav---3tvij > .sidenav---sidenav-navitem---uwIJ-:hover > .sidenav---navitem---9uL5T .sidenav---navtext---1AE_f {
-    color: #c0c4c8 !important;
+    color: #C741FC !important;
 }
 
 .sidenav---sidenav-nav---3tvij > .sidenav---sidenav-navitem---uwIJ-:hover > .sidenav---navitem---9uL5T::after {
@@ -89,4 +94,37 @@
 
 .mb-3 {
     margin-bottom: 15px;
+}
+
+.hrPanel {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.btn-full-width {
+    width: 100%;
+}
+
+.label-btn {
+    padding-top: 0.5em;
+    padding-right: 1em;
+    padding-bottom: 0.5em;
+}
+.panel-heading{
+    font-size: 1.4rem;
+}
+
+.dropdown-luna{
+    background: #9400CE;
+    color: #fff;
+}
+.li-a{
+    color: #fff !important;
+}
+.li-a:hover{
+    color: #fff !important;
+    background-color: #9400CE !important;
+}
+.dropdown-lu{
+    background: #2f323b;
 }

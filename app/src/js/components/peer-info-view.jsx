@@ -4,6 +4,7 @@ import {withRouter} from 'react-router-dom';
 import {Button, Col, Row, Table} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {getNodeAttribute} from '../redux/actions/index';
+import {object} from 'prop-types';
 
 
 class PeerInfoView extends Component {
@@ -21,18 +22,33 @@ class PeerInfoView extends Component {
         let simpleAttributes  = [];
         let tabularAttributes = [];
         attributes.forEach(ele => {
+            if (!ele)
+                return;
             if (ele.value instanceof Array) {
-                ele.value.forEach(entry => {
-                    tabularAttributes.push(entry);
-                });
+                if(ele.attribute_type === 'shard_protocol')
+                    ele.value.forEach(entry => {
+                            tabularAttributes.push(entry);
+                    });
             }
             else {
-                let attributeType = ele.attribute_type.replace(/_/g, ' ');
-                simpleAttributes.push(
-                    <Row className="mb-1">
-                        <h5>{attributeType}:</h5> {ele.value}
-                    </Row>
-                );
+                if(ele.value instanceof Object){
+                    Object.entries(ele.value).forEach(([key, value]) => {
+                        let attributeType = key.replace(/_/g, ' ');
+                        simpleAttributes.push(
+                            <Row className="mb-1">
+                                <h5>{attributeType}:</h5> {value}
+                            </Row>
+                        );
+                    });
+                }
+                else {
+                    let attributeType = ele.attribute_type.replace(/_/g, ' ');
+                    simpleAttributes.push(
+                        <Row className="mb-1">
+                            <h5>{attributeType}:</h5> {ele.value}
+                        </Row>
+                    );
+                }
             }
         });
 
@@ -41,10 +57,11 @@ class PeerInfoView extends Component {
                 <Row className="mb-3 mt-3">
                     <Col className="pl-0" style={{
                         display       : 'flex',
-                        justifyContent: 'flex-start'
+                        justifyContent: 'flex-start',
+                        marginLeft: 10
                     }}>
                         <Button variant="light"
-                                className={'btn btn-w-md btn-default'}
+                                className={'btn btn-w-md btn-accent'}
                                 onClick={this.props.history.goBack}>
                             <FontAwesomeIcon icon="arrow-circle-left"
                                              size="2x"/>
@@ -58,33 +75,43 @@ class PeerInfoView extends Component {
                     </Col>
                 </Row>
                 <div className={'panel panel-filled'}>
+                    <div className={'panel-heading'}>peer attributes</div>
+                    <hr className={'hrPanel'}/>
                     <div className={'panel-body'}>
+
                         {simpleAttributes}
                     </div>
                 </div>
-                <Table striped bordered hover variant="dark">
-                    <thead>
-                    <tr>
-                        <th>shard id</th>
-                        <th>transaction count</th>
-                        <th>update date</th>
-                        <th>is required</th>
-                        <th>fee ask request byte</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {tabularAttributes.map((item, idx) => {
-                        return (
-                            <tr key={idx} className="wallet-node">
-                                <td>{item.shard_id}</td>
-                                <td>{item.transaction_count}</td>
-                                <td>{item.update_date}</td>
-                                <td>{item.is_required ? 'yes' : 'no'}</td>
-                                <td>{item.fee_ask_request_byte}</td>
-                            </tr>);
-                    })}
-                    </tbody>
-                </Table>
+                <div className={'panel panel-filled'}>
+                    <div className={'panel-heading'}>shard attributes</div>
+                    <hr className={'hrPanel'}/>
+                    <div className={'panel-body'}>
+                        <Table striped bordered hover variant="dark">
+                            <thead>
+                            <tr>
+                                <th>shard id</th>
+                                <th>transaction count</th>
+                                <th>update date</th>
+                                <th>is required</th>
+                                <th>fee ask request byte</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {tabularAttributes.map((item, idx) => {
+                                return (
+                                    <tr key={idx} className="wallet-node">
+                                        <td>{item.shard_id}</td>
+                                        <td>{item.transaction_count}</td>
+                                        <td>{item.update_date}</td>
+                                        <td>{item.is_required ? 'yes' : 'no'}</td>
+                                        <td>{item.fee_ask_request_byte}</td>
+                                    </tr>);
+                            })}
+                            </tbody>
+                        </Table>
+
+                    </div>
+                </div>
             </div>
         );
     }

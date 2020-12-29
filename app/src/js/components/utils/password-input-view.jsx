@@ -34,7 +34,7 @@ const PasswordInputView = (props) => {
                 <Row>
                     <Col style={styles.centered}>
                         <Button variant="light"
-                                className={'btn btn-w-md btn-default'}
+                                className={'btn btn-w-md btn-accent'}
                                 onClick={() => {
                                     props.onPassword(passphraseRef.value);
                                 }}>{props.newWallet ? 'create wallet' : 'unlock wallet'}</Button>

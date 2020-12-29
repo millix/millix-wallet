@@ -28,7 +28,7 @@ const UnlockWallet = (props) => {
             paddingLeft: 25
         }}>
             <Row className="mb-3">
-                <Button variant="light" className={'btn btn-w-md btn-default'}
+                <Button variant="light" className={'btn btn-w-md btn-accent'}
                         style={{
                             float     : 'left',
                             marginLeft: '12px'

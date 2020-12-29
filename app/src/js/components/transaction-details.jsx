@@ -34,10 +34,11 @@ class TransactionDetails extends Component {
                 <Row className="mb-3 mt-3">
                     <Col className="pl-0" style={{
                         display       : 'flex',
-                        justifyContent: 'flex-start'
+                        justifyContent: 'flex-start',
+                        marginLeft: 10
                     }}>
                         <Button variant="light"
-                                className={'btn btn-w-md btn-default'}
+                                className={'btn btn-w-md btn-accent'}
                                 onClick={this.props.history.goBack}>
                             <FontAwesomeIcon icon="arrow-circle-left"
                                              size="2x"/>
@@ -51,6 +52,8 @@ class TransactionDetails extends Component {
                     </Col>
                 </Row>
                 <div className={'panel panel-filled'}>
+                    <div className={'panel-heading'}>transaction details</div>
+                    <hr className={'hrPanel'}/>
                     <div className={'panel-body'}>
                         <Row className="mb-3"
                              style={{color: 'lightcyan'}}>

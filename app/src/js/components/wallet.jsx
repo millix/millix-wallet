@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {Button, Col, Form, FormControl, InputGroup, Row, Spinner, Table} from 'react-bootstrap';
@@ -18,7 +18,6 @@ const styles = {
         justifyContent: 'left'
     }
 };
-
 
 class Wallet extends Component {
     constructor(props) {
@@ -123,32 +122,41 @@ class Wallet extends Component {
         return (
             <div>
                 <Row>
-                    <Col md={10} className={'col-md-offset-1'}>
+                    <Col md={12}>
                         <div className={'panel panel-filled'}>
+                            <div className={'panel-heading'}>balance</div>
+                            <hr className={'hrPanel'}/>
                             <div className={'panel-body'}>
-                                <Row className="mb-1">
-                                    <Col style={styles.left}>
-                                        <Form.Label>balance</Form.Label>
-                                    </Col>
-                                </Row>
-                                <Row className="mb-1">
-                                    <Col style={styles.left}>
-                                        <span>available: {this.props.wallet.balance_stable.toLocaleString()}</span>
-                                    </Col>
-                                </Row>
+
+                                <Table striped bordered hover variant="dark">
+                                    <thead>
+                                    <tr>
+                                        <th>available</th>
+                                        <th>pending</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr key="1" className="wallet-address">
+                                        <td>{this.props.wallet.balance_stable.toLocaleString()}</td>
+                                        <td>{this.props.wallet.balance_pending.toLocaleString()}</td>
+                                    </tr>
+                                    </tbody>
+                                </Table>
+                            </div>
+                        </div>
+
+                        <div className={'panel panel-filled'}>
+                            <div className={'panel-heading'}>send</div>
+                            <hr className={'hrPanel'}/>
+                            <div className={'panel-body'}>
                                 <Row className="mb-3">
-                                    <Col style={styles.left}>
-                                        <span>pending: {this.props.wallet.balance_pending.toLocaleString()}</span>
-                                    </Col>
-                                </Row>
-                                <Row className="mb-3">
-                                    <Col>
-                                        <Form>
+                                    <Form>
+                                        <Col>
                                             <Form.Group>
-                                                <Form.Label>destination
-                                                    address</Form.Label>
+                                                <label
+                                                    className="control-label">address</label>
                                                 <Form.Control type="text"
-                                                              placeholder="enter destination address"
+                                                              placeholder="address"
                                                               ref={c => this.destinationAddress = c}/>
                                                 {this.state.addressError && (
                                                     <Form.Text
@@ -157,21 +165,12 @@ class Wallet extends Component {
                                                         address.
                                                         please, set a correct
                                                         value.</small></Form.Text>)}
-                                                <Form.Text
-                                                    className="text-muted">please
-                                                    carefully confirm the
-                                                    destination
-                                                    address
-                                                    before sending. if you send
-                                                    to
-                                                    an
-                                                    invalid
-                                                    address you will lose your
-                                                    millix.</Form.Text>
                                             </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <label
+                                                className="control-label">amount</label>
                                             <Form.Group>
-                                                <Form.Label>amount of
-                                                    millix</Form.Label>
                                                 <Form.Control type="text"
                                                               placeholder="amount"
                                                               pattern="[0-9]+([,][0-9]{1,2})?"
@@ -185,76 +184,83 @@ class Wallet extends Component {
                                                         please, set a correct
                                                         value.</small></Form.Text>)}
                                             </Form.Group>
-                                        </Form>
-                                    </Col>
+                                        </Col>
+                                        <Col style={styles.centered}>
+                                            <Button variant="light"
+                                                    className={'btn btn-w-md btn-accent'}
+                                                    onClick={this.send.bind(this)}
+                                                    disabled={this.state.sending}>
+                                                {this.state.sending &&
+                                                 <div style={{
+                                                     fontSize: '6px',
+                                                     float   : 'left'
+                                                 }} className="loader-spin"/>}
+                                                send millix
+                                            </Button>
+                                        </Col>
+                                        <Col style={styles.centered}>
+                                            {this.state.connectionError && (
+                                                <Form.Text
+                                                    className="text-muted"><small
+                                                    style={{color: 'red'}}>invalid
+                                                    network
+                                                    state.
+                                                    could not send the
+                                                    transaction.</small></Form.Text>)}
+                                        </Col>
+                                    </Form>
                                 </Row>
-                                <Row>
-                                    <Col style={styles.centered}>
-                                        {this.state.connectionError && (
-                                            <Form.Text
-                                                className="text-muted"><small
-                                                style={{color: 'red'}}>invalid
-                                                network
-                                                state.
-                                                could not send the
-                                                transaction.</small></Form.Text>)}
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col style={styles.centered}>
+                            </div>
+                        </div>
+                        <div className={'panel panel-filled'}>
+                            <div className={'panel-heading'}>addresses</div>
+                            <hr className={'hrPanel'}/>
+                            <div className={'panel-body'}>
+                                <Row className="mb-3 mt-3">
+                                    <Col className="pr-0" style={{
+                                        ...styles.centered,
+                                        display       : 'flex',
+                                        justifyContent: 'flex-end'
+                                    }}>
                                         <Button variant="light"
                                                 className={'btn btn-w-md btn-accent'}
-                                                onClick={this.send.bind(this)}
-                                                disabled={this.state.sending}>
-                                            {this.state.sending && <div style={{fontSize: "6px", float: 'left'}} className="loader-spin"/>}
-                                            send millix
+                                                onClick={() => {
+                                                    this.props.addNewAddress(this.props.wallet.id).then(() => this.props.walletUpdateAddresses(this.props.wallet.id));
+                                                }}>
+                                            generate address
                                         </Button>
                                     </Col>
+                                </Row>
+                                <Row className="mb-3">
+                                    <div style={{
+                                        maxHeight: 310,
+                                        width    : '100%',
+                                        overflow : 'auto'
+                                    }}>
+                                        <Table striped bordered hover variant="dark">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>address</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {this.props.wallet.addresses.map((item, idx) => {
+                                                return (
+                                                    <tr key={idx} className="wallet-address">
+                                                        <td>{idx}</td>
+                                                        <td>{item.address}</td>
+                                                    </tr>);
+                                            })}
+                                            </tbody>
+                                        </Table>
+                                    </div>
                                 </Row>
                             </div>
                         </div>
                     </Col>
                 </Row>
-                <Row className="mb-3 mt-3">
-                    <Col className="pr-0" style={{
-                        ...styles.centered,
-                        display       : 'flex',
-                        justifyContent: 'flex-end'
-                    }}>
-                        <Button variant="light"
-                                className={'btn btn-w-md btn-default'}
-                                onClick={() => {
-                                    this.props.addNewAddress(this.props.wallet.id).then(() => this.props.walletUpdateAddresses(this.props.wallet.id));
-                                }}>
-                            show more addresses
-                        </Button>
-                    </Col>
-                </Row>
-                <Row className="mb-3">
-                    <div style={{
-                        maxHeight: 310,
-                        width    : '100%',
-                        overflow : 'auto'
-                    }}>
-                        <Table striped bordered hover variant="dark">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>address</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {this.props.wallet.addresses.map((item, idx) => {
-                                return (
-                                    <tr key={idx} className="wallet-address">
-                                        <td>{idx}</td>
-                                        <td>{item.address}</td>
-                                    </tr>);
-                            })}
-                            </tbody>
-                        </Table>
-                    </div>
-                </Row>
+
             </div>
         );
     }
