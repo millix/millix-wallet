@@ -118,11 +118,16 @@ class TransactionDetails extends Component {
                                         </div>
                                 )}
                                 <Row className="mb-3">
-                                    <span>Date: {moment.utc(transaction.transaction_date).format('YYYY-MM-DD HH:mm:ss')}</span>
+                                    <span>Date: {moment.utc(transaction.transaction_date * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>
                                 </Row>
                                 <Row className="mb-3">
-                                    <span>Host: {transaction.ip_address_origin}</span>
+                                    <span>Node ID: {transaction.node_id_origin}</span>
                                 </Row>
+                                {transaction.node_id_proxy &&
+                                 (<Row className="mb-3">
+                                     <span>Proxy ID: {transaction.node_id_proxy}</span>
+                                 </Row>)
+                                }
                             </div>
                     )}
                 </div>
