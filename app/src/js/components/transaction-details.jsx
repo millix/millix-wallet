@@ -118,7 +118,7 @@ class TransactionDetails extends Component {
                                         </div>
                                 )}
                                 <Row className="mb-3">
-                                    <span>Date: {moment.utc(transaction.transaction_date * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>
+                                    <span>Date: {moment.utc(typeof(transaction.transaction_date)==="number" ? transaction.transaction_date * 1000 : transaction.transaction_date).format('YYYY-MM-DD HH:mm:ss')}</span>
                                 </Row>
                                 <Row className="mb-3">
                                     <span>Node ID: {transaction.node_id_origin}</span>
