@@ -57,6 +57,19 @@ const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (
                                                 <hr/>
                                             </Col>
                                         </Row>)}
+                                        {!!rest.wallet.version_available && rest.config.NODE_MILLIX_VERSION !== rest.wallet.version_available &&
+                                         (<Row>
+                                             <Col className="pr-0" style={{textAlign: 'right'}}>
+                                                 <Button variant="link"
+                                                         onClick={() => nw.Shell.openExternal('https://millix.org/client.html')}
+                                                         style={{
+                                                             fontSize: '75%',
+                                                             padding : 0,
+                                                             color   : '#ffadad'
+                                                         }}>new version available
+                                                     v.{rest.wallet.version_available} !</Button>
+                                             </Col>
+                                         </Row>)}
                                         <Row>
                                             <Col className="pr-0"
                                                  style={{textAlign: 'left'}}>

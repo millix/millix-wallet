@@ -4,7 +4,6 @@ import {withRouter} from 'react-router-dom';
 import {Button, Col, Row, Table} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {getNodeAttribute} from '../redux/actions/index';
-import {object} from 'prop-types';
 
 
 class PeerInfoView extends Component {
@@ -29,6 +28,16 @@ class PeerInfoView extends Component {
                     ele.value.forEach(entry => {
                             tabularAttributes.push(entry);
                     });
+            }
+            else if (ele.value instanceof Object) {
+                for (let [key, value] of Object.entries(ele.value)) {
+                    let attributeType = key.replace(/_/g, ' ');
+                    simpleAttributes.push(
+                        <Row className="mb-1">
+                            <h5>{attributeType}:</h5> {value}
+                        </Row>
+                    );
+                }
             }
             else {
                 if(ele.value instanceof Object){

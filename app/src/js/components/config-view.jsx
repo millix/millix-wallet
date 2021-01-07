@@ -7,6 +7,7 @@ import _ from 'lodash';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import bootstrap from '../../../../deps/millix-node/core/bootstrap';
 import network from '../../../../deps/millix-node/net/network';
+import {TRANSACTION_FEE_DEFAULT, TRANSACTION_FEE_NETWORK, TRANSACTION_FEE_PROXY} from '../../../../deps/millix-node/core/config/config';
 import Switch from 'react-switchery';
 
 const styles = {
@@ -521,6 +522,60 @@ class ConfigView extends Component {
                                </div>
                            </div>
 
+
+                           <div
+                               className={'panel panel-filled'}>
+                               <div
+                                   className={'panel-heading'}>fees
+                               </div>
+                               <hr className={'hrPanel'}/>
+                               <div className={'panel-body'}>
+                                   <Col>
+                                       <Form.Group>
+                                           <label
+                                               className="control-label">transaction proxy fees</label>
+                                           <Form.Control
+                                               type="text"
+                                               placeholder=""
+                                               ref={(c) => this._fee_proxy_fee = c}
+                                               onChange={() => {
+                                                   this.setConfig({TRANSACTION_FEE_PROXY: this._fee_proxy_fee.value});
+                                               }}
+                                               value={this.props.config.TRANSACTION_FEE_PROXY}/>
+                                       </Form.Group>
+                                   </Col>
+
+                                   <Col>
+                                       <Form.Group>
+                                           <label
+                                               className="control-label">transaction fees</label>
+                                           <Form.Control
+                                               type="text"
+                                               placeholder=""
+                                               ref={(c) => this._fee_transaction_default = c}
+                                               onChange={() => {
+                                                   this.setConfig({TRANSACTION_FEE_DEFAULT: this._fee_transaction_default.value});
+                                               }}
+                                               value={this.props.config.TRANSACTION_FEE_DEFAULT}/>
+                                       </Form.Group>
+                                   </Col>
+
+                                   <Col>
+                                       <Form.Group>
+                                           <label
+                                               className="control-label">network fee (%)</label>
+                                           <Form.Control
+                                               type="text"
+                                               placeholder=""
+                                               ref={(c) => this._fee_transaction_network = c}
+                                               onChange={() => {
+                                                   this.setConfig({TRANSACTION_FEE_NETWORK: parseFloat(this._fee_transaction_network.value)/100});
+                                               }}
+                                               value={this.props.config.TRANSACTION_FEE_NETWORK * 100}/>
+                                       </Form.Group>
+                                   </Col>
+                               </div>
+                           </div>
 
                            <div
                                className={'panel panel-filled'}>

@@ -1,9 +1,35 @@
-import {UPDATE_WALLET_ADDRESS_VERSION, ADD_LOG_EVENT, ADD_NEW_ADDRESS, ADD_WALLET_CONFIG, CLEAR_TRANSACTION_DETAILS, LOCK_WALLET, SET_BACKLOG_SIZE, UNLOCK_WALLET, UPDATE_CLOCK, UPDATE_NETWORK_CONNECTIONS, UPDATE_NETWORK_NODE_LIST, UPDATE_NETWORK_STATE, UPDATE_TRANSACTION_DETAILS, UPDATE_WALLET_ADDRESS, UPDATE_WALLET_CONFIG, UPDATE_WALLET_MAINTENANCE, UPDATE_WALLET_TRANSACTIONS, WALLET_READY, ADD_WALLET_ADDRESS_VERSION, GET_NODE_ATTRIBUTES, UPDATE_WALLET_BALANCE} from '../constants/action-types';
+import {
+    WALLET_VERSION_AVAILABLE, UPDATE_WALLET_ADDRESS_VERSION, ADD_LOG_EVENT,
+    ADD_NEW_ADDRESS, ADD_WALLET_CONFIG, CLEAR_TRANSACTION_DETAILS, LOCK_WALLET,
+    SET_BACKLOG_SIZE, UNLOCK_WALLET, UPDATE_CLOCK, UPDATE_NETWORK_CONNECTIONS,
+    UPDATE_NETWORK_NODE_LIST, UPDATE_NETWORK_STATE, UPDATE_TRANSACTION_DETAILS,
+    UPDATE_WALLET_ADDRESS, UPDATE_WALLET_CONFIG, UPDATE_WALLET_MAINTENANCE,
+    UPDATE_WALLET_TRANSACTIONS, WALLET_READY, ADD_WALLET_ADDRESS_VERSION,
+    GET_NODE_ATTRIBUTES, UPDATE_WALLET_BALANCE, UPDATE_WALLET_NOTIFICATION,
+    UPDATE_WALLET_TRANSACTION_FEE
+} from '../constants/action-types';
 import database from '../../../../../deps/millix-node/database/database';
 import wallet from '../../../../../deps/millix-node/core/wallet/wallet';
 import async from 'async';
 import _ from 'lodash';
 import network from '../../../../../deps/millix-node/net/network';
+import config from '../../../../../deps/millix-node/core/config/config';
+
+export function updateSuggestedTransactionFee() {
+    const transaction = database.getRepository('transaction');
+    return (dispatch) => transaction.getSuggestedNetworkFee(config.TRANSACTION_FEE_NETWORK)
+                                    .then(networkFee => dispatch({
+                                        type   : UPDATE_WALLET_TRANSACTION_FEE,
+                                        payload: networkFee + config.TRANSACTION_FEE_DEFAULT
+                                    }));
+}
+
+export function updateWalletNotification(payload) {
+    return {
+        type: UPDATE_WALLET_NOTIFICATION,
+        payload
+    };
+}
 
 export function walletUpdateTransactions() {
     return (dispatch) => wallet.getAllTransactions()
@@ -129,6 +155,13 @@ export function walletReady(payload) {
     };
 }
 
+export function walletVersionAvailable(payload) {
+    return {
+        type: WALLET_VERSION_AVAILABLE,
+        payload
+    };
+}
+
 export function setBackLogSize(payload) {
     return {
         type: SET_BACKLOG_SIZE,
@@ -175,7 +208,7 @@ export function updateNetworkNodeList() {
     return (dispatch) => database.getRepository('node')
                                  .listNodes()
                                  .then(items => items.map(item => {
-                                     return {node: item.node_prefix + item.node_ip_address + ':' + item.node_port};
+                                     return {node: item.node_prefix + item.node_address + ':' + item.node_port};
                                  }))
                                  .then(payload => dispatch({
                                      type: UPDATE_NETWORK_NODE_LIST,
@@ -189,7 +222,7 @@ export function walletUpdateBalance(keyIdentifier) {
             const transactionRepository = database.getRepository('transaction', shardID);
             return transactionRepository.getWalletBalance(keyIdentifier, true);
         }).then(balanceList => _.sum(balanceList)).then(balance => {
-            let payload = {};
+            let payload               = {};
             payload['balance_stable'] = balance || 0;
             return payload;
         }).then((payload) => {

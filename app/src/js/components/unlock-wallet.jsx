@@ -91,6 +91,18 @@ const UnlockWallet = (props) => {
                     </div>
                 </div>
             </div>
+            {props.wallet.notification_message && (props.wallet.notification_message.is_sticky || props.wallet.notification_message.timestamp + 10000 >= Date.now()) &&
+             props.wallet.notification_message.message.split('\n').map((message, idx) =>
+                 <Row key={'message_' + idx}>
+                     <Col style={{
+                         ...styles.centered,
+                         marginTop: idx === 0 ? 30 : 0
+                     }}>
+                         <small>
+                             {message}
+                         </small>
+                     </Col>
+                 </Row>)}
         </Container>
     );
 };

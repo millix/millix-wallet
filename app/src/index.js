@@ -3,7 +3,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import store from './js/redux/store';
 import _ from 'lodash';
-import {addWalletConfig, lockWallet, unlockWallet, updateClock, updateNetworkConnections, updateNetworkNodeList, updateWalletAddressVersion, walletReady, walletUpdateAddresses, walletUpdateBalance} from './js/redux/actions/index';
+import {
+    walletVersionAvailable, addWalletConfig, lockWallet, unlockWallet, updateClock,
+    updateNetworkConnections, updateNetworkNodeList, updateWalletAddressVersion,
+    walletReady, walletUpdateAddresses, walletUpdateBalance, updateWalletNotification,
+    updateSuggestedTransactionFee
+} from './js/redux/actions/index';
 import AppContainer from './js/components/app-container';
 import console from '../../deps/millix-node/core/console';
 import network from '../../deps/millix-node/net/network';
@@ -14,25 +19,27 @@ import configLoader from '../../deps/millix-node/core/config/config-loader';
 import {WALLET_MODE} from '../../deps/millix-node/core/wallet/wallet';
 import services from '../../deps/millix-node/core/services/services';
 import bootstrap from '../../deps/millix-node/core/bootstrap';
+import moment from 'moment';
+import request from 'request';
+import logManager from '../../deps/millix-node/core/log-manager';
+import yargs from 'yargs';
+import {addLogEvent, setBackLogSize} from './js/redux/actions';
 import fs from 'fs';
 import {config as faConfig, library} from '@fortawesome/fontawesome-svg-core';
-import {faArrowCircleLeft, faCloudDownloadAlt, faExchangeAlt, faFingerprint, faHeartbeat, faHome, faKey, faPlus, faSignOutAlt, faSlidersH, faStream, faTrash, faUndoAlt, faWallet} from '@fortawesome/free-solid-svg-icons';
-//import '../node_modules/react-virtualized/styles.css';
-//import '../node_modules/react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-//import '../node_modules/react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
+import {
+    faArrowCircleLeft, faCloudDownloadAlt, faExchangeAlt, faFingerprint, faHeartbeat,
+    faHome, faKey, faPlus, faSignOutAlt, faSlidersH, faStream, faTrash, faUndoAlt, faWallet,
+    faUndo
+} from '@fortawesome/free-solid-svg-icons';
 import '../node_modules/@trendmicro/react-sidenav/dist/react-sidenav.css';
 import '../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 import './css/app.scss';
 import './vendor/luna/luna';
-import moment from 'moment';
-import logManager from '../../deps/millix-node/core/log-manager';
-import yargs from 'yargs';
-import {addLogEvent, setBackLogSize} from './js/redux/actions';
 
 faConfig.autoAddCss = false;
 library.add(faArrowCircleLeft, faWallet, faKey, faHome, faFingerprint,
     faStream, faExchangeAlt, faCloudDownloadAlt, faSlidersH,
-    faSignOutAlt, faPlus, faHeartbeat, faUndoAlt, faTrash);
+    faSignOutAlt, faPlus, faHeartbeat, faUndoAlt, faTrash, faUndo);
 
 const argv = yargs
     .options({
@@ -86,7 +93,7 @@ process.on('exit', function() {
 
 console.log('starting millix-core');
 
-let initializeWallet = () => {
+let initializeWallet       = () => {
     services.stop();
     services.initialize({mode: WALLET_MODE.APP})
             .then(() => eventBus.emit('node_list_update'))
@@ -94,7 +101,7 @@ let initializeWallet = () => {
                 console.log(e);
             });
 };
-
+let lastFeeUpdateTimestamp = null;
 setInterval(() => {
     if (!ntp.initialized || !store.getState().wallet.unlocked) {
         return;
@@ -103,6 +110,11 @@ setInterval(() => {
     let clock = new Date();
     clock.setUTCMilliseconds(clock.getUTCMilliseconds() + ntp.offset);
     store.dispatch(updateClock(moment.utc(clock).format('YYYY-MM-DD HH:mm:ss')));
+    const timestamp = clock.getTime();
+    if (lastFeeUpdateTimestamp == null || timestamp - lastFeeUpdateTimestamp > 10000) {
+        lastFeeUpdateTimestamp = timestamp;
+        store.dispatch(updateSuggestedTransactionFee());
+    }
 }, 900);
 eventBus.on('wallet_ready', (ready) => store.dispatch(walletReady({
     isReady: true,
@@ -134,7 +146,7 @@ eventBus.on('wallet_lock', (lockPayload) => {
     services.stop();
     eventBus.emit('wallet_reload');
 });
-
+eventBus.on('wallet_notify_message', (message) => store.dispatch(updateWalletNotification(message)));
 eventBus.on('wallet_authentication_error', () => {
     store.dispatch(walletReady({authenticationError: true}));
     services.stop();
@@ -149,6 +161,22 @@ bootstrap.initialize()
          .then(() => database.initialize())
          .then(() => eventBus.emit('wallet_update_address_version', database.getRepository('address').addressVersionList))
          .then(() => configLoader.load().then(config => store.dispatch(addWalletConfig(config))))
+         .then(() => {
+             let currentVersion;
+             const checkVersion = () => {
+                 console.log('[wallet] check build version');
+                 request.get('https://millix.org/wallet/node-version.json', (err, res, data) => {
+                     data = JSON.parse(data);
+                     if (currentVersion !== data['node_version']) {
+                         currentVersion = data['node_version'];
+                         store.dispatch(walletVersionAvailable(currentVersion));
+                     }
+                     setTimeout(() => checkVersion(), 3600000);
+                 });
+             };
+
+             checkVersion();
+         })
          .then(() => initializeWallet());
 
 const wrapper = document.getElementById('app');

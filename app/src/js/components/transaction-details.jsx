@@ -126,11 +126,16 @@ class TransactionDetails extends Component {
                                     </>
                                 )}
                                 <Row className="mb-3">
-                                    <span>date: {moment.utc(transaction.transaction_date).format('YYYY-MM-DD HH:mm:ss')}</span>
+                                    <span>Date: {moment.utc(typeof(transaction.transaction_date)==="number" ? transaction.transaction_date * 1000 : transaction.transaction_date).format('YYYY-MM-DD HH:mm:ss')}</span>
                                 </Row>
                                 <Row className="mb-3">
-                                    <span>node id origin: {transaction.node_id_origin}</span>
+                                    <span>Node ID: {transaction.node_id_origin}</span>
                                 </Row>
+                                {transaction.node_id_proxy &&
+                                 (<Row className="mb-3">
+                                     <span>Proxy ID: {transaction.node_id_proxy}</span>
+                                 </Row>)
+                                }
                             </>
                         )}
                     </div>
