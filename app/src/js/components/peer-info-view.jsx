@@ -33,8 +33,8 @@ class PeerInfoView extends Component {
                 for (let [key, value] of Object.entries(ele.value)) {
                     let attributeType = key.replace(/_/g, ' ');
                     simpleAttributes.push(
-                        <Row className="mb-1">
-                            <h5>{attributeType}:</h5> {value}
+                        <Row className="mb-3">
+                            <span>{attributeType}: {value}</span>
                         </Row>
                     );
                 }
@@ -44,8 +44,8 @@ class PeerInfoView extends Component {
                     Object.entries(ele.value).forEach(([key, value]) => {
                         let attributeType = key.replace(/_/g, ' ');
                         simpleAttributes.push(
-                            <Row className="mb-1">
-                                <h5>{attributeType}:</h5> {value}
+                            <Row className="mb-3">
+                                <span>{attributeType}: {value}</span>
                             </Row>
                         );
                     });
@@ -53,8 +53,8 @@ class PeerInfoView extends Component {
                 else {
                     let attributeType = ele.attribute_type.replace(/_/g, ' ');
                     simpleAttributes.push(
-                        <Row className="mb-1">
-                            <h5>{attributeType}:</h5> {ele.value}
+                        <Row className="mb-3">
+                            <span>{attributeType}: {ele.value}</span>
                         </Row>
                     );
                 }
