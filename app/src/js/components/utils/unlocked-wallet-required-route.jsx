@@ -4,7 +4,6 @@ import {Link, Redirect, Route} from 'react-router-dom';
 import {updateNetworkState} from '../../redux/actions';
 import Sidebar from '../sidebar';
 import {Button, Col, Container, Form, Row} from 'react-bootstrap';
-import Switch from 'react-switchery';
 import '../../../../node_modules/mohithg-switchery/switchery.css';
 
 const UnlockedWalletRequiredRoute = ({component: Component, ...rest}) => (

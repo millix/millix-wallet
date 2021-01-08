@@ -128,3 +128,44 @@
 .dropdown-lu{
     background: #2f323b;
 }
+
+.dataTables_length.bs-select > label {
+    color: #949ba2;
+}
+
+.dataTables_length.bs-select > label > .custom-select {
+    width: 65px;
+    display: inline;
+    color: #ffffff;
+    background-color: #9400CE;
+    border-color: #9400CE;
+    font-size: 1em;
+    font-family:Roboto, sans-serif;
+}
+
+.dataTables_length.bs-select > label > .custom-select  option {
+    background-color:rgb(47, 50, 59);
+    color: #fff;
+}
+
+.pagination{
+    margin-top: 0;
+}
+
+.pagination > li > a:hover {
+    cursor: pointer;
+}
+
+pre {
+    background-color: transparent;
+    color: #949ba2!important;
+}
+
+#txhistory div[data-test="datatable-table"] {
+    max-width : 100%;
+    overflow-x: scroll;
+}
+
+#txhistory td {
+    white-space: nowrap;
+}

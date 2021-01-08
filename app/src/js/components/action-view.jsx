@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Col, Row, Table} from 'react-bootstrap';
+import {Button, Col, Row} from 'react-bootstrap';
 import walletUtils from '../../../../deps/millix-node/core/wallet/wallet-utils';
 import wallet from '../../../../deps/millix-node/core/wallet/wallet';
 import fs from 'fs';
@@ -32,6 +32,9 @@ class ActionView extends Component {
             fileKeyExport: 'export_' + now,
             fileKeyImport: 'import_' + now
         };
+    }
+
+    componentDidMount() {
     }
 
     exportKeys() {

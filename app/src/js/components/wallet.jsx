@@ -1,12 +1,13 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {Button, Col, Form, FormControl, InputGroup, Row, Spinner, Table} from 'react-bootstrap';
+import {Button, Col, Form, Row, Table} from 'react-bootstrap';
 import {addNewAddress, walletUpdateAddresses, walletUpdateBalance} from '../redux/actions/index';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import database from '../../../../deps/millix-node/database/database';
 import walletUtils from '../../../../deps/millix-node/core/wallet/wallet-utils';
 import wallet from '../../../../deps/millix-node/core/wallet/wallet';
+import {MDBDataTable as DataTable} from 'mdbreact';
 
 const styles = {
     centered: {
@@ -18,6 +19,7 @@ const styles = {
         justifyContent: 'left'
     }
 };
+
 
 class Wallet extends Component {
     constructor(props) {
@@ -229,7 +231,8 @@ class Wallet extends Component {
                                                 className="control-label">fees</label>
                                             <Form.Group as={Row}>
                                                 <Col md={11} ms={11}>
-                                                    <Form.Control type="text" placeholder="fees"
+                                                    <Form.Control type="text"
+                                                                  placeholder="fees"
                                                                   pattern="[0-9]+([,][0-9]{1,2})?"
                                                                   ref={c => {
                                                                       this.fees = c;
@@ -240,15 +243,21 @@ class Wallet extends Component {
                                                                   }}
                                                                   onChange={this.handleAmountValueChange.bind(this)}/>
                                                 </Col>
-                                                <Col style={styles.centered} md={1} ms={1}>
-                                                    <Button variant="outline-secondary"
-                                                            onClick={this.updateSuggestedFees.bind(this)}>
-                                                        <FontAwesomeIcon icon="undo" size="1x"/>
+                                                <Col style={styles.centered}
+                                                     md={1} ms={1}>
+                                                    <Button
+                                                        variant="outline-secondary"
+                                                        onClick={this.updateSuggestedFees.bind(this)}>
+                                                        <FontAwesomeIcon
+                                                            icon="undo"
+                                                            size="1x"/>
                                                     </Button>
                                                 </Col>
                                                 {this.state.feeError && (
-                                                    <Form.Text className="text-muted"><small
-                                                        style={{color: 'red'}}>invalid fee.
+                                                    <Form.Text
+                                                        className="text-muted"><small
+                                                        style={{color: 'red'}}>invalid
+                                                        fee.
                                                         please, set a correct
                                                         value.</small></Form.Text>)}
                                             </Form.Group>
@@ -268,8 +277,10 @@ class Wallet extends Component {
                                         </Col>
                                         <Col style={styles.centered}>
                                             {this.state.sendTransactionError && (
-                                                <Form.Text className="text-muted"><small
-                                                    style={{color: 'red'}}> could not send the
+                                                <Form.Text
+                                                    className="text-muted"><small
+                                                    style={{color: 'red'}}> could
+                                                    not send the
                                                     transaction
                                                     ({this.state.sendTransactionErrorMessage}).</small></Form.Text>)}
                                         </Col>
@@ -278,16 +289,17 @@ class Wallet extends Component {
                             </div>
                         </div>
                         <div className={'panel panel-filled'}>
-                            <div className={'panel-heading'}>addresses</div>
+                            <div className={'panel-heading'}>addresses
+                            </div>
                             <hr className={'hrPanel'}/>
                             <div className={'panel-body'}>
                                 <Row className="mb-3 mt-3">
                                     <Col className="pr-0" style={{
-                                        ...styles.centered,
                                         display       : 'flex',
                                         justifyContent: 'flex-end'
                                     }}>
                                         <Button variant="light"
+                                                style={{width: 191.2}}
                                                 className={'btn btn-w-md btn-accent'}
                                                 onClick={() => {
                                                     this.props.addNewAddress(this.props.wallet.id).then(() => this.props.walletUpdateAddresses(this.props.wallet.id));
@@ -296,30 +308,16 @@ class Wallet extends Component {
                                         </Button>
                                     </Col>
                                 </Row>
-                                <Row className="mb-3">
-                                    <div style={{
-                                        maxHeight: 310,
-                                        width    : '100%',
-                                        overflow : 'auto'
-                                    }}>
-                                        <Table striped bordered hover variant="dark">
-                                            <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>address</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {this.props.wallet.addresses.map((item, idx) => {
-                                                return (
-                                                    <tr key={idx} className="wallet-address">
-                                                        <td>{idx}</td>
-                                                        <td>{item.address}</td>
-                                                    </tr>);
-                                            })}
-                                            </tbody>
-                                        </Table>
-                                    </div>
+                                <Row>
+                                    <DataTable striped bordered small hover
+                                               info={false}
+                                               entries={10}
+                                               entriesOptions={[
+                                                   10,
+                                                   30,
+                                                   50
+                                               ]}
+                                               data={this.props.addressList}/>
                                 </Row>
                             </div>
                         </div>
@@ -334,7 +332,25 @@ class Wallet extends Component {
 
 export default connect(
     state => ({
-        wallet: state.wallet
+        wallet     : state.wallet,
+        addressList: {
+            columns: [
+                {
+                    label: '#',
+                    field: 'address_position',
+                    width: 150
+                },
+                {
+                    label: [
+                        <FontAwesomeIcon icon="book" size="1x"/>,
+                        ' address'
+                    ],
+                    field: 'address',
+                    width: 270
+                }
+            ],
+            rows   : state.wallet.addresses
+        }
     }),
     {
         walletUpdateAddresses,

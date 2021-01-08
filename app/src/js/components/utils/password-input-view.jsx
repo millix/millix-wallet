@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Button, Col, FormControl, InputGroup, Row} from 'react-bootstrap';
-import eventBus from '../../../../../deps/millix-node/core/event-bus';
+import {Button, Col, FormControl, Row} from 'react-bootstrap';
 
 const styles            = {
     centered: {

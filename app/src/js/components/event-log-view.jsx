@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {Button, Col, Dropdown, DropdownButton, Form, Row} from 'react-bootstrap';
+import {Button, Col, Form, Row} from 'react-bootstrap';
 import {CellMeasurerCache} from 'react-virtualized';
 import {createObjectCsvWriter} from 'csv-writer';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -23,7 +23,7 @@ class EventsLogView extends Component {
             typeFilter      : 'all',
             contentFilter   : '',
             events          : [],
-            enableAutoupdate: true
+            enableAutoUpdate: true
         };
         this.inputFilterText = React.createRef();
         this.types           = new Set();
@@ -48,7 +48,7 @@ class EventsLogView extends Component {
                 dataField: 'content',
                 text     : 'content',
                 formatter: (cell) => {
-                    return (<pre style={{color: 'white'}}>{cell}</pre>);
+                    return (<pre>{cell}</pre>);
                 }
             },
             {
@@ -58,12 +58,15 @@ class EventsLogView extends Component {
         ];
     }
 
+    componentDidMount() {
+    }
+
     componentDidUpdate() {
         this._cache.clearAll();
     }
 
     UNSAFE_componentWillReceiveProps(props) {
-        if (this.state.enableAutoupdate) {
+        if (this.state.enableAutoUpdate) {
             let filtered = this.filterByType(props.log.events, this.state.typeFilter);
             this.filterByContent(filtered, this.state.contentFilter);
         }
@@ -241,8 +244,8 @@ class EventsLogView extends Component {
                                                         size : 'small'
                                                     }
                                                 }
-                                                checked={this.state.enableAutoupdate}
-                                                onChange={(checked) => this.setState({enableAutoupdate: checked})}
+                                                checked={this.state.enableAutoUpdate}
+                                                onChange={(checked) => this.setState({enableAutoUpdate: checked})}
                                             />
 
                                         </Form.Group>

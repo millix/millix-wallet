@@ -1,26 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {Button, Col, Dropdown, DropdownButton, Form, Row, Table, Modal} from 'react-bootstrap';
+import {Button, Col, Form, Row, Table, Modal} from 'react-bootstrap';
 import {addWalletAddressVersion, walletUpdateConfig, removeWalletAddressVersion} from '../redux/actions/index';
 import _ from 'lodash';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import bootstrap from '../../../../deps/millix-node/core/bootstrap';
 import network from '../../../../deps/millix-node/net/network';
-import {TRANSACTION_FEE_DEFAULT, TRANSACTION_FEE_NETWORK, TRANSACTION_FEE_PROXY} from '../../../../deps/millix-node/core/config/config';
-import Switch from 'react-switchery';
-
-const styles = {
-    centered: {
-        display       : 'flex',
-        justifyContent: 'center'
-    },
-    left    : {
-        display       : 'flex',
-        justifyContent: 'left'
-    }
-};
-
 
 class ConfigView extends Component {
 
@@ -31,6 +17,9 @@ class ConfigView extends Component {
             address_version_regex: '',
             address_is_default   : false
         };
+    }
+
+    componentDidMount() {
     }
 
     setConfig(data, isBootstrapConfig) {

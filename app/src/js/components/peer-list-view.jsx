@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {Button, Col, Row, Table} from 'react-bootstrap';
+import {Row, Table} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {MDBDataTable as DataTable} from 'mdbreact';
 
 
 class PeerListView extends Component {
@@ -10,52 +11,71 @@ class PeerListView extends Component {
         super(props);
     }
 
+    componentDidMount() {
+    }
+
     render() {
+        const peerList = {
+            columns: [
+                {
+                    label: '#',
+                    field: 'node_idx',
+                    width: 150
+                },
+                {
+                    label: [
+                        <FontAwesomeIcon icon="microchip" size="1x"/>,
+                        ' node'
+                    ],
+                    field: 'node_url',
+                    width: 270
+                },
+                {
+                    label: [
+                        <FontAwesomeIcon icon="power-off" size="1x"/>,
+                        ' status'
+                    ],
+                    field: 'node_status',
+                    width: 270
+                }
+            ],
+            rows   : []
+        };
+
+
+        this.props.network.node_online_list.forEach((item, idx) => {
+            peerList.rows.push({
+                clickEvent : () => this.props.history.push('/peer/' + item.nodeID, {peer: item.nodeID}),
+                node_idx   : idx,
+                node_url   : item.node,
+                node_status: 'up'
+            });
+        });
+        this.props.network.node_offline_list.map((item, idx) => {
+            peerList.rows.push({
+                clickEvent : () => this.props.history.push('/peer/' + item.nodeID, {peer: item.nodeID}),
+                node_idx   : this.props.network.node_list.length + idx,
+                node_url   : item.node,
+                node_status: 'down'
+            });
+        });
+
         return (
             <div>
                 <div className={'panel panel-filled'}>
                     <div className={'panel-heading'}>connections</div>
                     <hr className={'hrPanel'}/>
                     <div className={'panel-body'}>
-                        <Row className="mb-3">
-                            <div style={{
-                                maxHeight: 310,
-                                width    : '100%',
-                                overflow : 'auto'
-                            }}>
-                                <Table striped bordered hover variant="dark">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>node</th>
-                                        <th>status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {this.props.network.node_online_list.map((item, idx) => {
-                                        return (
-                                            <tr key={item.node}
-                                                className="wallet-address"
-                                                onClick={() => {
-                                                    this.props.history.push('/peer/' + item.nodeID, {peer: item.nodeID});
-                                                }}>
-                                                <td>{idx}</td>
-                                                <td>{item.node}</td>
-                                                <td style={{color: 'green'}}>ok</td>
-                                            </tr>);
-                                    })}
-                                    {this.props.network.node_offline_list.map((item, idx) => {
-                                        return (
-                                            <tr key={item.node}
-                                                className="wallet-node">
-                                                <td>{this.props.network.node_list.length + idx}</td>
-                                                <td>{item.node}</td>
-                                                <td style={{color: 'red'}}>down</td>
-                                            </tr>);
-                                    })}
-                                    </tbody>
-                                </Table>
-                            </div>
+                        <Row>
+                            <DataTable striped bordered small hover
+                                       info={false}
+                                       entries={10}
+                                       entriesOptions={[
+                                           10,
+                                           30,
+                                           50
+                                       ]}
+                                       data={peerList}/>
                         </Row>
                     </div>
                 </div>

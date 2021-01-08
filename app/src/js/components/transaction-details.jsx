@@ -13,6 +13,9 @@ class TransactionDetails extends Component {
         super(props);
     }
 
+    componentDidMount() {
+    }
+
     UNSAFE_componentWillMount() {
         if (!this.props.transaction) {
             this.props.updateTransactionDetails(decodeURIComponent(this.props.match.params.transaction_id));
@@ -35,7 +38,7 @@ class TransactionDetails extends Component {
                     <Col className="pl-0" style={{
                         display       : 'flex',
                         justifyContent: 'flex-start',
-                        marginLeft: 10
+                        marginLeft    : 10
                     }}>
                         <Button variant="light"
                                 className={'btn btn-w-md btn-accent'}
@@ -126,7 +129,7 @@ class TransactionDetails extends Component {
                                     </>
                                 )}
                                 <Row className="mb-3">
-                                    <span>Date: {moment.utc(typeof(transaction.transaction_date)==="number" ? transaction.transaction_date * 1000 : transaction.transaction_date).format('YYYY-MM-DD HH:mm:ss')}</span>
+                                    <span>Date: {moment.utc(typeof (transaction.transaction_date) === 'number' ? transaction.transaction_date * 1000 : transaction.transaction_date).format('YYYY-MM-DD HH:mm:ss')}</span>
                                 </Row>
                                 <Row className="mb-3">
                                     <span>Node ID: {transaction.node_id_origin}</span>

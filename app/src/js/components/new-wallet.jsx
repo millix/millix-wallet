@@ -11,14 +11,6 @@ import fs from 'fs';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import async from 'async';
 
-const styles = {
-    centered: {
-        display       : 'flex',
-        justifyContent: 'center',
-        color         : '#949ba2'
-    }
-};
-
 const STATUS = {
     SELECT       : 0,
     NEW_WALLET   : 1,

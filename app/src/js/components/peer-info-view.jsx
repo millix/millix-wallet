@@ -11,6 +11,9 @@ class PeerInfoView extends Component {
         super(props);
     }
 
+    componentDidMount() {
+    }
+
     UNSAFE_componentWillMount() {
         let nodeID = this.props.location.state.peer;
         this.props.getNodeAttribute(nodeID);

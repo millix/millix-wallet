@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import {Button, Col, Container, FormControl, InputGroup, Row} from 'react-bootstrap';
+import {Button, Col, Container, FormControl, Row} from 'react-bootstrap';
 import eventBus from '../../../../deps/millix-node/core/event-bus';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 

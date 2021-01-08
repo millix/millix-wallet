@@ -6,9 +6,9 @@
   "main": "index.html",
   "window": {
     "icon": "./icon.png",
-    "width": 800,
+    "width": 1260,
     "height": 480,
-    "min_width": 800,
+    "min_width": 1260,
     "min_height": 480,
     "resizable": true
   },
