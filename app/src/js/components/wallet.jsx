@@ -27,6 +27,24 @@ class Wallet extends Component {
         this.address     = props.match.params.address;
         this.fullAddress = this.address;
         this.state       = {
+            address_list        : {
+                columns: [
+                    {
+                        label: '#',
+                        field: 'address_position',
+                        width: 150
+                    },
+                    {
+                        label: [
+                            <FontAwesomeIcon icon="book" size="1x"/>,
+                            ' address'
+                        ],
+                        field: 'address',
+                        width: 270
+                    }
+                ],
+                rows   : []
+            },
             amountError         : false,
             feeError            : false,
             addressError        : false,
@@ -35,6 +53,18 @@ class Wallet extends Component {
         };
 
         this.feesInitialized = false;
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (this.state.address_list.rows.length !== this.props.wallet.addresses.length) {
+            const rows = [...this.props.wallet.addresses];
+            this.setState({
+                address_list: {
+                    columns: [...this.state.address_list.columns],
+                    rows
+                }
+            });
+        }
     }
 
     componentDidMount() {
@@ -317,7 +347,7 @@ class Wallet extends Component {
                                                    30,
                                                    50
                                                ]}
-                                               data={this.props.addressList}/>
+                                               data={this.state.address_list}/>
                                 </Row>
                             </div>
                         </div>
@@ -332,25 +362,7 @@ class Wallet extends Component {
 
 export default connect(
     state => ({
-        wallet     : state.wallet,
-        addressList: {
-            columns: [
-                {
-                    label: '#',
-                    field: 'address_position',
-                    width: 150
-                },
-                {
-                    label: [
-                        <FontAwesomeIcon icon="book" size="1x"/>,
-                        ' address'
-                    ],
-                    field: 'address',
-                    width: 270
-                }
-            ],
-            rows   : state.wallet.addresses
-        }
+        wallet: state.wallet
     }),
     {
         walletUpdateAddresses,

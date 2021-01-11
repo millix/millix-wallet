@@ -12,9 +12,69 @@ import {MDBDataTable as DataTable} from 'mdbreact';
 class TransactionHistoryView extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            fileKey: new Date().getTime()
+        this.state                 = {
+            fileKey         : new Date().getTime(),
+            transaction_list: {
+                columns: [
+                    {
+                        label: '#',
+                        field: 'idx'
+                    },
+                    {
+                        label: [
+                            <FontAwesomeIcon icon="user-clock" size="1x"/>,
+                            ' date'
+                        ],
+                        field: 'date'
+                    },
+                    {
+                        label: [
+                            <FontAwesomeIcon icon="compress-arrows-alt"
+                                             size="1x"/>,
+                            ' amount'
+                        ],
+                        field: 'amount'
+                    },
+                    {
+                        label: [
+                            <FontAwesomeIcon icon="book" size="1x"/>,
+                            ' txid'
+                        ],
+                        field: 'txid'
+                    },
+                    {
+                        label: [
+                            <FontAwesomeIcon icon="book" size="1x"/>,
+                            ' from'
+                        ],
+                        field: 'from'
+                    },
+                    {
+                        label: [
+                            <FontAwesomeIcon icon="book" size="1x"/>,
+                            ' to'
+                        ],
+                        field: 'to'
+                    },
+                    {
+                        label: [
+                            <FontAwesomeIcon icon="clock" size="1x"/>,
+                            ' stable date'
+                        ],
+                        field: 'stable_date'
+                    },
+                    {
+                        label: [
+                            <FontAwesomeIcon icon="clock" size="1x"/>,
+                            ' parent date'
+                        ],
+                        field: 'parent_date'
+                    }
+                ],
+                rows   : []
+            }
         };
+        this.scrollObserverHandler = null;
     }
 
     UNSAFE_componentWillMount() {
@@ -22,7 +82,41 @@ class TransactionHistoryView extends Component {
     }
 
     componentDidMount() {
-        $('#txhistory div[data-test="datatable-table"]').niceScroll();
+        let scroll = $('#txhistory div[data-test="datatable-table"]').getNiceScroll();
+        if (scroll.length === 0) {
+            scroll = $('#txhistory div[data-test="datatable-table"]').niceScroll();
+        }
+        else {
+            scroll.resize();
+        }
+        this.scrollObserverHandler = setInterval(() => scroll.resize(), 500);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.scrollObserverHandler);
+        this.scrollObserverHandler = null;
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (this.state.transaction_list.rows.length !== this.props.wallet.transactions.length) {
+            const rows = this.props.wallet.transactions.map((transaction, idx) => ({
+                clickEvent : () => this.props.history.push('/transaction/' + encodeURIComponent(transaction.transaction_id), [transaction]),
+                idx        : this.props.wallet.transactions.length - idx,
+                date       : moment.utc(transaction.transaction_date * 1000).format('YYYY-MM-DD HH:mm:ss'),
+                amount     : transaction.amount.toLocaleString(),
+                txid       : transaction.transaction_id,
+                from       : transaction.input_address,
+                to         : transaction.output_address,
+                stable_date: transaction.stable_date && moment.utc(transaction.stable_date * 1000).format('YYYY-MM-DD HH:mm:ss'),
+                parent_date: transaction.parent_date && moment.utc(transaction.parent_date * 1000).format('YYYY-MM-DD HH:mm:ss')
+            }));
+            this.setState({
+                transaction_list: {
+                    columns: [...this.state.transaction_list.columns],
+                    rows
+                }
+            });
+        }
     }
 
     openExportDialog() {
@@ -84,90 +178,6 @@ class TransactionHistoryView extends Component {
     }
 
     render() {
-
-        <tr>
-            <th>#</th>
-            <th style={{minWidth: 185}}>date</th>
-            <th>amount</th>
-            <th>transaction id</th>
-            <th>from address</th>
-            <th>to address</th>
-            <th style={{minWidth: 185}}>stable
-                date
-            </th>
-            <th style={{minWidth: 185}}>parent
-                date
-            </th>
-        </tr>;
-
-        const transactionList = {
-            columns: [
-                {
-                    label: '#',
-                    field: 'idx'
-                },
-                {
-                    label: [
-                        <FontAwesomeIcon icon="user-clock" size="1x"/>,
-                        ' date'
-                    ],
-                    field: 'date'
-                },
-                {
-                    label: [
-                        <FontAwesomeIcon icon="compress-arrows-alt" size="1x"/>,
-                        ' amount'
-                    ],
-                    field: 'amount'
-                },
-                {
-                    label: [
-                        <FontAwesomeIcon icon="book" size="1x"/>,
-                        ' txid'
-                    ],
-                    field: 'txid'
-                },
-                {
-                    label: [
-                        <FontAwesomeIcon icon="book" size="1x"/>,
-                        ' from'
-                    ],
-                    field: 'from'
-                },
-                {
-                    label: [
-                        <FontAwesomeIcon icon="book" size="1x"/>,
-                        ' to'
-                    ],
-                    field: 'to'
-                },
-                {
-                    label: [
-                        <FontAwesomeIcon icon="clock" size="1x"/>,
-                        ' stable date'
-                    ],
-                    field: 'stable_date'
-                },
-                {
-                    label: [
-                        <FontAwesomeIcon icon="clock" size="1x"/>,
-                        ' parent date'
-                    ],
-                    field: 'parent_date'
-                }
-            ],
-            rows   : this.props.wallet.transactions.map((transaction, idx) => ({
-                clickEvent : () => this.props.history.push('/transaction/' + encodeURIComponent(transaction.transaction_id), [transaction]),
-                idx        : this.props.wallet.transactions.length - idx,
-                date       : moment.utc(transaction.transaction_date * 1000).format('YYYY-MM-DD HH:mm:ss'),
-                amount     : transaction.amount.toLocaleString(),
-                txid       : transaction.transaction_id,
-                from       : transaction.input_address,
-                to         : transaction.output_address,
-                stable_date: transaction.stable_date && moment.utc(transaction.stable_date * 1000).format('YYYY-MM-DD HH:mm:ss'),
-                parent_date: transaction.parent_date && moment.utc(transaction.parent_date * 1000).format('YYYY-MM-DD HH:mm:ss')
-            }))
-        };
         return (
             <div>
                 <div className={'panel panel-filled'}>
@@ -192,7 +202,7 @@ class TransactionHistoryView extends Component {
                                        key={this.state.fileKey}/>
                             </Col>
                         </Row>
-                        <Row  id={"txhistory"}>
+                        <Row id={'txhistory'}>
                             <DataTable striped bordered small hover
                                        autoWidth={false}
                                        info={false}
@@ -202,7 +212,7 @@ class TransactionHistoryView extends Component {
                                            30,
                                            50
                                        ]}
-                                       data={transactionList}/>
+                                       data={this.state.transaction_list}/>
                         </Row>
                     </div>
                 </div>

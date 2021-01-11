@@ -7,7 +7,7 @@
   "window": {
     "icon": "./icon.png",
     "width": 1260,
-    "height": 480,
+    "height": 620,
     "min_width": 1260,
     "min_height": 480,
     "resizable": true
