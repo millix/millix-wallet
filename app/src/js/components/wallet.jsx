@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {Button, Col, Form, FormControl, InputGroup, Row, Spinner, Table} from 'react-bootstrap';
+import {Button, Col, Form, Row, Table} from 'react-bootstrap';
 import {addNewAddress, walletUpdateAddresses, walletUpdateBalance} from '../redux/actions/index';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import database from '../../../../deps/millix-node/database/database';
 import walletUtils from '../../../../deps/millix-node/core/wallet/wallet-utils';
 import wallet from '../../../../deps/millix-node/core/wallet/wallet';
+import {MDBDataTable as DataTable} from 'mdbreact';
 
 const styles = {
     centered: {
@@ -26,6 +27,24 @@ class Wallet extends Component {
         this.address     = props.match.params.address;
         this.fullAddress = this.address;
         this.state       = {
+            address_list        : {
+                columns: [
+                    {
+                        label: '#',
+                        field: 'address_position',
+                        width: 150
+                    },
+                    {
+                        label: [
+                            <FontAwesomeIcon icon="book" size="1x"/>,
+                            ' address'
+                        ],
+                        field: 'address',
+                        width: 270
+                    }
+                ],
+                rows   : []
+            },
             amountError         : false,
             feeError            : false,
             addressError        : false,
@@ -34,6 +53,18 @@ class Wallet extends Component {
         };
 
         this.feesInitialized = false;
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (this.state.address_list.rows.length !== this.props.wallet.addresses.length) {
+            const rows = [...this.props.wallet.addresses];
+            this.setState({
+                address_list: {
+                    columns: [...this.state.address_list.columns],
+                    rows
+                }
+            });
+        }
     }
 
     componentDidMount() {
@@ -161,152 +192,168 @@ class Wallet extends Component {
     render() {
         return (
             <div>
-                <Row className="mb-1">
-                    <Col style={styles.left}>
-                        <span>balance</span>
-                    </Col>
-                </Row>
-                <Row className="mb-1">
-                    <Col style={styles.left}>
-                        <span
-                            style={{color: 'lightblue'}}>available: {this.props.wallet.balance_stable.toLocaleString()}</span>
-                    </Col>
-                </Row>
-                <Row className="mb-3">
-                    <Col style={styles.left}>
-                        <span
-                            style={{color: 'lightslategrey'}}>pending: {this.props.wallet.balance_pending.toLocaleString()}</span>
-                    </Col>
-                </Row>
-                <Row className="mb-3">
-                    <Col>
-                        <Form>
-                            <Form.Group>
-                                <Form.Label>destination address</Form.Label>
-                                <Form.Control type="text"
-                                              placeholder="enter destination address"
-                                              ref={c => this.destinationAddress = c}/>
-                                {this.state.addressError && (
-                                    <Form.Text className="text-muted"><small
-                                        style={{color: 'red'}}>invalid address.
-                                        please, set a correct
-                                        value.</small></Form.Text>)}
-                                <Form.Text className="text-muted">please
-                                    carefully confirm the destination address
-                                    before sending. if you send to an invalid
-                                    address you will lose your
-                                    millix.</Form.Text>
-                            </Form.Group>
-                            <Form.Group as={Row}>
-                                <Col sm="9">
-                                    <Form.Label>amount of millix</Form.Label>
-                                    <Form.Control type="text"
-                                                  placeholder="amount"
-                                                  pattern="[0-9]+([,][0-9]{1,2})?"
-                                                  ref={c => this.amount = c}
-                                                  onChange={this.handleAmountValueChange.bind(this)}/>
-                                    {this.state.amountError && (
-                                        <Form.Text className="text-muted"><small
-                                            style={{color: 'red'}}>invalid
-                                            amount.
-                                            please, set a correct
-                                            value.</small></Form.Text>)}
-                                </Col>
-                                <Col sm="2">
-                                    <Form.Label>fees</Form.Label>
-                                    <Form.Control type="text" placeholder="fees"
-                                                  pattern="[0-9]+([,][0-9]{1,2})?"
-                                                  ref={c => {
-                                                      this.fees = c;
-                                                      if (this.fees && !this.feesInitialized && this.props.wallet.transaction_fee > 0) {
-                                                          this.feesInitialized = true;
-                                                          this.fees.value      = Math.floor(this.props.wallet.transaction_fee);
-                                                      }
-                                                  }}
-                                                  onChange={this.handleAmountValueChange.bind(this)}/>
-                                    {this.state.feeError && (
-                                        <Form.Text className="text-muted"><small
-                                            style={{color: 'red'}}>invalid fee.
-                                            please, set a correct
-                                            value.</small></Form.Text>)}
-                                </Col>
-                                <Col sm="1" style={{
-                                    alignSelf  : 'flex-end',
-                                    paddingLeft: 0
-                                }}>
-                                    <Button variant="outline-secondary"
-                                            onClick={this.updateSuggestedFees.bind(this)}>
-                                        <FontAwesomeIcon icon="undo" size="1x"/>
-                                    </Button>
-                                </Col>
-                            </Form.Group>
-                        </Form>
-                    </Col>
-                </Row>
                 <Row>
-                    <Col style={styles.centered}>
-                        {this.state.sendTransactionError && (
-                            <Form.Text className="text-muted"><small
-                                style={{color: 'red'}}> could not send the
-                                transaction
-                                ({this.state.sendTransactionErrorMessage}).</small></Form.Text>)}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col style={styles.centered}>
-                        <Button variant="light" onClick={this.send.bind(this)}
-                                disabled={this.state.sending}>
-                            {this.state.sending && <Spinner
-                                as="span"
-                                animation="border"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                            />}
-                            send millix
-                        </Button>
+                    <Col md={12}>
+                        <div className={'panel panel-filled'}>
+                            <div className={'panel-heading'}>balance</div>
+                            <hr className={'hrPanel'}/>
+                            <div className={'panel-body'}>
+
+                                <Table striped bordered hover variant="dark">
+                                    <thead>
+                                    <tr>
+                                        <th>available</th>
+                                        <th>pending</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr key="1" className="wallet-address">
+                                        <td>{this.props.wallet.balance_stable.toLocaleString()}</td>
+                                        <td>{this.props.wallet.balance_pending.toLocaleString()}</td>
+                                    </tr>
+                                    </tbody>
+                                </Table>
+                            </div>
+                        </div>
+
+                        <div className={'panel panel-filled'}>
+                            <div className={'panel-heading'}>send</div>
+                            <hr className={'hrPanel'}/>
+                            <div className={'panel-body'}>
+                                <Row className="mb-3">
+                                    <Form>
+                                        <Col>
+                                            <Form.Group>
+                                                <label
+                                                    className="control-label">address</label>
+                                                <Form.Control type="text"
+                                                              placeholder="address"
+                                                              ref={c => this.destinationAddress = c}/>
+                                                {this.state.addressError && (
+                                                    <Form.Text
+                                                        className="text-muted"><small
+                                                        style={{color: 'red'}}>invalid
+                                                        address.
+                                                        please, set a correct
+                                                        value.</small></Form.Text>)}
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <label
+                                                className="control-label">amount</label>
+                                            <Form.Group>
+                                                <Form.Control type="text"
+                                                              placeholder="amount"
+                                                              pattern="[0-9]+([,][0-9]{1,2})?"
+                                                              ref={c => this.amount = c}
+                                                              onChange={this.handleAmountValueChange.bind(this)}/>
+                                                {this.state.amountError && (
+                                                    <Form.Text
+                                                        className="text-muted"><small
+                                                        style={{color: 'red'}}>invalid
+                                                        amount.
+                                                        please, set a correct
+                                                        value.</small></Form.Text>)}
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <label
+                                                className="control-label">fees</label>
+                                            <Form.Group as={Row}>
+                                                <Col md={11} ms={11}>
+                                                    <Form.Control type="text"
+                                                                  placeholder="fees"
+                                                                  pattern="[0-9]+([,][0-9]{1,2})?"
+                                                                  ref={c => {
+                                                                      this.fees = c;
+                                                                      if (this.fees && !this.feesInitialized && this.props.wallet.transaction_fee > 0) {
+                                                                          this.feesInitialized = true;
+                                                                          this.fees.value      = Math.floor(this.props.wallet.transaction_fee);
+                                                                      }
+                                                                  }}
+                                                                  onChange={this.handleAmountValueChange.bind(this)}/>
+                                                </Col>
+                                                <Col style={styles.centered}
+                                                     md={1} ms={1}>
+                                                    <Button
+                                                        variant="outline-secondary"
+                                                        onClick={this.updateSuggestedFees.bind(this)}>
+                                                        <FontAwesomeIcon
+                                                            icon="undo"
+                                                            size="1x"/>
+                                                    </Button>
+                                                </Col>
+                                                {this.state.feeError && (
+                                                    <Form.Text
+                                                        className="text-muted"><small
+                                                        style={{color: 'red'}}>invalid
+                                                        fee.
+                                                        please, set a correct
+                                                        value.</small></Form.Text>)}
+                                            </Form.Group>
+                                        </Col>
+                                        <Col style={styles.centered}>
+                                            <Button variant="light"
+                                                    className={'btn btn-w-md btn-accent'}
+                                                    onClick={this.send.bind(this)}
+                                                    disabled={this.state.sending}>
+                                                {this.state.sending &&
+                                                 <div style={{
+                                                     fontSize: '6px',
+                                                     float   : 'left'
+                                                 }} className="loader-spin"/>}
+                                                send millix
+                                            </Button>
+                                        </Col>
+                                        <Col style={styles.centered}>
+                                            {this.state.sendTransactionError && (
+                                                <Form.Text
+                                                    className="text-muted"><small
+                                                    style={{color: 'red'}}> could
+                                                    not send the
+                                                    transaction
+                                                    ({this.state.sendTransactionErrorMessage}).</small></Form.Text>)}
+                                        </Col>
+                                    </Form>
+                                </Row>
+                            </div>
+                        </div>
+                        <div className={'panel panel-filled'}>
+                            <div className={'panel-heading'}>addresses
+                            </div>
+                            <hr className={'hrPanel'}/>
+                            <div className={'panel-body'}>
+                                <Row className="mb-3 mt-3">
+                                    <Col className="pr-0" style={{
+                                        display       : 'flex',
+                                        justifyContent: 'flex-end'
+                                    }}>
+                                        <Button variant="light"
+                                                style={{width: 191.2}}
+                                                className={'btn btn-w-md btn-accent'}
+                                                onClick={() => {
+                                                    this.props.addNewAddress(this.props.wallet.id).then(() => this.props.walletUpdateAddresses(this.props.wallet.id));
+                                                }}>
+                                            generate address
+                                        </Button>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <DataTable striped bordered small hover
+                                               info={false}
+                                               entries={10}
+                                               entriesOptions={[
+                                                   10,
+                                                   30,
+                                                   50
+                                               ]}
+                                               data={this.state.address_list}/>
+                                </Row>
+                            </div>
+                        </div>
                     </Col>
                 </Row>
 
-
-                <Row className="mb-3 mt-3">
-                    <Col className="pr-0" style={{
-                        ...styles.centered,
-                        display       : 'flex',
-                        justifyContent: 'flex-end'
-                    }}>
-                        <Button variant="outline-secondary" onClick={() => {
-                            this.props.addNewAddress(this.props.wallet.id).then(() => this.props.walletUpdateAddresses(this.props.wallet.id));
-                        }}>
-                            show more addresses
-                        </Button>
-                    </Col>
-                </Row>
-                <Row className="mb-3">
-                    <div style={{
-                        maxHeight: 310,
-                        width    : '100%',
-                        overflow : 'auto'
-                    }}>
-                        <Table striped bordered hover variant="dark">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>address</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {this.props.wallet.addresses.map((item, idx) => {
-                                return (
-                                    <tr key={idx} className="wallet-address">
-                                        <td>{idx}</td>
-                                        <td>{item.address}</td>
-                                    </tr>);
-                            })}
-                            </tbody>
-                        </Table>
-                    </div>
-                </Row>
             </div>
         );
     }

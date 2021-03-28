@@ -1,0 +1,107 @@
+body .ui-datepicker {
+    background-color: #9400CE;
+    border: 0.2rem solid #e5e5e5;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+}
+
+body .ui-datepicker {
+    padding: 0;
+    width: 22rem;
+}
+
+body .ui-datepicker-header {
+    border: none;
+    background: transparent;
+    font-weight: normal;
+    font-size: 1rem;
+}
+
+body .ui-datepicker-header .ui-state-hover {
+    background: transparent;
+    border-color: transparent;
+    cursor: pointer;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+}
+
+body .ui-datepicker .ui-datepicker-title {
+    margin-top: .4em;
+    margin-bottom: .3em;
+    color: #ffffff;
+}
+
+body .ui-datepicker .ui-datepicker-prev-hover,
+body .ui-datepicker .ui-datepicker-next-hover,
+body .ui-datepicker .ui-datepicker-next,
+body .ui-datepicker .ui-datepicker-prev {
+    top: .9em;
+    border:none;
+}
+
+body .ui-datepicker .ui-datepicker-prev-hover {
+    left: 0.1rem;
+}
+
+body .ui-datepicker .ui-datepicker-next-hover {
+    right: 0.1rem;
+}
+
+body .ui-datepicker .ui-datepicker-next span,
+body .ui-datepicker .ui-datepicker-prev span {
+    background-image: url(img/ui-icons_ffffff_256x240.png);
+    background-position: -32px 0;
+    margin-top: 0;
+    top: 0;
+    font-weight: normal;
+}
+
+body .ui-datepicker .ui-datepicker-prev span {
+    background-position: -96px 0;
+}
+
+body .ui-datepicker table {
+    margin: 0;
+}
+
+body .ui-datepicker th {
+    padding: 1em 0;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: normal;
+    border: none;
+    border-top: 0.1rem solid #e5e5e5;
+}
+
+body .ui-datepicker td {
+    background-color: #fff;
+    border: none;
+    padding: 0;
+}
+
+body .ui-datepicker td .ui-state-default {
+    background: transparent;
+    border: none;
+    text-align: center;
+    padding: .5em;
+    margin: 0;
+    font-weight: normal;
+    color: #6a6c6f;
+    font-size: 1rem;
+}
+
+body .ui-datepicker .ui-state-disabled  {
+    opacity: 1;
+}
+
+body .ui-datepicker .ui-state-disabled .ui-state-default {
+    color: #6a6c6f;
+}
+
+body .ui-datepicker td .ui-state-active,
+body .ui-datepicker td .ui-state-hover {
+    background: #9400CE;
+    color: #ffffff;
+}

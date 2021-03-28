@@ -19,30 +19,28 @@ import configLoader from '../../deps/millix-node/core/config/config-loader';
 import {WALLET_MODE} from '../../deps/millix-node/core/wallet/wallet';
 import services from '../../deps/millix-node/core/services/services';
 import bootstrap from '../../deps/millix-node/core/bootstrap';
-import fs from 'fs';
-import {config as faConfig, library} from '@fortawesome/fontawesome-svg-core';
-import {
-    faArrowCircleLeft, faCloudDownloadAlt, faExchangeAlt, faFingerprint, faHeartbeat,
-    faHome, faKey, faPlus, faSignOutAlt, faSlidersH, faStream, faTrash, faUndoAlt, faWallet,
-    faUndo
-} from '@fortawesome/free-solid-svg-icons';
-import '../node_modules/react-virtualized/styles.css';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import '../node_modules/react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-import '../node_modules/react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
-import '../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
-import '../node_modules/@trendmicro/react-sidenav/dist/react-sidenav.css';
-import './css/app.scss';
 import moment from 'moment';
 import request from 'request';
 import logManager from '../../deps/millix-node/core/log-manager';
 import yargs from 'yargs';
 import {addLogEvent, setBackLogSize} from './js/redux/actions';
+import fs from 'fs';
+import {config as faConfig, library} from '@fortawesome/fontawesome-svg-core';
+import {
+    faArrowCircleLeft, faCloudDownloadAlt, faExchangeAlt, faFingerprint, faHeartbeat,
+    faHome, faKey, faPlus, faSignOutAlt, faSlidersH, faStream, faTrash, faUndoAlt, faWallet,
+    faUndo, faBook, faMicrochip, faPowerOff, faUserClock, faClock, faCompressArrowsAlt
+} from '@fortawesome/free-solid-svg-icons';
+import '../node_modules/@trendmicro/react-sidenav/dist/react-sidenav.css';
+import '../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
+import './css/app.scss';
+import './vendor/luna/luna';
 
 faConfig.autoAddCss = false;
 library.add(faArrowCircleLeft, faWallet, faKey, faHome, faFingerprint,
     faStream, faExchangeAlt, faCloudDownloadAlt, faSlidersH,
-    faSignOutAlt, faPlus, faHeartbeat, faUndoAlt, faTrash, faUndo);
+    faSignOutAlt, faPlus, faHeartbeat, faUndoAlt, faTrash, faUndo,
+    faBook, faMicrochip, faPowerOff, faUserClock, faClock, faCompressArrowsAlt);
 
 const argv = yargs
     .options({
