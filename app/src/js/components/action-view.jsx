@@ -9,6 +9,7 @@ import eventBus from '../../../../deps/millix-node/core/event-bus';
 import network from '../../../../deps/millix-node/net/network';
 import peer from '../../../../deps/millix-node/net/peer';
 import logManager from '../../../../deps/millix-node/core/log-manager';
+import walletConsensus from '../../../../deps/millix-node/core/wallet/wallet-transaction-consensus';
 import store from '../redux/store';
 import {updateWalletMaintenance} from '../redux/actions';
 
@@ -17,7 +18,7 @@ const styles = {
         display       : 'flex',
         justifyContent: 'center'
     },
-    left: {
+    left    : {
         display       : 'flex',
         justifyContent: 'left'
     }
@@ -169,7 +170,7 @@ class ActionView extends Component {
                                                 className={'btn btn-w-md btn-accent'}
                                                 onClick={() => {
                                                     wallet.resetTransactionValidationRejected();
-                                                    wallet._doTransactionOutputRefresh().then(_ => _);
+                                                    walletConsensus.doValidateTransaction().then(_ => _);
                                                 }}>
                                             reset validation
                                         </Button>

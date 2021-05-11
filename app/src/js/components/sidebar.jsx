@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import SideNav, {NavItem, NavText} from '@trendmicro/react-sidenav';
 import eventBus from '../../../../deps/millix-node/core/event-bus';
-import walletConsensus from '../../../../deps/millix-node/core/wallet/wallet-transaction-consensus';
 import wallet from '../../../../deps/millix-node/core/wallet/wallet';
 
 
@@ -45,10 +44,6 @@ class Sidebar extends Component {
                     switch (selected) {
                         case 'lock':
                             eventBus.emit('wallet_lock');
-                            break;
-                        case 'resetValidation':
-                            wallet.resetTransactionValidationRejected();
-                            wallet._doTransactionOutputRefresh().then(() => walletConsensus.doValidateTransaction());
                             break;
                         default:
                             props.history.push(selected);
