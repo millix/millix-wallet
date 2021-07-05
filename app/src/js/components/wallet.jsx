@@ -8,6 +8,7 @@ import database from '../../../../deps/millix-node/database/database';
 import walletUtils from '../../../../deps/millix-node/core/wallet/wallet-utils';
 import wallet from '../../../../deps/millix-node/core/wallet/wallet';
 import {MDBDataTable as DataTable} from 'mdbreact';
+import config from '../../../../deps/millix-node/core/config/config';
 
 const styles = {
     centered: {
@@ -74,7 +75,7 @@ class Wallet extends Component {
 
     _getAmount(value, allowZero = false) {
         const pValue = parseInt(value.replace(/[,.]/g, ''));
-        if ((allowZero ? pValue < 0 : pValue <= 0) || pValue.toLocaleString() !== value) {
+        if ((allowZero ? pValue < 0 : pValue <= 0) || pValue.toLocaleString('en-US') !== value) {
             throw Error('invalid_value');
         }
         return pValue;
@@ -152,7 +153,7 @@ class Wallet extends Component {
               .then(() => {
                   this.destinationAddress.value = '';
                   this.amount.value             = '';
-                  this.fees.value               = '';
+                  this.updateSuggestedFees();
                   this.setState({
                       sending: false
                   });
@@ -167,7 +168,7 @@ class Wallet extends Component {
     }
 
     updateSuggestedFees() {
-        this.fees.value = Math.floor(this.props.wallet.transaction_fee);
+        this.fees.value = Math.floor(Math.max(this.props.wallet.transaction_fee || 0, config.TRANSACTION_FEE_PROXY)).toLocaleString('en-US');
     }
 
     handleAmountValueChange(e) {
@@ -184,7 +185,7 @@ class Wallet extends Component {
         }
 
         amount         = parseInt(amount);
-        e.target.value = !isNaN(amount) ? amount.toLocaleString() : 0;
+        e.target.value = !isNaN(amount) ? amount.toLocaleString('en-US') : 0;
 
         e.target.setSelectionRange(cursorStart + offset, cursorEnd + offset);
     }
@@ -208,8 +209,8 @@ class Wallet extends Component {
                                     </thead>
                                     <tbody>
                                     <tr key="1" className="wallet-address">
-                                        <td>{this.props.wallet.balance_stable.toLocaleString()}</td>
-                                        <td>{this.props.wallet.balance_pending.toLocaleString()}</td>
+                                        <td>{this.props.wallet.balance_stable.toLocaleString('en-US')}</td>
+                                        <td>{this.props.wallet.balance_pending.toLocaleString('en-US')}</td>
                                     </tr>
                                     </tbody>
                                 </Table>
@@ -266,9 +267,9 @@ class Wallet extends Component {
                                                                   pattern="[0-9]+([,][0-9]{1,2})?"
                                                                   ref={c => {
                                                                       this.fees = c;
-                                                                      if (this.fees && !this.feesInitialized && this.props.wallet.transaction_fee > 0) {
+                                                                      if (this.fees && !this.feesInitialized) {
                                                                           this.feesInitialized = true;
-                                                                          this.fees.value      = Math.floor(this.props.wallet.transaction_fee);
+                                                                          this.updateSuggestedFees();
                                                                       }
                                                                   }}
                                                                   onChange={this.handleAmountValueChange.bind(this)}/>
