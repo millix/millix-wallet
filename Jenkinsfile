@@ -19,9 +19,8 @@ pipeline {
                     sh('git submodule init')
                     sh('git submodule update')
                     sh('npm install')
-                    sh('grunt build mac')
-                    sh('ls -lah');
-                    sh('pwd')
+                    sh('npm install -g grunt')
+                    sh('grunt build-mac')
                 }
             }
         }
