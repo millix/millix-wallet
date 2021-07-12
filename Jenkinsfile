@@ -1,14 +1,6 @@
 pipeline {
     agent none
-
     stages {
-        stage('Hello') {
-            agent any
-            steps {
-                echo 'Hello World'
-            }
-        }
-
         stage('Hello mac'){
             agent {
                 label 'macos'
