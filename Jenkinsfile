@@ -16,7 +16,10 @@ pipeline {
             steps {
                 echo 'hello from mac'
                 script {
-                    sh('touch jenkinstest-$(date "+%Y-%m-%d %H:%M:%S").txt')
+                    sh('git submodule init')
+                    sh('git submodule update')
+                    sh('npm install')
+                    sh('grunt build mac')
                     sh('ls -lah');
                     sh('pwd')
                 }
