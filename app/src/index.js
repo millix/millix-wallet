@@ -28,7 +28,8 @@ import {config as faConfig, library} from '@fortawesome/fontawesome-svg-core';
 import {
     faArrowCircleLeft, faCloudDownloadAlt, faExchangeAlt, faFingerprint, faHeartbeat,
     faHome, faKey, faPlus, faSignOutAlt, faSlidersH, faStream, faTrash, faUndoAlt, faWallet,
-    faUndo, faBook, faMicrochip, faPowerOff, faUserClock, faClock, faCompressArrowsAlt
+    faUndo, faBook, faMicrochip, faPowerOff, faUserClock, faClock, faCompressArrowsAlt,
+    faLock, faLockOpen
 } from '@fortawesome/free-solid-svg-icons';
 import '../node_modules/@trendmicro/react-sidenav/dist/react-sidenav.css';
 import '../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
@@ -39,7 +40,8 @@ faConfig.autoAddCss = false;
 library.add(faArrowCircleLeft, faWallet, faKey, faHome, faFingerprint,
     faStream, faExchangeAlt, faCloudDownloadAlt, faSlidersH,
     faSignOutAlt, faPlus, faHeartbeat, faUndoAlt, faTrash, faUndo,
-    faBook, faMicrochip, faPowerOff, faUserClock, faClock, faCompressArrowsAlt);
+    faBook, faMicrochip, faPowerOff, faUserClock, faClock, faCompressArrowsAlt,
+    faLock, faLockOpen);
 
 const argv = yargs
     .options({

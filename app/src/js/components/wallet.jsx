@@ -28,7 +28,7 @@ class Wallet extends Component {
         this.address     = props.match.params.address;
         this.fullAddress = this.address;
         this.state       = {
-            address_list        : {
+            addressList         : {
                 columns: [
                     {
                         label: '#',
@@ -50,18 +50,19 @@ class Wallet extends Component {
             feeError            : false,
             addressError        : false,
             sendTransactionError: false,
-            sending             : false
+            sending             : false,
+            feesLocked          : true
         };
 
         this.feesInitialized = false;
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if (this.state.address_list.rows.length !== this.props.wallet.addresses.length) {
+        if (this.state.addressList.rows.length !== this.props.wallet.addresses.length) {
             const rows = [...this.props.wallet.addresses];
             this.setState({
-                address_list: {
-                    columns: [...this.state.address_list.columns],
+                addressList: {
+                    columns: [...this.state.addressList.columns],
                     rows
                 }
             });
@@ -153,7 +154,7 @@ class Wallet extends Component {
               .then(() => {
                   this.destinationAddress.value = '';
                   this.amount.value             = '';
-                  this.updateSuggestedFees();
+                  this.fees.value               = config.TRANSACTION_FEE_PROXY.toLocaleString('en-US');
                   this.setState({
                       sending: false
                   });
@@ -165,10 +166,6 @@ class Wallet extends Component {
                       sending                    : false
                   });
               });
-    }
-
-    updateSuggestedFees() {
-        this.fees.value = config.TRANSACTION_FEE_PROXY.toLocaleString('en-US');
     }
 
     handleAmountValueChange(e) {
@@ -269,18 +266,18 @@ class Wallet extends Component {
                                                                       this.fees = c;
                                                                       if (this.fees && !this.feesInitialized) {
                                                                           this.feesInitialized = true;
-                                                                          this.updateSuggestedFees();
+                                                                          this.fees.value      = config.TRANSACTION_FEE_PROXY.toLocaleString('en-US');
                                                                       }
                                                                   }}
-                                                                  onChange={this.handleAmountValueChange.bind(this)}/>
+                                                                  onChange={this.handleAmountValueChange.bind(this)}
+                                                                  disabled={this.state.feesLocked}/>
                                                 </Col>
                                                 <Col style={styles.centered}
                                                      md={1} ms={1}>
                                                     <Button
-                                                        variant="outline-secondary"
-                                                        onClick={this.updateSuggestedFees.bind(this)}>
+                                                        onClick={() => this.setState({feesLocked: !this.state.feesLocked})}>
                                                         <FontAwesomeIcon
-                                                            icon="undo"
+                                                            icon={this.state.feesLocked ? "lock" : "lock-open"}
                                                             size="1x"/>
                                                     </Button>
                                                 </Col>
@@ -348,7 +345,7 @@ class Wallet extends Component {
                                                    30,
                                                    50
                                                ]}
-                                               data={this.state.address_list}/>
+                                               data={this.state.addressList}/>
                                 </Row>
                             </div>
                         </div>
