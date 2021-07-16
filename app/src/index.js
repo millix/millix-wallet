@@ -6,8 +6,7 @@ import _ from 'lodash';
 import {
     walletVersionAvailable, addWalletConfig, lockWallet, unlockWallet, updateClock,
     updateNetworkConnections, updateNetworkNodeList, updateWalletAddressVersion,
-    walletReady, walletUpdateAddresses, walletUpdateBalance, updateWalletNotification,
-    updateSuggestedTransactionFee
+    walletReady, walletUpdateAddresses, walletUpdateBalance, updateWalletNotification
 } from './js/redux/actions/index';
 import AppContainer from './js/components/app-container';
 import console from '../../deps/millix-node/core/console';
@@ -114,7 +113,6 @@ setInterval(() => {
     const timestamp = clock.getTime();
     if (lastFeeUpdateTimestamp == null || timestamp - lastFeeUpdateTimestamp > 10000) {
         lastFeeUpdateTimestamp = timestamp;
-        store.dispatch(updateSuggestedTransactionFee());
     }
 }, 900);
 eventBus.on('wallet_ready', (ready) => store.dispatch(walletReady({

@@ -168,7 +168,7 @@ class Wallet extends Component {
     }
 
     updateSuggestedFees() {
-        this.fees.value = Math.floor(Math.max(this.props.wallet.transaction_fee || 0, config.TRANSACTION_FEE_PROXY)).toLocaleString('en-US');
+        this.fees.value = config.TRANSACTION_FEE_PROXY.toLocaleString('en-US');
     }
 
     handleAmountValueChange(e) {
