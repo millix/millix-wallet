@@ -5,8 +5,7 @@ import {
     UPDATE_NETWORK_NODE_LIST, UPDATE_NETWORK_STATE, UPDATE_TRANSACTION_DETAILS,
     UPDATE_WALLET_ADDRESS, UPDATE_WALLET_CONFIG, UPDATE_WALLET_MAINTENANCE,
     UPDATE_WALLET_TRANSACTIONS, WALLET_READY, ADD_WALLET_ADDRESS_VERSION,
-    GET_NODE_ATTRIBUTES, UPDATE_WALLET_BALANCE, UPDATE_WALLET_NOTIFICATION,
-    UPDATE_WALLET_TRANSACTION_FEE
+    GET_NODE_ATTRIBUTES, UPDATE_WALLET_BALANCE, UPDATE_WALLET_NOTIFICATION
 } from '../constants/action-types';
 import database from '../../../../../deps/millix-node/database/database';
 import wallet from '../../../../../deps/millix-node/core/wallet/wallet';
@@ -14,15 +13,6 @@ import async from 'async';
 import _ from 'lodash';
 import network from '../../../../../deps/millix-node/net/network';
 import config from '../../../../../deps/millix-node/core/config/config';
-
-export function updateSuggestedTransactionFee() {
-    const transaction = database.getRepository('transaction');
-    return (dispatch) => transaction.getSuggestedNetworkFee(config.TRANSACTION_FEE_NETWORK)
-                                    .then(networkFee => dispatch({
-                                        type   : UPDATE_WALLET_TRANSACTION_FEE,
-                                        payload: networkFee + config.TRANSACTION_FEE_DEFAULT
-                                    }));
-}
 
 export function updateWalletNotification(payload) {
     return {
