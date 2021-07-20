@@ -16,5 +16,20 @@ pipeline {
                 }
             }
         }
+        stage('Hello win'){
+            agent {
+                label 'win'
+            }
+            steps {
+                echo 'hello from win'
+                script {
+                    bat'git submodule init'
+                    bat'git submodule update'
+                    bat'npm install'
+                    bat'npm install -g grunt'
+                    bat'grunt build-win'
+                }
+            }
+        }
     }
 }
