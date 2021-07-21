@@ -1,7 +1,7 @@
 pipeline {
     agent none
     stages {
-        stage('Hello mac'){
+        stage('build on mac'){
             agent {
                 label 'macos'
             }
@@ -16,7 +16,7 @@ pipeline {
                 }
             }
         }
-        stage('Hello win'){
+        stage('build on win'){
             agent {
                 label 'win'
             }
@@ -28,6 +28,21 @@ pipeline {
                     bat'npm install'
                     bat'npm install -g grunt'
                     bat'grunt build-win'
+                }
+            }
+        }
+        stage('build on linux'){
+            agent {
+                label 'linux'
+            }
+            steps {
+                echo 'hello from linux'
+                script{
+                    sh('git submodule init')
+                    sh('git submodule update')
+                    sh('npm install')
+                    sh('npm install -g grunt')
+                    sh('grunt build-linux')
                 }
             }
         }
