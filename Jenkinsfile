@@ -1,7 +1,15 @@
 pipeline {
-    agent none
+    environment {
+        DEST = "/home/info/"
+    }
+    agent any
     stages {
         stage('build on mac'){
+            when {
+                anyOf {
+                    branch 'master'
+                }
+            }
             agent {
                 label 'macos'
             }
@@ -13,10 +21,25 @@ pipeline {
                     sh('npm install')
                     sh('npm install -g grunt')
                     sh('grunt build-mac')
+                    sh('zip -r millix-mac-x64.zip ${WORKSPACE}/app/dist/millix-mac-x64/')
+                    withCredentials([
+                        sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
+                        string(credentialsId: "jenkins_host", variable: 'jenkins_host'),
+                        sshUserPrivateKey(credentialsId: "info", keyFileVariable: 'keyfile_info'),
+                        string(credentialsId: "info_host", variable: 'info_host')
+                    ]){
+                        sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/millix-mac-x64.zip info@${info_host}:/home/info/')
+                    }
+                    deleteDir()
                 }
             }
         }
         stage('build on win'){
+            when {
+                anyOf {
+                    branch 'master'
+                }
+            }
             agent {
                 label 'win'
             }
@@ -28,10 +51,25 @@ pipeline {
                     bat'npm install'
                     bat'npm install -g grunt'
                     bat'grunt build-win'
+                    bat'tar -cf millix-win-x64.zip app/dist/millix-win-x64'
+                    withCredentials([
+                        sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
+                        string(credentialsId: "jenkins_host", variable: 'jenkins_host'),
+                        sshUserPrivateKey(credentialsId: "info", keyFileVariable: 'keyfile_info'),
+                        string(credentialsId: "info_host", variable: 'info_host')
+                    ]){
+                        sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/millix-win-x64.zip info@${info_host}:${DEST}')
+                    }
+                    deleteDir()
                 }
             }
         }
         stage('build on linux'){
+            when {
+                anyOf {
+                    branch 'master'
+                }
+            }
             agent {
                 label 'linux'
             }
@@ -43,6 +81,16 @@ pipeline {
                     sh('npm install')
                     sh('npm install -g grunt')
                     sh('grunt build-linux')
+                    sh('zip -r millix-linux-x64.zip ${WORKSPACE}/app/dist/millix-linux-x64/')
+                    withCredentials([
+                        sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
+                        string(credentialsId: "jenkins_host", variable: 'jenkins_host'),
+                        sshUserPrivateKey(credentialsId: "info", keyFileVariable: 'keyfile_info'),
+                        string(credentialsId: "info_host", variable: 'info_host')
+                    ]){
+                        sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/millix-linux-x64.zip info@${info_host}:${DEST}')
+                    }
+                    deleteDir()
                 }
             }
         }
