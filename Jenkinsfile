@@ -26,9 +26,11 @@ pipeline {
                         sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
                         string(credentialsId: "jenkins_host", variable: 'jenkins_host'),
                         sshUserPrivateKey(credentialsId: "info", keyFileVariable: 'keyfile_info'),
-                        string(credentialsId: "info_host", variable: 'info_host')
+                        string(credentialsId: "info_host_10", variable: 'info_host_10'),
+                        string(credentialsId: "info_host_11", variable: 'info_host_11')
                     ]){
-                        sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-mac-x64.zip info@${info_host}:${DEST}')
+                        sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-mac-x64.zip info@${info_host_10}:${DEST}')
+                        sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-mac-x64.zip info@${info_host_11}:${DEST}')
                     }
                     deleteDir()
                 }
@@ -56,9 +58,11 @@ pipeline {
                         sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
                         string(credentialsId: "jenkins_host", variable: 'jenkins_host'),
                         sshUserPrivateKey(credentialsId: "info", keyFileVariable: 'keyfile_info'),
-                        string(credentialsId: "info_host", variable: 'info_host')
+                        string(credentialsId: "info_host_10", variable: 'info_host_10'),
+                        string(credentialsId: "info_host_11", variable: 'info_host_11')
                     ]){
-                        sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-win-x64.zip info@${info_host}:${DEST}')
+                        sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-win-x64.zip info@${info_host_10}:${DEST}')
+                        sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-win-x64.zip info@${info_host_11}:${DEST}')
                     }
                     deleteDir()
                 }
@@ -86,9 +90,11 @@ pipeline {
                         sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
                         string(credentialsId: "jenkins_host", variable: 'jenkins_host'),
                         sshUserPrivateKey(credentialsId: "info", keyFileVariable: 'keyfile_info'),
-                        string(credentialsId: "info_host", variable: 'info_host')
+                        string(credentialsId: "info_host_10", variable: 'info_host_10'),
+                        string(credentialsId: "info_host_11", variable: 'info_host_11')
                     ]){
-                        sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-linux-x64.zip info@${info_host}:${DEST}')
+                        sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-linux-x64.zip info@${info_host_10}:${DEST}')
+                        sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-linux-x64.zip info@${info_host_11}:${DEST}')
                     }
                     deleteDir()
                 }
