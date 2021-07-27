@@ -99,3 +99,5 @@ Please see [Support requests](CONTRIBUTING.md#support)
 ## License
 
 Copay is released under the MIT License. Please refer to the [LICENSE](LICENSE) file that accompanies this project for more information including complete terms and conditions.
+
+
