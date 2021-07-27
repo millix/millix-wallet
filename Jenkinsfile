@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        DEST = "/home/info/"
+        DEST = "/home/website/wallet/release"
     }
     agent any
     stages {
