@@ -5,7 +5,7 @@ import {
     UPDATE_WALLET_ADDRESS, UPDATE_WALLET_CONFIG, UPDATE_WALLET_MAINTENANCE,
     UPDATE_WALLET_TRANSACTIONS, WALLET_READY, UPDATE_WALLET_ADDRESS_VERSION,
     ADD_WALLET_ADDRESS_VERSION, GET_NODE_ATTRIBUTES, UPDATE_WALLET_BALANCE,
-    WALLET_VERSION_AVAILABLE, UPDATE_WALLET_NOTIFICATION, UPDATE_WALLET_TRANSACTION_FEE
+    WALLET_VERSION_AVAILABLE, UPDATE_WALLET_NOTIFICATION
 } from '../constants/action-types';
 import config from '../../../../../deps/millix-node/core/config/config';
 import _ from 'lodash';
@@ -241,14 +241,6 @@ function rootReducer(state = initialState, action) {
             wallet: {
                 ...state.wallet,
                 notification_message: action.payload
-            }
-        });
-    }
-    else if (action.type === UPDATE_WALLET_TRANSACTION_FEE) {
-        return Object.assign({}, state, {
-            wallet: {
-                ...state.wallet,
-                transaction_fee: action.payload
             }
         });
     }
