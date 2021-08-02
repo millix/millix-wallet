@@ -160,10 +160,22 @@ class Wallet extends Component {
                   });
               })
               .catch((e) => {
+                  let sendTransactionErrorMessage;
+                  if (e.api_message) {
+                      const match                 = /unexpected generic api error: \((?<message>.*)\)/.exec(e.api_message);
+                      sendTransactionErrorMessage = `could not send the transaction(${match.groups.message})`;
+                  }
+                  else if (e === 'insufficient_balance') {
+                      sendTransactionErrorMessage = 'your transaction could not be sent: insufficient millix balance';
+                  }
+                  else {
+                      sendTransactionErrorMessage = `could not send the transaction(${e.message || e.api_message || e})`;
+                  }
+
                   this.setState({
-                      sendTransactionError       : true,
-                      sendTransactionErrorMessage: e.message || e,
-                      sending                    : false
+                      sendTransactionError: true,
+                      sending             : false,
+                      sendTransactionErrorMessage
                   });
               });
     }
@@ -256,11 +268,11 @@ class Wallet extends Component {
                                         </Col>
                                         <Col>
                                             <label
-                                                className="control-label">fees</label>
+                                                className="control-label">fee</label>
                                             <Form.Group as={Row}>
                                                 <Col md={11} ms={11}>
                                                     <Form.Control type="text"
-                                                                  placeholder="fees"
+                                                                  placeholder="fee"
                                                                   pattern="[0-9]+([,][0-9]{1,2})?"
                                                                   ref={c => {
                                                                       this.fees = c;
@@ -277,7 +289,7 @@ class Wallet extends Component {
                                                     <Button
                                                         onClick={() => this.setState({feesLocked: !this.state.feesLocked})}>
                                                         <FontAwesomeIcon
-                                                            icon={this.state.feesLocked ? "lock" : "lock-open"}
+                                                            icon={this.state.feesLocked ? 'lock' : 'lock-open'}
                                                             size="1x"/>
                                                     </Button>
                                                 </Col>
@@ -307,10 +319,7 @@ class Wallet extends Component {
                                             {this.state.sendTransactionError && (
                                                 <Form.Text
                                                     className="text-muted"><small
-                                                    style={{color: 'red'}}> could
-                                                    not send the
-                                                    transaction
-                                                    ({this.state.sendTransactionErrorMessage}).</small></Form.Text>)}
+                                                    style={{color: 'red'}}> {this.state.sendTransactionErrorMessage}.</small></Form.Text>)}
                                         </Col>
                                     </Form>
                                 </Row>
