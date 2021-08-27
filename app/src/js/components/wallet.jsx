@@ -51,6 +51,7 @@ class Wallet extends Component {
             addressError        : false,
             sendTransactionError: false,
             sending             : false,
+            canceling           : false,
             feesLocked          : true
         };
 
@@ -83,6 +84,14 @@ class Wallet extends Component {
     }
 
     send() {
+
+        if (this.state.sending) {
+            wallet.interruptTransactionSendInProgress();
+            this.setState({
+                canceling: true
+            });
+            return;
+        }
 
         this.setState({
             sendTransactionError       : false,
@@ -168,6 +177,9 @@ class Wallet extends Component {
                   else if (e === 'insufficient_balance') {
                       sendTransactionErrorMessage = 'your transaction could not be sent: insufficient millix balance';
                   }
+                  else if (e === 'transaction_send_interrupt') {
+                      sendTransactionErrorMessage = 'the transaction was canceled';
+                  }
                   else {
                       sendTransactionErrorMessage = `could not send the transaction(${e.message || e.api_message || e})`;
                   }
@@ -175,6 +187,7 @@ class Wallet extends Component {
                   this.setState({
                       sendTransactionError: true,
                       sending             : false,
+                      canceling           : false,
                       sendTransactionErrorMessage
                   });
               });
@@ -306,20 +319,22 @@ class Wallet extends Component {
                                             <Button variant="light"
                                                     className={'btn btn-w-md btn-accent'}
                                                     onClick={this.send.bind(this)}
-                                                    disabled={this.state.sending}>
-                                                {this.state.sending &&
-                                                 <div style={{
-                                                     fontSize: '6px',
-                                                     float   : 'left'
-                                                 }} className="loader-spin"/>}
-                                                send millix
+                                                    disabled={this.state.canceling}>
+                                                {this.state.sending ?
+                                                 <>
+                                                     <div style={{
+                                                         fontSize: '6px',
+                                                         float   : 'left'
+                                                     }}
+                                                          className="loader-spin"/>
+                                                     {this.state.canceling ? "canceling" : "cancel transaction"}
+                                                 </> : <>send millix</>}
                                             </Button>
                                         </Col>
                                         <Col style={styles.centered}>
                                             {this.state.sendTransactionError && (
                                                 <Form.Text
-                                                    className="text-muted"><small
-                                                    style={{color: 'red'}}> {this.state.sendTransactionErrorMessage}.</small></Form.Text>)}
+                                                    className="text-muted">{this.state.sendTransactionErrorMessage}.</Form.Text>)}
                                         </Col>
                                     </Form>
                                 </Row>
