@@ -75,6 +75,12 @@ class Wallet extends Component {
         this.props.walletUpdateBalance(this.props.wallet.address_key_identifier);
     }
 
+    componentWillUnmount() {
+        if (this.state.sending) {
+            wallet.interruptTransactionSendInProgress();
+        }
+    }
+
     _getAmount(value, allowZero = false) {
         const pValue = parseInt(value.replace(/[,.]/g, ''));
         if ((allowZero ? pValue < 0 : pValue <= 0) || pValue.toLocaleString('en-US') !== value) {
@@ -327,7 +333,7 @@ class Wallet extends Component {
                                                          float   : 'left'
                                                      }}
                                                           className="loader-spin"/>
-                                                     {this.state.canceling ? "canceling" : "cancel transaction"}
+                                                     {this.state.canceling ? 'canceling' : 'cancel transaction'}
                                                  </> : <>send millix</>}
                                             </Button>
                                         </Col>
