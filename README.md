@@ -2,7 +2,7 @@
   <br>
   <a href="#"><img src="https://github.com/millix/millix-wallet/blob/master/app/icon.png?raw=true" alt="millix node" width="200"></a>
   <br>
-  millix wallet <small>v1.11.1</small>
+  millix wallet <small>v1.11.6</small>
   <br>
 </h1>
 
@@ -99,3 +99,5 @@ Please see [Support requests](CONTRIBUTING.md#support)
 ## License
 
 Copay is released under the MIT License. Please refer to the [LICENSE](LICENSE) file that accompanies this project for more information including complete terms and conditions.
+
+
