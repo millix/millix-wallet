@@ -132,37 +132,6 @@ class ConfigView extends Component {
                                            </ul>
                                        </div>
                                    </Form.Group>
-                                   {/*
-                                    <Form.Group as={Row}>
-                                    <Form.Label column sm="1">
-                                    network
-                                    </Form.Label>
-
-                                    <Col sm="10" style={{
-                                    marginTop   : 'auto',
-                                    marginBottom: 'auto'
-                                    }}>
-                                    <Switch
-                                    className={"switch-class network-switch"}
-                                    id="networkSelectSwitch"
-                                    options={
-                                    {
-                                    color: '#9400CE',
-                                    size : 'small'
-                                    }
-                                    }
-                                    label={!this.props.config.MODE_TEST_NETWORK ? 'main network' : 'test network'}
-                                    checked={!this.props.config.MODE_TEST_NETWORK}
-                                    ref={(c) => this._network = c}
-                                    onChange={(checked) => {
-                                    this.setState({
-                                    is_main_network   : checked,
-                                    show_restart_modal: true
-                                    });
-                                    }}
-                                    />
-                                    </Col>
-                                    </Form.Group>*/}
                                    <Col>
                                        <Form.Group>
                                            <label
@@ -697,102 +666,10 @@ class ConfigView extends Component {
                            <div
                                className={'panel panel-filled'}>
                                <div
-                                   className={'panel-heading'}>audit
-                                   point
+                                   className={'panel-heading'}> punning
                                </div>
                                <hr className={'hrPanel'}/>
                                <div className={'panel-body'}>
-
-                                   <Col>
-                                       <Form.Group>
-
-                                           <label
-                                               className="control-label">allow
-                                               pruning my
-                                               transactions</label>
-                                           <div className="btn-group btn-full-width">
-                                               <button
-                                                   data-toggle="dropdown"
-                                                   className="btn btn-w-sm btn-accent dropdown-toggle btn-full-width dropdown-luna"
-                                                   aria-expanded="false">
-                                                   <p style={{float:"left", marginBottom: "0px"}}>{this.props.config.WALLET_SPENT_TRANSACTION_PRUNE ? 'yes' : 'no'}</p>
-                                                   <p style={{float:"right", marginBottom: "0px"}}><span className="caret"/></p>
-                                               </button>
-                                               <ul className="dropdown-menu btn-full-width dropdown-lu">
-                                                   {Array.from([
-                                                       'yes',
-                                                       'no'
-                                                   ]).map(type =>
-                                                       <li><a
-                                                              className="li-a"
-                                                              key={type}
-                                                              href="#"
-                                                              onClick={() => {
-                                                                  this.setConfig({WALLET_SPENT_TRANSACTION_PRUNE: type === 'yes'});
-                                                              }}>{type}</a>
-                                                       </li>
-                                                   )}
-                                               </ul>
-                                           </div>
-                                       </Form.Group>
-                                   </Col>
-
-                                   <Col>
-                                       <Form.Group>
-                                           <label
-                                               className="control-label">number
-                                               of nodes</label>
-                                           <Form.Control type="text"
-                                                         placeholder=""
-                                                         ref={(c) => this._audit_point_n_nodes = c}
-                                                         onChange={() => {
-                                                             this.setConfig({AUDIT_POINT_NODE_COUNT: this._audit_point_n_nodes.value});
-                                                         }}
-                                                         value={this.props.config.AUDIT_POINT_NODE_COUNT}/>
-                                       </Form.Group>
-                                   </Col>
-                                   <Col>
-                                       <Form.Group>
-                                           <label
-                                               className="control-label">number
-                                               of validations</label>
-                                           <Form.Control type="text"
-                                                         placeholder=""
-                                                         ref={(c) => this._audit_point_n_validations = c}
-                                                         onChange={() => {
-                                                             this.setConfig({AUDIT_POINT_VALIDATION_REQUIRED: this._audit_point_n_validations.value});
-                                                         }}
-                                                         value={this.props.config.AUDIT_POINT_VALIDATION_REQUIRED}/>
-                                       </Form.Group>
-                                   </Col>
-                                   <Col>
-                                       <Form.Group>
-                                           <label
-                                               className="control-label">max
-                                               attempts</label>
-                                           <Form.Control type="text"
-                                                         placeholder=""
-                                                         ref={(c) => this._audit_point_max_attempts = c}
-                                                         onChange={() => {
-                                                             this.setConfig({AUDIT_POINT_ATTEMPT_MAX: this._audit_point_max_attempts.value});
-                                                         }}
-                                                         value={this.props.config.AUDIT_POINT_ATTEMPT_MAX}/>
-                                       </Form.Group>
-                                   </Col>
-                                   <Col>
-                                       <Form.Group>
-                                           <label
-                                               className="control-label">max
-                                               candidate transactions</label>
-                                           <Form.Control type="text"
-                                                         placeholder=""
-                                                         ref={(c) => this._audit_point_max_candidate = c}
-                                                         onChange={() => {
-                                                             this.setConfig({AUDIT_POINT_CANDIDATE_MAX: this._audit_point_max_candidate.value});
-                                                         }}
-                                                         value={this.props.config.AUDIT_POINT_CANDIDATE_MAX}/>
-                                       </Form.Group>
-                                   </Col>
                                    <Col>
                                        <Form.Group>
                                            <label
@@ -821,50 +698,6 @@ class ConfigView extends Component {
                                                              this.setConfig({TRANSACTION_PRUNE_COUNT: Math.min(parseInt(this._transaction_prune_count.value), 512).toString()});
                                                          }}
                                                          value={this.props.config.TRANSACTION_PRUNE_COUNT}/>
-                                       </Form.Group>
-                                   </Col>
-                                   <Col>
-                                       <Form.Group>
-                                           <label
-                                               className="control-label">audit
-                                               point pruning age (min)</label>
-                                           <Form.Control type="text"
-                                                         placeholder=""
-                                                         ref={(c) => this._audit_point_prune_min_age = c}
-                                                         onChange={() => {
-                                                             this.setConfig({AUDIT_POINT_PRUNE_AGE_MIN: this._audit_point_prune_min_age.value});
-                                                         }}
-                                                         value={this.props.config.AUDIT_POINT_PRUNE_AGE_MIN}/>
-                                       </Form.Group>
-                                   </Col>
-                                   <Col>
-                                       <Form.Group>
-                                           <label
-                                               className="control-label">total
-                                               audit points to prune
-                                               (512
-                                               max.)</label>
-                                           <Form.Control type="text"
-                                                         placeholder=""
-                                                         ref={(c) => this._audit_point_prune_count = c}
-                                                         onChange={() => {
-                                                             this.setConfig({AUDIT_POINT_PRUNE_COUNT: Math.min(parseInt(this._audit_point_prune_count.value), 512).toString()});
-                                                         }}
-                                                         value={this.props.config.AUDIT_POINT_PRUNE_COUNT}/>
-                                       </Form.Group>
-                                   </Col>
-                                   <Col>
-                                       <Form.Group>
-                                           <label
-                                               className="control-label">max
-                                               wait (sec)</label>
-                                           <Form.Control type="text"
-                                                         placeholder=""
-                                                         ref={(c) => this._audit_point_max_wait_time = c}
-                                                         onChange={() => {
-                                                             this.setConfig({AUDIT_POINT_VALIDATION_WAIT_TIME_MAX: this._audit_point_max_wait_time.value});
-                                                         }}
-                                                         value={this.props.config.AUDIT_POINT_VALIDATION_WAIT_TIME_MAX}/>
                                        </Form.Group>
                                    </Col>
                                </div>
