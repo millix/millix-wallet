@@ -29,14 +29,6 @@ class TransactionHistoryView extends Component {
                     },
                     {
                         label: [
-                            <FontAwesomeIcon icon="compress-arrows-alt"
-                                             size="1x"/>,
-                            ' amount'
-                        ],
-                        field: 'amount'
-                    },
-                    {
-                        label: [
                             <FontAwesomeIcon icon="book" size="1x"/>,
                             ' txid'
                         ],
@@ -44,17 +36,11 @@ class TransactionHistoryView extends Component {
                     },
                     {
                         label: [
-                            <FontAwesomeIcon icon="book" size="1x"/>,
-                            ' from'
+                            <FontAwesomeIcon icon="compress-arrows-alt"
+                                             size="1x"/>,
+                            ' amount'
                         ],
-                        field: 'from'
-                    },
-                    {
-                        label: [
-                            <FontAwesomeIcon icon="book" size="1x"/>,
-                            ' to'
-                        ],
-                        field: 'to'
+                        field: 'amount'
                     },
                     {
                         label: [
@@ -105,8 +91,6 @@ class TransactionHistoryView extends Component {
                 date       : moment.utc(transaction.transaction_date * 1000).format('YYYY-MM-DD HH:mm:ss'),
                 amount     : transaction.amount.toLocaleString(),
                 txid       : transaction.transaction_id,
-                from       : transaction.input_address,
-                to         : transaction.output_address,
                 stable_date: transaction.stable_date && moment.utc(transaction.stable_date * 1000).format('YYYY-MM-DD HH:mm:ss'),
                 parent_date: transaction.parent_date && moment.utc(transaction.parent_date * 1000).format('YYYY-MM-DD HH:mm:ss')
             }));
@@ -137,14 +121,6 @@ class TransactionHistoryView extends Component {
                 {
                     id   : 'transaction_id',
                     title: 'Transaction ID'
-                },
-                {
-                    id   : 'input_address',
-                    title: 'Input address'
-                },
-                {
-                    id   : 'output_address',
-                    title: 'Output address'
                 },
                 {
                     id   : 'income',

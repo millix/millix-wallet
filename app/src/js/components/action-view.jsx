@@ -76,7 +76,7 @@ class ActionView extends Component {
         fs.readFile(this.inputImport.value, 'utf8', function(err, dataString) {
             if (err) {
                 this.setState({importingWallet: false});
-                return reject('Couldn\'t read wallet mnemonic');
+                return;
             }
 
             const data = JSON.parse(dataString);
@@ -101,7 +101,6 @@ class ActionView extends Component {
             }
             else {
                 self.setState({importingWallet: false});
-                return reject('Couldn\'t read nor create master key');
             }
         });
         this.setState({fileKeyImport: 'import_' + Date.now()});
