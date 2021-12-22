@@ -34,7 +34,7 @@ pipeline {
                                 sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-mac-x64.zip info@${info_host_10}:${DEST}')
                                 sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-mac-x64.zip info@${info_host_11}:${DEST}')
                             }
-                            deleteDir()
+//                             deleteDir()
                         }
                     }
                 }
@@ -66,7 +66,7 @@ pipeline {
                                 sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-win-x64.zip info@${info_host_10}:${DEST}')
                                 sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-win-x64.zip info@${info_host_11}:${DEST}')
                             }
-                            deleteDir()
+//                             deleteDir()
                         }
                     }
                 }
@@ -98,7 +98,7 @@ pipeline {
                                 sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-linux-x64.zip info@${info_host_10}:${DEST}')
                                 sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-linux-x64.zip info@${info_host_11}:${DEST}')
                             }
-                            deleteDir()
+//                             deleteDir()
                         }
                     }
                 }
