@@ -23,6 +23,7 @@ pipeline {
                             sh('npm install')
                             sh('npm install -g grunt')
                             sh('grunt build-mac')
+                            sh('cd ${WORKSPACE}/app/dist/millix-mac-x64/ && rm -r $(ls -A | grep -v millix.app)')
                             sh('cd ${WORKSPACE}/app/dist/ && zip -r millix-mac-x64.zip millix-mac-x64/')
                             withCredentials([
                                 sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
