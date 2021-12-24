@@ -34,7 +34,7 @@ pipeline {
                                 sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-mac-x64.zip info@${info_host_10}:${DEST}')
                                 sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-mac-x64.zip info@${info_host_11}:${DEST}')
                             }
-//                             deleteDir()
+                            deleteDir()
                         }
                     }
                 }
@@ -55,6 +55,38 @@ pipeline {
                             bat'npm install'
                             bat'npm install -g grunt'
                             bat'grunt build-win'
+                            echo 'pre-rename unsigned'
+                            if(!fileExists('./app/dist/unsigned'))
+                            {
+                                bat """
+                                cd ./app/dist/
+                                mkdir unsigned
+                                """.stripIndent().trim()
+                            }
+                            if(fileExists('./app/dist/millix-win-x64/millix.exe'))
+                            {
+                                bat 'mv ./app/dist/millix-win-x64/millix.exe ./app/dist/unsigned/millix.exe'
+                            }
+                            echo 'sign binary'
+                            dir('./../../../CodeSignTool-v1.2.0-windows')
+                            {
+                                withCredentials([
+                                    string(credentialsId: 'ssl_totp', variable: 'ssl_totp'),
+                                    string(credentialsId: 'ssl_credential_id', variable: 'ssl_credential_id'),
+                                    string(credentialsId: 'ssl_username', variable: 'ssl_username'),
+                                    string(credentialsId: 'ssl_password', variable: 'ssl_password')
+                                ]){
+                                    echo "sign the tangled binary"
+                                    bat """CodeSignTool.bat sign ^
+                                        -credential_id=${ssl_credential_id} ^
+                                        -username=${ssl_username} ^
+                                        -password=${ssl_password} ^
+                                        -totp_secret=\"${ssl_totp}\" ^
+                                        -output_dir_path=./../slave/workspace/millix-wallet_master/app/dist/millix-win-x64/ ^
+                                        -input_file_path=./../slave/workspace/millix-wallet_master/app/dist/unsigned/millix.exe
+                                        """
+                                }
+                            }
                             bat'cd app/dist && tar -cf millix-win-x64.zip millix-win-x64'
                             withCredentials([
                                 sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
@@ -66,7 +98,7 @@ pipeline {
                                 sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-win-x64.zip info@${info_host_10}:${DEST}')
                                 sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-win-x64.zip info@${info_host_11}:${DEST}')
                             }
-//                             deleteDir()
+                            deleteDir()
                         }
                     }
                 }
@@ -98,7 +130,7 @@ pipeline {
                                 sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-linux-x64.zip info@${info_host_10}:${DEST}')
                                 sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix-linux-x64.zip info@${info_host_11}:${DEST}')
                             }
-//                             deleteDir()
+                            deleteDir()
                         }
                     }
                 }
