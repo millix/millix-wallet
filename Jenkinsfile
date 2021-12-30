@@ -43,7 +43,6 @@ pipeline {
                     when {
                         anyOf {
                             branch 'master'
-                            branch 'issue/MILLIX-25'
                         }
                     }
                     agent {
