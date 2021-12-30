@@ -69,6 +69,7 @@ pipeline {
                             {
                                 bat 'mv ./app/dist/millix-win-x64/millix.exe ./app/dist/unsigned/millix.exe'
                             }
+
                             echo 'sign binary'
                             dir('./../../../CodeSignTool-v1.2.0-windows')
                             {
@@ -84,25 +85,58 @@ pipeline {
                                         -username=${ssl_username} ^
                                         -password=${ssl_password} ^
                                         -totp_secret=\"${ssl_totp}\" ^
-                                        -output_dir_path=./../slave/workspace/millix-wallet_master/app/dist/millix-win-x64/ ^
-                                        -input_file_path=./../slave/workspace/millix-wallet_master/app/dist/unsigned/millix.exe
+                                        -output_dir_path=${WORKSPACE}/app/dist/millix-win-x64/ ^
+                                        -input_file_path=${WORKSPACE}/app/dist/unsigned/millix.exe
                                         """
                                 }
                             }
-                            if(!fileExists("./../../unsigned"))
+
+                            if(fileExists("${WORKSPACE}/app/dist/unsigned")
                             {
-                                echo 'unsigned folder is missing. Create one'
-                                bat """
-                                    cd ./../../
-                                    mkdir unsigned
-                                    """.stripIndent().trim()
+                                echo 'remove temp'
+                                bat"rm -rf ${WORKSPACE}/app/dist/unsigned/"
                             }
 
-//                             echo 'create installer'
-//                             be
+                            if(fileExists("${WORKSPACE}/unsigned"))
+                            {
+                                echo 'remove old unsigned installer folder'
+                                bat "rn -rf ${WORKSPACE}/unsigned"
+                            }
 
-//                             echo 'making archive'
-//                             bat'cd app/dist && tar -cf millix-win-x64.zip millix-win-x64'
+                            if(!fileExists("${WORKSPACE}/unsigned"))
+                            {
+                                echo 'create unsigned installer folder'
+                                bat "mkdir ${WORKSPACE}/unsigned"
+                            }
+
+                            echo 'create installer'
+                            bat """
+                            iscc millix.iss
+                            """.stripIndent().trim()
+
+                            echo 'sign installer'
+                            dir('./../../../CodeSignTool-v1.2.0-windows')
+                            {
+                                withCredentials([
+                                    string(credentialsId: 'ssl_totp', variable: 'ssl_totp'),
+                                    string(credentialsId: 'ssl_credential_id', variable: 'ssl_credential_id'),
+                                    string(credentialsId: 'ssl_username', variable: 'ssl_username'),
+                                    string(credentialsId: 'ssl_password', variable: 'ssl_password')
+                                ]){
+                                    echo "sign the tangled binary"
+                                    bat """CodeSignTool.bat sign ^
+                                        -credential_id=${ssl_credential_id} ^
+                                        -username=${ssl_username} ^
+                                        -password=${ssl_password} ^
+                                        -totp_secret=\"${ssl_totp}\" ^
+                                        -output_dir_path=${WORKSPACE}/ ^
+                                        -input_file_path=${WORKSPACE}/unsigned/Millix_setup.exe
+                                        """
+                                }
+                            }
+
+                            echo 'making archive'
+                            bat'tar -c millix-win-x64.zip Millix_setup.exe'
 
 //                             withCredentials([
 //                                 sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),

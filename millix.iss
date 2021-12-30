@@ -6,13 +6,13 @@ DefaultGroupName=Millix
 ;Windows 7 is a requirement
 MinVersion=0,6.1
 AllowNoIcons=yes
-OutputDir=..\..\unsigned
+OutputDir=.\unsigned
 OutputBaseFileName=Millix_Setup
 Compression=lzma/max
 ;.bmp format only. 164x314 max resoltuion.
-WizardImageFile=.\app\src\iconWizard.bmp
+WizardImageFile=.\app\iconWizard.bmp
 ;small bitmap is 55x58 pixels.
-WizardSmallImageFile=.\app\src\iconWizardSmall.bmp
+WizardSmallImageFile=.\app\iconWizardSmall.bmp
 
 [Tasks]
 ; NOTE: The following entry contains English phrases ("Create a desktop icon" and "Additional icons").
