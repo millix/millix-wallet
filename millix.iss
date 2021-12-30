@@ -20,7 +20,7 @@ WizardSmallImageFile=.\app\iconWizardSmall.bmp
 Name: "desktopicon"; Description: "Create a &desktop icon"; GroupDescription: "Additional icons:"
 
 [Files]
-Source: ".\app\dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+Source: ".\app\dist\millix-win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
