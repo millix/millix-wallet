@@ -91,7 +91,7 @@ pipeline {
                                 }
                             }
 
-                            if(fileExists("${WORKSPACE}/app/dist/unsigned")
+                            if(fileExists("${WORKSPACE}/app/dist/unsigned"))
                             {
                                 echo 'remove temp'
                                 bat"rm -rf ${WORKSPACE}/app/dist/unsigned/"
@@ -100,13 +100,13 @@ pipeline {
                             if(fileExists("${WORKSPACE}/unsigned"))
                             {
                                 echo 'remove old unsigned installer folder'
-                                bat "rn -rf ${WORKSPACE}/unsigned"
+                                bat "rm -rf ${WORKSPACE}/unsigned"
                             }
 
                             if(!fileExists("${WORKSPACE}/unsigned"))
                             {
                                 echo 'create unsigned installer folder'
-                                bat "mkdir ${WORKSPACE}/unsigned"
+                                bat "cd ${WORKSPACE} && mkdir unsigned"
                             }
 
                             echo 'create installer'
@@ -130,7 +130,7 @@ pipeline {
                                         -password=${ssl_password} ^
                                         -totp_secret=\"${ssl_totp}\" ^
                                         -output_dir_path=${WORKSPACE}/ ^
-                                        -input_file_path=${WORKSPACE}/unsigned/Millix_setup.exe
+                                        -input_file_path=${WORKSPACE}/../../unsigned/Millix_setup.exe
                                         """
                                 }
                             }
