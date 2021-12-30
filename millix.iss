@@ -1,7 +1,7 @@
 [Setup]
 AppName=Millix
 AppVerName=Millix
-DefaultDirName={pf}\Millix
+DefaultDirName={pf64}\Millix
 DefaultGroupName=Millix
 ;Windows 7 is a requirement
 MinVersion=0,6.1
@@ -13,6 +13,7 @@ Compression=lzma/max
 WizardImageFile=.\app\iconWizard.bmp
 ;small bitmap is 55x58 pixels.
 WizardSmallImageFile=.\app\iconWizardSmall.bmp
+WizardImageStretch=no
 
 [Tasks]
 ; NOTE: The following entry contains English phrases ("Create a desktop icon" and "Additional icons").
@@ -20,8 +21,7 @@ WizardSmallImageFile=.\app\iconWizardSmall.bmp
 Name: "desktopicon"; Description: "Create a &desktop icon"; GroupDescription: "Additional icons:"
 
 [Files]
-Source: ".\app\dist\millix-win-x64\*";
-DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+Source: ".\app\dist\millix-win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
