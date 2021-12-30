@@ -130,7 +130,7 @@ pipeline {
                                         -password=${ssl_password} ^
                                         -totp_secret=\"${ssl_totp}\" ^
                                         -output_dir_path=${WORKSPACE}/ ^
-                                        -input_file_path=${WORKSPACE}/../../unsigned/Millix_setup.exe
+                                        -input_file_path=${WORKSPACE}/unsigned/Millix_setup.exe
                                         """
                                 }
                             }
