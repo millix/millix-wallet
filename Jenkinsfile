@@ -135,7 +135,7 @@ pipeline {
                             }
 
                             echo 'making archive'
-                            bat'tar -cf millix-win-x64.zip Millix_setup.exe'
+                            bat'7z a -tzip millix-win-x64.zip Millix_setup.exe'
 
                             withCredentials([
                                 sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
