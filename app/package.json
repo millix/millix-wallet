@@ -69,7 +69,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "@trendmicro/react-sidenav": "^0.4.5",
-    "async": "^2.6.2",
+    "async": "^2.6.4",
     "bitcore-lib": "^8.1.1",
     "bitcore-mnemonic": "^8.1.1",
     "bootstrap": "^4.3.1",
