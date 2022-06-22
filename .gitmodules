@@ -1,3 +1,6 @@
 [submodule "deps/millix-node"]
 	path = deps/millix-node
 	url = https://github.com/millix/millix-node.git
+[submodule "deps/millix-wallet-ui"]
+	path = deps/millix-wallet-ui
+	url = https://github.com/millix/millix-wallet-ui.git
