@@ -14,9 +14,7 @@
     "resizable": true
   },
   "scripts": {
-    "build": "webpack",
-    "start": "nw .",
-    "worker-import-replace": "replace-in-file \"./database/pool/worker.mjs\" \"./worker.dist.js\" ../deps/millix-node/database/pool/pool.js"
+    "start": "nw ."
   },
   "author": "developer@millix.org",
   "license": "MIT",
@@ -27,9 +25,6 @@
   ],
   "//": "product_string: millix",
   "devDependencies": {
-    "@babel/runtime": "^7.18.6",
-    "nw": "0.66.0-sdk",
-    "replace-in-file": "^6.3.5"
   },
   "build": {
     "nwVersion": "0.66.0",
@@ -48,5 +43,8 @@
       "icon": "icon.icns",
       "documentIcon": "icon.icns"
     }
+  },
+  "dependencies": {
+    "sqlite3": "^5.0.8"
   }
 }
