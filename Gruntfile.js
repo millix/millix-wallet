@@ -115,19 +115,28 @@ module.exports = function(grunt) {
         },
         nwjs : {
             options: {
-                platforms: [
-                    'win64',
-                    'linux64',
-                    'osx64'
-                ],
-                macIcns  : './app/icon.icns',
-                //winIco   : './app/icon.ico',
-                version  : '0.66.0',
-                flavor   : 'normal',
-                buildDir : './app/dist',
-                files    : './app/dist/unpacked/**/**'
+                macIcns : './app/icon.icns',
+                winIco  : './app/icon.ico',
+                version : '0.66.0',
+                flavor  : 'normal',
+                buildDir: './app/dist',
+                files   : './app/dist/unpacked/**/**'
             },
-            src    : './app/dist/unpacked'
+            osx    : {
+                options: {
+                    platforms: ['osx64']
+                }
+            },
+            win    : {
+                options: {
+                    platforms: ['win64']
+                }
+            },
+            linux  : {
+                options: {
+                    platforms: ['linux64']
+                }
+            }
         }
     });
 
@@ -148,9 +157,19 @@ module.exports = function(grunt) {
         'copy'
     ]);
 
-    grunt.registerTask('build-app', [
+    grunt.registerTask('build-osx', [
         'build-core',
-        'nwjs'
+        'nwjs:osx'
+    ]);
+
+    grunt.registerTask('build-win', [
+        'build-core',
+        'nwjs:win'
+    ]);
+
+    grunt.registerTask('build-linux', [
+        'build-core',
+        'nwjs:linux'
     ]);
 
     grunt.registerTask('installer', [
