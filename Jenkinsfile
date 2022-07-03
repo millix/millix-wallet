@@ -22,7 +22,7 @@ pipeline {
                             sh('git submodule update -f')
                             sh('npm install')
                             sh('npx grunt build-osx')
-                            sh('cd ${WORKSPACE}/app/dist/millix && mv osx64 millix-mac--x64 && zip -r millix-mac-x64.zip millix-mac-x64/')
+                            sh('cd ${WORKSPACE}/app/dist/millix && mv osx64 millix-mac-x64 && zip -r millix-mac-x64.zip millix-mac-x64/')
                             withCredentials([
                                 sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
                                 string(credentialsId: "jenkins_host", variable: 'jenkins_host'),
