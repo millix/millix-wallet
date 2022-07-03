@@ -127,15 +127,15 @@ pipeline {
                                         -password=${ssl_password} ^
                                         -totp_secret=\"${ssl_totp}\" ^
                                         -output_dir_path=${WORKSPACE}/app/dist/installer/ ^
-                                        -input_file_path=${WORKSPACE}/app/dist/installer/unsigned/Millix_setup.exe
+                                        -input_file_path=${WORKSPACE}/app/dist/installer/unsigned/Millix_Setup.exe
                                         """
                                 }
                             }*/
 
-                            bat'cp ${WORKSPACE}/app/dist/installer/unsigned/Millix_setup.exe ${WORKSPACE}/app/dist/installer/'
+                            bat'cp ${WORKSPACE}/app/dist/installer/unsigned/Millix_Setup.exe ${WORKSPACE}/app/dist/installer/'
 
                             echo 'making archive'
-                            bat'cd ${WORKSPACE}/app/dist/installer/ && 7z a -tzip millix-win-x64.zip Millix_setup.exe'
+                            bat'cd ${WORKSPACE}/app/dist/installer/ && 7z a -tzip millix-win-x64.zip Millix_Setup.exe'
 
                             withCredentials([
                                 sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
