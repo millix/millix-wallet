@@ -61,7 +61,15 @@ module.exports = function(grunt) {
                 command: 'cd deps/millix-node && npx webpack --entry ../../app/index.js --config webpack.prod.config.js'
             },
             build_wallet_ui         : {
-                command: 'cd deps/millix-wallet-ui && npm run build'
+                command: 'cd deps/millix-wallet-ui && npm run build',
+                options: {
+                    execOptions: {
+                        env: {
+                            ...process.env,
+                            CI: "false"
+                        }
+                    }
+                }
             },
             release_win_deps        : {
                 command: 'cd app/dist/millix-win-x64 && cp locales/en* . && rm -rf locales/* && cp en* locales && rm -r node_modules/* package-lock.json && npm install sqlite3 k-bucket'
