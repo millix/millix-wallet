@@ -29,7 +29,7 @@ module.exports = function(grunt) {
         },
         shell: {
             make_dist_dirs          : {
-                command: 'cd app && mkdir -p dist/installer && mkdir -p dist/unpacked'
+                command: 'cd app && mkdir dist && mkdir dist/installer && mkdir dist/unpacked'
             },
             deps_millix_node        : {
                 command: 'cd deps/millix-node && npm install'

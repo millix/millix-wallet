@@ -19,7 +19,7 @@ pipeline {
                         echo 'hello from mac'
                         script {
                             sh('git submodule init')
-                            sh('git submodule update')
+                            sh('git submodule update -f')
                             sh('npm install')
                             sh('npx grunt build-osx')
                             sh('cd ${WORKSPACE}/app/dist/millix && mv osx64 millix-mac--x64 && zip -r millix-mac-x64.zip millix-mac-x64/')
@@ -50,7 +50,7 @@ pipeline {
                         echo 'hello from win'
                         script {
                             bat'git submodule init'
-                            bat'git submodule update'
+                            bat'git submodule update -f'
                             bat'npm install'
                             bat'npx grunt build-win'
                             bat'mv ./app/dist/millix/win64 ./app/dist/millix/millix-win-x64'
@@ -162,7 +162,7 @@ pipeline {
                         echo 'hello from linux'
                         script{
                             sh('git submodule init')
-                            sh('git submodule update')
+                            sh('git submodule update -f')
                             sh('npm install')
                             sh('npx grunt build-linux')
                             sh('cd ${WORKSPACE}/app/dist/millix/ && mv linux64 millix-linux-x64 && zip -r millix-linux-x64.zip millix-linux-x64/')
