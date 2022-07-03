@@ -22,7 +22,7 @@ pipeline {
                             sh('git submodule update -f')
                             sh('npm install')
                             sh('npx grunt build-osx')
-                            sh('cd ${WORKSPACE}/app/dist/millix && mv osx64 millix-mac--x64 && zip -r millix-mac-x64.zip millix-mac-x64/')
+                            sh('cd ${WORKSPACE}/app/dist/millix && mv osx64 millix-mac-x64 && zip -r millix-mac-x64.zip millix-mac-x64/')
                             withCredentials([
                                 sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
                                 string(credentialsId: "jenkins_host", variable: 'jenkins_host'),
@@ -54,7 +54,7 @@ pipeline {
                             bat'npm install'
                             bat'npx grunt build-win'
                             bat'mv ./app/dist/millix/win64 ./app/dist/millix/millix-win-x64'
-                            echo 'pre-rename unsigned'
+                            /*echo 'pre-rename unsigned'
                             if(!fileExists('./app/dist/unsigned'))
                             {
                                 bat """
@@ -92,7 +92,7 @@ pipeline {
                             {
                                 echo 'remove temp'
                                 bat"rm -rf ${WORKSPACE}/app/dist/unsigned/"
-                            }
+                            }*/
 
                             if(fileExists("${WORKSPACE}/app/dist/installer/unsigned"))
                             {
@@ -111,7 +111,7 @@ pipeline {
                             iscc millix.iss
                             """.stripIndent().trim()
 
-                            echo 'sign installer'
+                            /*echo 'sign installer'
                             dir('./../../../CodeSignTool-v1.2.0-windows')
                             {
                                 withCredentials([
@@ -130,7 +130,9 @@ pipeline {
                                         -input_file_path=${WORKSPACE}/app/dist/installer/unsigned/Millix_setup.exe
                                         """
                                 }
-                            }
+                            }*/
+
+                            bat'cp ${WORKSPACE}/app/dist/installer/unsigned/Millix_setup.exe ${WORKSPACE}/app/dist/installer/'
 
                             echo 'making archive'
                             bat'cd ${WORKSPACE}/app/dist/installer/ && 7z a -tzip millix-win-x64.zip Millix_setup.exe'
