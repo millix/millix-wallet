@@ -132,10 +132,10 @@ pipeline {
                                 }
                             }*/
 
-                            bat'cp ${WORKSPACE}/app/dist/installer/unsigned/Millix_Setup.exe ${WORKSPACE}/app/dist/installer/'
+                            bat"cp ${WORKSPACE}/app/dist/installer/unsigned/Millix_Setup.exe ${WORKSPACE}/app/dist/installer/"
 
                             echo 'making archive'
-                            bat'cd ${WORKSPACE}/app/dist/installer/ && 7z a -tzip millix-win-x64.zip Millix_Setup.exe'
+                            bat"cd ${WORKSPACE}/app/dist/installer/ && 7z a -tzip millix-win-x64.zip Millix_Setup.exe"
 
                             withCredentials([
                                 sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
