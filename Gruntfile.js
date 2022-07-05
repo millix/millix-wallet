@@ -66,7 +66,7 @@ module.exports = function(grunt) {
                     execOptions: {
                         env: {
                             ...process.env,
-                            CI: "false"
+                            CI: 'false'
                         }
                     }
                 }
@@ -117,6 +117,11 @@ module.exports = function(grunt) {
                     {
                         src : './app/node-main.js',
                         dest: './app/dist/unpacked/node-main.js'
+                    },
+                    {
+                        expand: true,
+                        src   : '../deps/millix-node/scripts',
+                        dest  : './app/dist/unpacked/scripts'
                     }
                 ]
             }
