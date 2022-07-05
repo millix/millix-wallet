@@ -6,3 +6,4 @@ app/scripts/
 .idea/
 .vscode/
 app/index.html
+cache/

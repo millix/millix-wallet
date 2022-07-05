@@ -120,14 +120,22 @@ module.exports = function(grunt) {
                     },
                     {
                         expand: true,
-                        src   : '../deps/millix-node/scripts',
-                        dest  : './app/dist/unpacked/scripts'
+                        cwd : './deps/millix-node/scripts',
+                        src : '**',
+                        dest: './app/dist/unpacked/scripts/'
+                    },
+                    {
+                        expand: true,
+                        cwd : './app',
+                        src : 'icon.*',
+                        dest: './app/dist/unpacked/'
                     }
                 ]
             }
         },
         nwjs : {
             options: {
+                icon    : './app/icon.png',
                 macIcns : './app/icon.icns',
                 winIco  : './app/icon.ico',
                 version : '0.66.0',
