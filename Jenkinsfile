@@ -92,7 +92,7 @@ pipeline {
                             {
                                 echo 'remove temp'
                                 bat"rm -rf ${WORKSPACE}/app/dist/unsigned/"
-                            }*/
+                            }
 
                             if(fileExists("${WORKSPACE}/app/dist/installer/unsigned"))
                             {
@@ -111,7 +111,7 @@ pipeline {
                             iscc millix.iss
                             """.stripIndent().trim()
 
-                            /*echo 'sign installer'
+                            echo 'sign installer'
                             dir('./../../../CodeSignTool-v1.2.0-windows')
                             {
                                 withCredentials([

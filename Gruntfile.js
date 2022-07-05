@@ -23,6 +23,9 @@ module.exports = function(grunt) {
             installer          : ['./app/dist/installer'],
             unpacked_wallet_app: ['./app/dist/unpacked'],
             build              : ['./app/dist'],
+            build_credits_osx  : ['./app/dist/millix/osx64/credits.html'],
+            build_credits_win  : ['./app/dist/millix/win64/credits.html'],
+            build_credits_linux: ['./app/dist/millix/linux64/credits.html'],
             modules_millix_node: ['./deps/millix-node/node_modules'],
             modules_wallet_ui  : ['./deps/millix-wallet-ui/node_modules'],
             modules_wallet_app : ['./app/node_modules']
@@ -78,7 +81,7 @@ module.exports = function(grunt) {
                 command: 'cd app && npm install && webpack --config webpack.config.js'
             },
             innosetup               : {
-                command: 'innosetup-compiler InnoSetup.iss --verbose'
+                command: 'innosetup-compiler millix.iss --verbose'
             },
             nwjs_win                : {
                 command: 'build --tasks win-x64 --mirror https://dl.nwjs.io/ app'
@@ -165,13 +168,19 @@ module.exports = function(grunt) {
         },
         nwjs : {
             options: {
-                icon    : './app/icon.png',
-                macIcns : './app/icon.icns',
-                winIco  : './app/icon.ico',
-                version : '0.66.0',
-                flavor  : 'normal',
-                buildDir: './app/dist',
-                files   : './app/dist/unpacked/**/**'
+                icon            : './app/icon.png',
+                macIcns         : './app/icon.icns',
+                winIco          : './app/icon.ico',
+                winVersionString: {
+                    'CompanyName'    : 'millix foundation',
+                    'FileDescription': 'millix',
+                    'ProductName'    : 'millix',
+                    'LegalCopyright' : 'Copyright 2022'
+                },
+                version         : '0.66.0',
+                flavor          : 'normal',
+                buildDir        : './app/dist',
+                files           : './app/dist/unpacked/**/**'
             },
             osx    : {
                 options: {
@@ -192,7 +201,12 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('build-core', [
-        'clean',
+        'clean:installer',
+        'clean:unpacked_wallet_app',
+        'clean:build',
+        'clean:modules_millix_node',
+        'clean:modules_wallet_ui',
+        'clean:modules_wallet_app',
         'shell:make_dist_dirs',
         'shell:deps_millix_node',
         'shell:deps_millix_node_sqlite3',
@@ -211,23 +225,21 @@ module.exports = function(grunt) {
     grunt.registerTask('build-osx', [
         'build-core',
         'nwjs:osx',
-        'copy:database_scripts_osx'
+        'clean:build_credits_osx'
     ]);
 
     grunt.registerTask('build-win', [
         'build-core',
         'nwjs:win',
-        'copy:database_scripts_win'
+        'clean:build_credits_win',
+        'copy:database_scripts_win',
+        'shell:innosetup'
     ]);
 
     grunt.registerTask('build-linux', [
         'build-core',
         'nwjs:linux',
+        'clean:build_credits_osx',
         'copy:database_scripts_linux'
-    ]);
-
-    grunt.registerTask('installer', [
-        'build-core',
-        'shell:innosetup'
     ]);
 };
