@@ -108,7 +108,7 @@ module.exports = function(grunt) {
             }
         },
         copy : {
-            wallet_app: {
+            wallet_app            : {
                 files: [
                     {
                         src : './app/package-dist.json',
@@ -120,15 +120,39 @@ module.exports = function(grunt) {
                     },
                     {
                         expand: true,
-                        cwd : './deps/millix-node/scripts',
-                        src : '**',
-                        dest: './app/dist/unpacked/scripts/'
-                    },
+                        cwd   : './app',
+                        src   : 'icon.*',
+                        dest  : './app/dist/unpacked/'
+                    }
+                ]
+            },
+            database_scripts_win  : {
+                files: [
                     {
                         expand: true,
-                        cwd : './app',
-                        src : 'icon.*',
-                        dest: './app/dist/unpacked/'
+                        cwd   : './deps/millix-node/scripts',
+                        src   : '**',
+                        dest  : './app/dist/millix/win64/scripts/'
+                    }
+                ]
+            },
+            database_scripts_osx  : {
+                files: [
+                    {
+                        expand: true,
+                        cwd   : './deps/millix-node/scripts',
+                        src   : '**',
+                        dest  : './app/dist/millix/osx64/scripts/'
+                    }
+                ]
+            },
+            database_scripts_linux: {
+                files: [
+                    {
+                        expand: true,
+                        cwd   : './deps/millix-node/scripts',
+                        src   : '**',
+                        dest  : './app/dist/millix/linux64/scripts/'
                     }
                 ]
             }
@@ -175,22 +199,25 @@ module.exports = function(grunt) {
         'move:millix_node',
         'shell:build_wallet_ui',
         'move:wallet_ui',
-        'copy'
+        'copy:wallet_app'
     ]);
 
     grunt.registerTask('build-osx', [
         'build-core',
-        'nwjs:osx'
+        'nwjs:osx',
+        'copy:database_scripts_osx'
     ]);
 
     grunt.registerTask('build-win', [
         'build-core',
-        'nwjs:win'
+        'nwjs:win',
+        'copy:database_scripts_win'
     ]);
 
     grunt.registerTask('build-linux', [
         'build-core',
-        'nwjs:linux'
+        'nwjs:linux',
+        'copy:database_scripts_linux'
     ]);
 
     grunt.registerTask('installer', [
