@@ -123,6 +123,12 @@ module.exports = function(grunt) {
                         cwd   : './app',
                         src   : 'icon.*',
                         dest  : './app/dist/unpacked/'
+                    },
+                    {
+                        expand: true,
+                        cwd   : './deps/millix-node/scripts',
+                        src   : '**',
+                        dest  : './app/dist/unpacked/scripts/'
                     }
                 ]
             },
