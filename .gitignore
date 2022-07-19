@@ -2,8 +2,8 @@ node_modules/
 app/dist/
 libs/
 app/index.js.map
-app/index.js
 app/scripts/
 .idea/
 .vscode/
 app/index.html
+cache/
