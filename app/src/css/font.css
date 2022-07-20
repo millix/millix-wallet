@@ -1,7 +1,0 @@
-@font-face {
-    font-family: 'Arvo';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Arvo'), url(../fonts/arvo.woff2) format('woff2'),
-                        url(../fonts/arvo.woff) format('woff');
-}
