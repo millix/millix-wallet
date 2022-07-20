@@ -144,8 +144,8 @@ pipeline {
                                 string(credentialsId: "info_host_10", variable: 'info_host_10'),
                                 string(credentialsId: "info_host_11", variable: 'info_host_11')
                             ]){
-                                sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/millix-win-x64.zip info@${info_host_10}:${DEST}')
-                                sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/millix-win-x64.zip info@${info_host_11}:${DEST}')
+                                sh('scp -i ${keyfile_info} -P2222 ${WORKSPACE}/app/dist/installer/millix-win-x64.zip info@38.93.243.8:${DEST}/millix-win-x64.zip')
+                                sh('scp -i ${keyfile_info} -P2223 ${WORKSPACE}/app/dist/installer/millix-win-x64.zip info@38.93.243.8:${DEST}/millix-win-x64.zip')
                             }
                             deleteDir()
                         }
