@@ -140,11 +140,11 @@ pipeline {
                             withCredentials([
                                 sshUserPrivateKey(credentialsId: "info", keyFileVariable: 'keyfile_info'),
                                 string(credentialsId: "info_10_port", variable: 'info_10_port'),
-                                string(credentialsId: "info_11_port", variable: 'info_11_port')
-                                string(credentialsId: "gateway_host", variable: 'gateway_host'),
+                                string(credentialsId: "info_11_port", variable: 'info_11_port'),
+                                string(credentialsId: "gateway_host", variable: 'gateway_host')
                             ]){
-                                sh('scp -i ${keyfile_info} -P${info_10_port} ${WORKSPACE}/app/dist/installer/millix-win-x64.zip info@${gateway_host}:${DEST}/millix-win-x64.zip')
-                                sh('scp -i ${keyfile_info} -P${info_11_port} ${WORKSPACE}/app/dist/installer/millix-win-x64.zip info@${gateway_host}:${DEST}/millix-win-x64.zip')
+                                bat'"c:\\Program Files\\git\\usr\\bin\\scp.exe" -i %keyfile_info% -P %info_10_port% %WORKSPACE%/app/dist/installer/millix-win-x64.zip info@%gateway_host%:%DEST%/millix-win-x64.zip'
+                                bat'"c:\\Program Files\\git\\usr\\bin\\scp.exe" -i %keyfile_info% -P %info_11_port% %WORKSPACE%/app/dist/installer/millix-win-x64.zip info@%gateway_host%:%DEST%/millix-win-x64.zip'
                             }
                             deleteDir()
                         }
