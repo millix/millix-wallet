@@ -138,14 +138,13 @@ pipeline {
                             bat"cd ${WORKSPACE}/app/dist/installer/ && 7z a -tzip millix-win-x64.zip Millix_Setup.exe"
 
                             withCredentials([
-                                sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
-                                string(credentialsId: "jenkins_host", variable: 'jenkins_host'),
                                 sshUserPrivateKey(credentialsId: "info", keyFileVariable: 'keyfile_info'),
-                                string(credentialsId: "info_host_10", variable: 'info_host_10'),
-                                string(credentialsId: "info_host_11", variable: 'info_host_11')
+                                string(credentialsId: "info_10_port", variable: 'info_10_port'),
+                                string(credentialsId: "info_11_port", variable: 'info_11_port')
+                                string(credentialsId: "gateway_host", variable: 'gateway_host'),
                             ]){
-                                sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/installer/millix-win-x64.zip info@${info_host_10}:${DEST}')
-                                sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/installer/millix-win-x64.zip info@${info_host_11}:${DEST}')
+                                sh('scp -i ${keyfile_info} -P${info_10_port} ${WORKSPACE}/app/dist/installer/millix-win-x64.zip info@${gateway_host}:${DEST}/millix-win-x64.zip')
+                                sh('scp -i ${keyfile_info} -P${info_11_port} ${WORKSPACE}/app/dist/installer/millix-win-x64.zip info@${gateway_host}:${DEST}/millix-win-x64.zip')
                             }
                             deleteDir()
                         }
