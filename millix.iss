@@ -21,7 +21,7 @@ WizardImageStretch=no
 Name: "desktopicon"; Description: "Create a &desktop icon"; GroupDescription: "Additional icons:"
 
 [Files]
-Source: ".\app\dist\millix\win64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+Source: ".\app\dist\millix\millix-win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
