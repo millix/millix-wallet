@@ -232,8 +232,7 @@ module.exports = function(grunt) {
         'build-core',
         'nwjs:win',
         'clean:build_credits_win',
-        'copy:database_scripts_win',
-        'shell:innosetup'
+        'copy:database_scripts_win'
     ]);
 
     grunt.registerTask('build-linux', [
