@@ -54,27 +54,22 @@ pipeline {
                             bat'npm install'
                             bat'npx grunt build-win'
                             bat'mv ./app/dist/millix/win64 ./app/dist/millix/millix-win-x64'
-                            /*echo 'pre-rename unsigned'
-                            if(!fileExists('./app/dist/unsigned'))
+                            if(!fileExists('./app/dist/millix/millix-win-x64-unsigned'))
                             {
                                 bat """
-                                cd ./app/dist/
-                                mkdir unsigned
+                                cd ./app/dist/millix/
+                                mkdir millix-win-x64-unsigned
                                 """.stripIndent().trim()
                             }
-                            if(fileExists('./app/dist/millix/millix-win-x64/millix.exe'))
-                            {
-                                bat 'mv ./app/dist/millix/millix-win-x64/millix.exe ./app/dist/unsigned/millix.exe'
-                            }
-
+                            bat 'mv ./app/dist/millix/millix-win-x64/millix.exe ./app/dist/millix/millix-win-x64-unsigned/millix.exe'
                             echo 'sign binary'
                             dir('./../../../CodeSignTool-v1.2.0-windows')
                             {
                                 withCredentials([
-                                    string(credentialsId: 'ssl_totp', variable: 'ssl_totp'),
-                                    string(credentialsId: 'ssl_credential_id', variable: 'ssl_credential_id'),
-                                    string(credentialsId: 'ssl_username', variable: 'ssl_username'),
-                                    string(credentialsId: 'ssl_password', variable: 'ssl_password')
+                                    string(credentialsId: 'ssl_totp_millix', variable: 'ssl_totp'),
+                                    string(credentialsId: 'ssl_credential_id_millix', variable: 'ssl_credential_id'),
+                                    string(credentialsId: 'ssl_username_millix', variable: 'ssl_username'),
+                                    string(credentialsId: 'ssl_password_millix', variable: 'ssl_password')
                                 ]){
                                     echo "sign the tangled binary"
                                     bat """CodeSignTool.bat sign ^
@@ -83,42 +78,20 @@ pipeline {
                                         -password=${ssl_password} ^
                                         -totp_secret=\"${ssl_totp}\" ^
                                         -output_dir_path=${WORKSPACE}/app/dist/millix/millix-win-x64/ ^
-                                        -input_file_path=${WORKSPACE}/app/dist/unsigned/millix.exe
+                                        -input_file_path=${WORKSPACE}/app/dist/millix/millix-win-x64-unsigned/millix.exe
                                         """
                                 }
                             }
 
-                            if(fileExists("${WORKSPACE}/app/dist/unsigned"))
-                            {
-                                echo 'remove temp'
-                                bat"rm -rf ${WORKSPACE}/app/dist/unsigned/"
-                            }
-
-                            if(fileExists("${WORKSPACE}/app/dist/installer/unsigned"))
-                            {
-                                echo 'remove old unsigned installer folder'
-                                bat "rm -rf ${WORKSPACE}/app/dist/installer/unsigned"
-                            }
-
-                            if(!fileExists("${WORKSPACE}/app/dist/installer/unsigned"))
-                            {
-                                echo 'create unsigned installer folder'
-                                bat "cd ${WORKSPACE}/app/dist/installer && mkdir unsigned"
-                            }
-
-                            echo 'create installer'
-                            bat """
-                            iscc millix.iss
-                            """.stripIndent().trim()
-
+                            bat'npx grunt shell:innosetup'
                             echo 'sign installer'
                             dir('./../../../CodeSignTool-v1.2.0-windows')
                             {
                                 withCredentials([
-                                    string(credentialsId: 'ssl_totp', variable: 'ssl_totp'),
-                                    string(credentialsId: 'ssl_credential_id', variable: 'ssl_credential_id'),
-                                    string(credentialsId: 'ssl_username', variable: 'ssl_username'),
-                                    string(credentialsId: 'ssl_password', variable: 'ssl_password')
+                                    string(credentialsId: 'ssl_totp_millix', variable: 'ssl_totp'),
+                                    string(credentialsId: 'ssl_credential_id_millix', variable: 'ssl_credential_id'),
+                                    string(credentialsId: 'ssl_username_millix', variable: 'ssl_username'),
+                                    string(credentialsId: 'ssl_password_millix', variable: 'ssl_password')
                                 ]){
                                     echo "sign the tangled binary"
                                     bat """CodeSignTool.bat sign ^
@@ -130,9 +103,7 @@ pipeline {
                                         -input_file_path=${WORKSPACE}/app/dist/installer/unsigned/Millix_Setup.exe
                                         """
                                 }
-                            }*/
-
-                            bat"cp ${WORKSPACE}/app/dist/installer/unsigned/Millix_Setup.exe ${WORKSPACE}/app/dist/installer/"
+                            }
 
                             echo 'making archive'
                             bat"cd ${WORKSPACE}/app/dist/installer/ && 7z a -tzip millix-win-x64.zip Millix_Setup.exe"
