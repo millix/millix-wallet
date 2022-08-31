@@ -178,7 +178,7 @@ module.exports = function(grunt) {
                     'LegalCopyright' : 'Copyright 2022'
                 },
                 version         : '0.66.0',
-                flavor          : 'normal',
+                flavor          : 'sdk',
                 buildDir        : './app/dist',
                 files           : './app/dist/unpacked/**/**'
             },
