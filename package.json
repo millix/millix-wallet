@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "findup-sync": "^4.0.0",
-    "grunt-env": "^0.4.4",
+    "grunt-env": "^1.0.1",
     "nw-gyp": "^3.6.6"
   }
 }
