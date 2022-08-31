@@ -22,16 +22,31 @@ pipeline {
                             sh('git submodule update -f')
                             sh('npm install')
                             sh('npx grunt build-osx')
-                            sh('cd ${WORKSPACE}/app/dist/millix && mv osx64 millix-mac-x64 && zip -r millix-mac-x64.zip millix-mac-x64/')
-                            withCredentials([
-                                sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
-                                string(credentialsId: "jenkins_host", variable: 'jenkins_host'),
-                                sshUserPrivateKey(credentialsId: "info", keyFileVariable: 'keyfile_info'),
-                                string(credentialsId: "info_host_10", variable: 'info_host_10'),
-                                string(credentialsId: "info_host_11", variable: 'info_host_11')
-                            ]){
-                                sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix/millix-mac-x64.zip info@${info_host_10}:${DEST}')
-                                sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/millix/millix-mac-x64.zip info@${info_host_11}:${DEST}')
+                            dir('./build_tools/osx') {
+                                withCredentials([
+                                    sshUserPrivateKey(credentialsId: "jenkins", keyFileVariable: 'keyfile_jenkins'),
+                                    string(credentialsId: "jenkins_host", variable: 'jenkins_host'),
+                                    sshUserPrivateKey(credentialsId: "info", keyFileVariable: 'keyfile_info'),
+                                    string(credentialsId: "info_host_10", variable: 'info_host_10'),
+                                    string(credentialsId: "info_host_11", variable: 'info_host_11'),
+                                    string(credentialsId: "jenkins_keychain_pwd", variable: 'jenkins_keychain_pwd'),
+                                    string(credentialsId: "millix_codesign_developer_id_application", variable: 'millix_codesign_developer_id_application'),
+                                    string(credentialsId: "millix_codesign_developer_id_installer", variable: 'millix_codesign_developer_id_installer'),
+                                    string(credentialsId: "millix_developer_team_id", variable: 'millix_developer_team_id'),
+                                    string(credentialsId: "millix_developer_apple_id", variable: 'millix_developer_apple_id'),
+                                    string(credentialsId: "millix_developer_pwd", variable: 'millix_developer_pwd')
+                                ]){
+                                    sh('security -v unlock-keychain -p ${jenkins_keychain_pwd} ~/Library/Keychains/login.keychain-db')
+                                    sh('rm -rf millix.app millix-unsigned.app millix.pkg')
+                                    sh('cp -a ${WORKSPACE}/app/dist/millix/osx64/millix.app millix-unsigned.app')
+                                    sh('chmod -R a+xr millix-unsigned.app')
+                                    sh('python build_mas.py --pkg millix.pkg --config-file build.cfg --input millix-unsigned.app --output millix.app --application-identity "${millix_codesign_developer_id_application}" --installer-identity "${millix_codesign_developer_id_installer}" --team-id ${millix_developer_team_id} --verbose')
+                                    sh('xcrun notarytool submit millix.pkg --apple-id ${millix_developer_apple_id} --password ${millix_developer_pwd} --team-id ${millix_developer_team_id} --wait')
+                                    sh('xcrun stapler staple millix.pkg')
+                                    sh('mv millix.pkg ${WORKSPACE}/app/dist/installer')
+                                    sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/installer/millix.pkg info@${info_host_10}:${DEST}')
+                                    sh('scp -i ${keyfile_info} -oProxyCommand="ssh -i ${keyfile_jenkins} -W %h:%p millix_jenkins_s@${jenkins_host}" ${WORKSPACE}/app/dist/installer/millix.pkg info@${info_host_11}:${DEST}')
+                                }
                             }
                             deleteDir()
                         }
