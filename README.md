@@ -86,7 +86,7 @@ Anyone and everyone is welcome to contribute. Please take a moment to review the
 
 ## Release Schedules
 
-Copay uses the `MAJOR.MINOR.BATCH` convention for versioning. Any release that adds features should modify the MINOR or MAJOR number.
+millix-wallet uses the `MAJOR.MINOR.BATCH` convention for versioning. Any release that adds features should modify the MINOR or MAJOR number if it's a breaking change.
 
 ### Bug Fixing Releases
 
